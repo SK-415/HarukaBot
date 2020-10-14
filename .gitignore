@@ -1,0 +1,11 @@
+__pycache__/
+.venv/
+.vscode/
+data/dd_bot/*
+go-cqhttp/
+.env
+.env.dev
+
+docker-compose.yml
+Dockerfile
+pyproject.toml
