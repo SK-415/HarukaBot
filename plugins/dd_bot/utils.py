@@ -1,5 +1,5 @@
 import sqlite3
-import requests
+# import requests
 import json
 import base64
 from pyppeteer import launch
@@ -11,6 +11,7 @@ from os import path
 # from nonebot.log import logger
 # import traceback
 import aiohttp
+from datetime import datetime
 
 
 class Dydb():
@@ -159,12 +160,21 @@ async def read_config():
         with open(get_path('config.json'), encoding='utf-8-sig') as f:
             config = json.loads(f.read())
     except FileNotFoundError:
-        config = {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": [], "index": 0}, 'live': {'uid_list': [], 'index': 0}}
+        config = get_new_config()
     return config
+
+def get_new_config():
+    return {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": [], "index": 0}, 'live': {'uid_list': [], 'index': 0}}
 
 async def update_config(config):
     """更新注册信息"""
     with open(get_path('config.json'), 'w', encoding='utf-8') as f:
+        f.write(json.dumps(config, ensure_ascii=False, indent=4))
+
+async def backup_config(config):
+    # backup_name = f"config{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json"
+    backup_name = f"config{datetime.now().timestamp()}.json"
+    with open(get_path(backup_name), 'w', encoding='utf-8') as f:
         f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
 def get_path(name):

@@ -4,9 +4,11 @@ from nonebot import scheduler
 from .utils import Dynamic, Dydb, User
 from .utils import read_config, update_config
 from datetime import datetime, timedelta
+from nonebot.log import logger
 
 
 @scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
+@logger.catch
 async def _():
     config = await read_config()
     ups = config['dynamic']['uid_list']

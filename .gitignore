@@ -1,8 +1,10 @@
 __pycache__/
 .venv/
 .vscode/
-data/dd_bot/*
+data/
 go-cqhttp/
+log/
+
 .env
 .env.dev
 

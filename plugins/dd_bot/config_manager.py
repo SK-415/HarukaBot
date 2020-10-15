@@ -3,7 +3,7 @@ from nonebot import on_command
 from nonebot.rule import to_me
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.permission import GROUP_ADMIN, PRIVATE_FRIEND, SUPERUSER, GROUP_OWNER
-from .utils import read_config, Dydb, User, update_config
+from .utils import get_new_config, read_config, Dydb, User, update_config, backup_config
 
 
 async def permission_check(bot: Bot, event: Event, state: dict):
@@ -448,66 +448,54 @@ fix_config = on_command('修复配置', rule=to_me(),
 @fix_config.handle()
 async def _(bot: Bot, event: Event, state: dict):
     config = await read_config()
+    new_config = get_new_config()
     dy_counter = Counter() # 动态推送开启用户数统计
     live_counter = Counter() # 直播推送开启用户数统计
     
-    del_qq = [] # 没有订阅的QQ号
-    # 统计用户开启的订阅数量
-    for qq, user in config['users'].items():
-        try:
-            for uid, status in user['uid'].items():
-                if status['dynamic']:
-                    dy_counter[uid] += 1
+    for config_type in ['groups', 'users']:
+        for type_id, type_config in config[config_type].items():
+            uids = type_config['uid']
+            if uids == {}:
+                continue
+            new_config[config_type][type_id] = {'uid': {}}
+            if config_type == 'groups':
+                new_config[config_type][type_id]['admin'] = type_config.get('admin', True)
+            for uid, status in uids.items():
+                new_config[config_type][type_id]['uid'][uid] = {'live': False, 'dynamic': False}
+                new_status = new_config[config_type][type_id]['uid'][uid]
                 if 'live' in status and status['live'] or status['live_reminder']:
                     live_counter[uid] += 1
-        except KeyError:
-            del_qq.append(qq)
-    # 删除没有订阅的QQ号
-    for qq in del_qq:
-        del config['users'][qq]
-
-    del_qq = [] # 没有订阅的QQ号
-    # 统计群开启的订阅数量
-    for qq, group in config['groups'].items():
-        try:
-            for uid, status in group['uid'].items():
+                    new_status['live'] = True
                 if status['dynamic']:
                     dy_counter[uid] += 1
-                if 'live' in status and status['live'] or status['live_reminder']:
-                    live_counter[uid] += 1
-        except KeyError:
-            del_qq.append(qq)
-    # 删除没有订阅的QQ群号
-    for qq in del_qq:
-        del config['groups'][qq]
-    
-    # 给每个QQ号下的 uid 添加@全体设置
-    for qq_id in config['groups']:
-        for uid in config['groups'][qq_id]['uid']:
-            if 'at' not in config['groups'][qq_id]['uid'][uid]:
-                config['groups'][qq_id]['uid'][uid]['at'] = False
-
-    # 将 uid 列表中的 live_reminder 替换为 live
-    for uid in config['uid']:
-        if 'live_reminder' in config['uid'][uid]:
-            del config['uid'][uid]['live_reminder']
-
-    # 检查是否有权限选项
-    for group_id in config['groups']:
-        if 'admin' not in config['groups'][group_id]:
-            config['groups'][group_id]['admin'] = True
-
-    # 将动态和直播订阅总数填入对应uid
+                    new_status['dynamic'] = True
+                if config_type == 'groups':
+                    new_status['at'] = status['at']
+                
+                if uid not in new_config['uid']:
+                    new_config['uid'][uid] = {
+                        'groups': {},
+                        'users': {},
+                        'live': 0,
+                        'dynamic': 0,
+                        'name': config['uid'][uid]['name']
+                        }
+                if new_status['live'] or new_status['dynamic']:
+                    new_config['uid'][uid][config_type][type_id] = str(config['uid'][uid][config_type][type_id])
+                
     for uid, sub_num in dy_counter.items():
-        config['uid'][uid]['dynamic'] = sub_num
+        new_config['uid'][uid]['dynamic'] = sub_num
     for uid, sub_num in live_counter.items():
-        config['uid'][uid]['live'] = sub_num
-    # 重置动态和直播的爬取列表
-    config['dynamic'] = {'uid_list': list(dy_counter), 'index': 0}
-    config['live'] = {'uid_list': list(config['status']), 'index': 0}
-    await update_config(config)
+        new_config['uid'][uid]['live'] = sub_num
+        new_config['status'][uid] = config['status'].get(uid, 0)
+    
+    new_config['dynamic'] = {'uid_list': list(dy_counter), 'index': 0}
+    new_config['live'] = {'uid_list': list(config['status']), 'index': 0}
+    
+    await backup_config(config)
+    await update_config(new_config)
     await fix_config.finish('修复完成')
-
+    
 
 __plugin_name__ = 'DD机'
 __plugin_usage__ = r"""DD机目前支持的功能有：

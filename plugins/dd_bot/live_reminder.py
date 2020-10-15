@@ -2,9 +2,11 @@ import nonebot
 from nonebot import scheduler
 from .utils import read_config, update_config
 from .utils import User
+from nonebot.log import logger
 
 
 @scheduler.scheduled_job('cron', second='*/10', id='live_sched')
+@logger.catch
 async def _():
     config = await read_config()
     ups = config['status']
