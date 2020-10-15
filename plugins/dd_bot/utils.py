@@ -3,13 +3,14 @@ import requests
 import json
 import base64
 from pyppeteer import launch
-import asyncio
-import os
-import sys
+# import asyncio
+# import os
+# import sys
 from os import path
-import functools
-from nonebot.log import logger
-import traceback
+# import functools
+# from nonebot.log import logger
+# import traceback
+import aiohttp
 
 
 class Dydb():
@@ -95,24 +96,6 @@ class Dynamic():
         await page.close()
         await browser.close()
     
-    async def upload(self, authorization):
-        """将图片上传至sm.ms图床后发给酷Q，现在改为base64方法传输，已弃用此方法"""
-        url = 'https://sm.ms/api/v2/upload'
-        headers = {'Authorization': authorization}
-        for i in range(3):
-            with open(self.img_path, 'rb') as f:
-                files = {'smfile': f}
-                re = requests.post(url, headers=headers, files=files)
-            re_json = re.json()
-            if re_json['success']:
-                self.image = re_json['data']['url']
-                return re_json['data']['url']
-            elif re_json['code'] == 'image_repeated':
-                self.image = re_json['images']
-                return re_json['images']
-            await asyncio.sleep(3)
-        self.image = 'https://i.loli.net/2020/04/23/gqzP8vELAjewMYH.png' # 图片加载失败返回的图
-        return self.image
 
     async def encode(self):
         """将图片转为base64码"""
@@ -144,23 +127,31 @@ class User():
         url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={self.uid}'
         return (await Get(url))['data']
 
-# # 单个的http请求没必要异步，而且速度反而慢，不知道为什么
-# async def Get(url):
-#     async with aiohttp.ClientSession() as session:
-#         async with session.get(url, headers=DEFAULT_HEADERS) as r:
-#             return await r.text(encoding='utf-8')
 
 async def Get(url):
-    """简单粗暴的请求模块"""    
+    # start = time.time()
     DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                   "Chrome/79.0.3945.130 Safari/537.36",
     "Referer": "https://www.bilibili.com/"
     }
+    async with aiohttp.request('GET', url=url, headers=DEFAULT_HEADERS) as resp:
+        return await resp.json(encoding='utf-8')
 
-    r = requests.get(url, headers=DEFAULT_HEADERS)
-    r.encoding='utf-8'
-    return r.json()
+
+# async def Get(url):
+#     """简单粗暴的请求模块"""
+#     start = time.time()
+#     DEFAULT_HEADERS = {
+#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+#                   "Chrome/79.0.3945.130 Safari/537.36",
+#     "Referer": "https://www.bilibili.com/"
+#     }
+
+#     r = requests.get(url, headers=DEFAULT_HEADERS)
+#     r.encoding='utf-8'
+#     print(time.time()-start)
+#     return r.json()
 
 async def read_config():
     """读取用户注册信息"""

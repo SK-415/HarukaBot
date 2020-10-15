@@ -1,5 +1,4 @@
 import nonebot
-import asyncio
 import os
 from nonebot import scheduler
 from .utils import Dynamic, Dydb, User

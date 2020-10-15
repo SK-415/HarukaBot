@@ -2,7 +2,6 @@ import nonebot
 from nonebot import scheduler
 from .utils import read_config, update_config
 from .utils import User
-import asyncio
 
 
 @scheduler.scheduled_job('cron', second='*/10', id='live_sched')
