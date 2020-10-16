@@ -5,9 +5,9 @@ from .utils import User
 from nonebot.log import logger
 
 
-@scheduler.scheduled_job('cron', second='*/10', id='live_sched')
+@scheduler.scheduled_job('interval', seconds=10, id='live_sched')
 @logger.catch
-async def _():
+async def live_sched():
     config = await read_config()
     ups = config['status']
     

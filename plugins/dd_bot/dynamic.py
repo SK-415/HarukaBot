@@ -7,15 +7,15 @@ from datetime import datetime, timedelta
 from nonebot.log import logger
 
 
-@scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
+@scheduler.scheduled_job('interval', seconds=10, id='dynamic_sched')
 @logger.catch
-async def _():
+async def dy_sched():
     config = await read_config()
     ups = config['dynamic']['uid_list']
     if len(ups):
         if config['dynamic']['index'] >= len(ups):
             uid = ups[0]
-            config['dynamic']['index'] = 0
+            config['dynamic']['index'] = 1
         else:
             uid = ups[config['dynamic']['index']]
             config['dynamic']['index'] += 1
