@@ -36,7 +36,7 @@ async def _():
             live_msg = f"{name} 开播啦！\n\n{user_info['title']}\n传送门→{user_info['url']}\n[CQ:image,file={user_info['cover']}]"
             groups = config["uid"][uid]["groups"]
             for group_id, bot_id in groups.items():
-                if config["groups"][group_id]['uid'][uid]["live_reminder"]:
+                if config["groups"][group_id]['uid'][uid]["live"]:
                     bot = bots[bot_id]
                     if config['groups'][group_id]['uid'][uid]['at']:
                         await bot.send_group_msg(group_id=group_id, message="[CQ:at,qq=all] "+live_msg)
@@ -44,6 +44,6 @@ async def _():
                         await bot.send_group_msg(group_id=group_id, message=live_msg)
             users = config["uid"][uid]["users"]
             for user_id, bot_id in users.items():
-                if config["users"][user_id]['uid'][uid]["live_reminder"]:
+                if config["users"][user_id]['uid'][uid]["live"]:
                     bot = bots[bot_id]
                     await bot.send_private_msg(user_id=user_id, message=live_msg)

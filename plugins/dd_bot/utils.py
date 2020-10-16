@@ -172,8 +172,8 @@ async def update_config(config):
         f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
 async def backup_config(config):
-    # backup_name = f"config{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.json"
-    backup_name = f"config{datetime.now().timestamp()}.json"
+    # backup_name = f"config{datetime.now().strftime('%Y.%m.%d %H-%M-%S')}.json"
+    backup_name = f"config{int(datetime.now().timestamp())}.json"
     with open(get_path(backup_name), 'w', encoding='utf-8') as f:
         f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
@@ -181,17 +181,6 @@ def get_path(name):
     """获取数据文件绝对路径"""
     f_path = path.abspath(path.join('data', 'dd_bot', name))
     return f_path
-
-# def log(func):
-#     """捕捉错误并输出日志（logger定义在bot.py）"""
-#     @functools.wraps(func)
-#     async def wrapper(*args, **kw):
-#         try:
-#             r = await func(*args, **kw)
-#             return r
-#         except:
-#             logger.error(traceback.format_exc())
-#     return wrapper
 
 # def restart():
 #     # python = sys.executable

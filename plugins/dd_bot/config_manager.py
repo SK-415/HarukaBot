@@ -65,9 +65,9 @@ async def _(bot: Bot, event: Event, state: dict):
         else:
             await add_uid.finish(f"您已将{name}（{uid}）添加至该群，请勿重复添加")
         if group_id in config["groups"]:
-            config["groups"][group_id]["uid"][uid] = {"live_reminder": True, "dynamic": True, 'at': False}
+            config["groups"][group_id]["uid"][uid] = {"live": True, "dynamic": True, 'at': False}
         else:
-            config["groups"][group_id] = {"uid": {uid: {"live_reminder": True, "dynamic": True, 'at': False}}, 'admin': True}
+            config["groups"][group_id] = {"uid": {uid: {"live": True, "dynamic": True, 'at': False}}, 'admin': True}
         config['uid'][uid]['dynamic'] += 1
         config['uid'][uid]['live'] += 1
         await update_config(config)
@@ -80,9 +80,9 @@ async def _(bot: Bot, event: Event, state: dict):
         else:
             await add_uid.finish(f"您已添加{name}（{uid}），请勿重复添加")
         if user_id in config["users"]:
-            config["users"][user_id]["uid"][uid] = {"live_reminder": True, "dynamic": True} # DD机中应改为 False
+            config["users"][user_id]["uid"][uid] = {"live": True, "dynamic": True} # DD机中应改为 False
         else:
-            config["users"][user_id] = {"uid": {uid: {"live_reminder": True, "dynamic": True}}} # DD机中应改为 False
+            config["users"][user_id] = {"uid": {uid: {"live": True, "dynamic": True}}} # DD机中应改为 False
         config['uid'][uid]['dynamic'] += 1 # 动态推送数加一DD机中应注释
         config['uid'][uid]['live'] += 1
         await update_config(config)
@@ -111,7 +111,7 @@ async def _(bot: Bot, event: Event, state: dict):
         try:
             if config['groups'][group_id]['uid'][uid]['dynamic']:
                 config['uid'][uid]['dynamic'] -= 1
-            if config['groups'][group_id]['uid'][uid]['live_reminder']:
+            if config['groups'][group_id]['uid'][uid]['live']:
                 config['uid'][uid]['live'] -= 1
             del config['groups'][group_id]['uid'][uid]
             del config['uid'][uid]['groups'][group_id]
@@ -125,7 +125,7 @@ async def _(bot: Bot, event: Event, state: dict):
         try:
             if config['users'][user_id]['uid'][uid]['dynamic']:
                 config['uid'][uid]['dynamic'] -= 1
-            if config['users'][user_id]['uid'][uid]['live_reminder']:
+            if config['users'][user_id]['uid'][uid]['live']:
                 config['uid'][uid]['live'] -= 1
             del config['users'][user_id]['uid'][uid]
             del config['uid'][uid]['users'][user_id]
@@ -173,7 +173,7 @@ async def _(bot: Bot, event: Event, state: dict):
     for uid, status in uid_list.items():
         name = config['uid'][uid]['name']
         message += f"【{name}】"
-        message += f"直播推送：{'开' if status['live_reminder'] else '关'}，"
+        message += f"直播推送：{'开' if status['live'] else '关'}，"
         message += f"动态推送：{'开' if status['dynamic'] else '关'}"
         message += f"（{uid}）\n"
     await list_uid.send(message=message)
@@ -277,18 +277,18 @@ async def _(bot: Bot, event: Event, state: dict):
     if event.detail_type == 'group':
         group_id = str(event.group_id)
         try:
-            if config['groups'][group_id]['uid'][uid]['live_reminder']:
+            if config['groups'][group_id]['uid'][uid]['live']:
                 live_on.finish('请勿重复开启直播推送')
-            config['groups'][group_id]['uid'][uid]['live_reminder'] = True
+            config['groups'][group_id]['uid'][uid]['live'] = True
             config['uid'][uid]['live'] += 1
         except KeyError:
             live_on.finish("开启失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
-            if config['users'][user_id]['uid'][uid]['live_reminder']:
+            if config['users'][user_id]['uid'][uid]['live']:
                 live_on.finish('请勿重复开启直播推送')
-            config['users'][user_id]['uid'][uid]['live_reminder'] = True
+            config['users'][user_id]['uid'][uid]['live'] = True
             config['uid'][uid]['live'] += 1
         except KeyError:
             live_on.finish("开启失败，uid不存在")
@@ -318,18 +318,18 @@ async def _(bot: Bot, event: Event, state: dict):
     if event.detail_type == 'group':
         group_id = str(event.group_id)
         try:
-            if not config['groups'][group_id]['uid'][uid]['live_reminder']:
+            if not config['groups'][group_id]['uid'][uid]['live']:
                 live_off.finish('请勿重复关闭直播推送')
-            config['groups'][group_id]['uid'][uid]['live_reminder'] = False
+            config['groups'][group_id]['uid'][uid]['live'] = False
             config['uid'][uid]['live'] -= 1
         except KeyError:
             live_off.finish("关闭失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
-            if not config['users'][user_id]['uid'][uid]['live_reminder']:
+            if not config['users'][user_id]['uid'][uid]['live']:
                 live_off.finish('请勿重复关闭直播推送')
-            config['users'][user_id]['uid'][uid]['live_reminder'] = False
+            config['users'][user_id]['uid'][uid]['live'] = False
             config['uid'][uid]['live'] -= 1
         except KeyError:
             live_off.finish("关闭失败，uid不存在")
@@ -463,7 +463,7 @@ async def _(bot: Bot, event: Event, state: dict):
             for uid, status in uids.items():
                 new_config[config_type][type_id]['uid'][uid] = {'live': False, 'dynamic': False}
                 new_status = new_config[config_type][type_id]['uid'][uid]
-                if 'live' in status and status['live'] or status['live_reminder']:
+                if 'live' in status and status['live'] or status['live']:
                     live_counter[uid] += 1
                     new_status['live'] = True
                 if status['dynamic']:
