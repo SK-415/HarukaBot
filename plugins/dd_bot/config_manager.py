@@ -463,7 +463,7 @@ async def _(bot: Bot, event: Event, state: dict):
             for uid, status in uids.items():
                 new_config[config_type][type_id]['uid'][uid] = {'live': False, 'dynamic': False}
                 new_status = new_config[config_type][type_id]['uid'][uid]
-                if 'live' in status and status['live'] or status['live']:
+                if 'live' in status and status['live'] or status['live_reminder']:
                     live_counter[uid] += 1
                     new_status['live'] = True
                 if status['dynamic']:
