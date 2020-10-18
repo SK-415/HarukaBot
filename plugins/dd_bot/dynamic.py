@@ -7,25 +7,30 @@ from datetime import datetime, timedelta
 from nonebot.log import logger
 
 
-@scheduler.scheduled_job('interval', seconds=10, id='dynamic_sched')
+index = 0
+
+@scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
 @logger.catch
 async def dy_sched():
     config = await read_config()
     ups = config['dynamic']['uid_list']
-    if len(ups):
-        if config['dynamic']['index'] >= len(ups):
-            uid = ups[0]
-            config['dynamic']['index'] = 1
-        else:
-            uid = ups[config['dynamic']['index']]
-            config['dynamic']['index'] += 1
-    else:
-        return
 
+    uid_list = ups
+    global index
+    if not uid_list:
+        return
+    if index >= len(uid_list):
+        uid = uid_list[0]
+        index = 1
+    else:
+        uid = uid_list[index]
+        index += 1
+
+    print('动态:', index, uid)
     user = User(uid)
     dynamics = (await user.get_dynamic())['cards'] # 获取最近十二条动态
-    config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
-    await update_config(config)
+    # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
+    # await update_config(config)
 
     dydb = Dydb()
     data = dydb.run_command(f'select * from uid{uid} order by time desc limit 3 offset 0')

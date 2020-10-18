@@ -4,6 +4,7 @@ __pycache__/
 data/
 go-cqhttp/
 log/
+test/
 
 .env
 .env.dev

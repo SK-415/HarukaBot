@@ -5,34 +5,39 @@ from .utils import User
 from nonebot.log import logger
 
 
-@scheduler.scheduled_job('interval', seconds=10, id='live_sched')
+index = 0
+
+@scheduler.scheduled_job('cron', second='*/10', id='live_sched')
 @logger.catch
 async def live_sched():
     config = await read_config()
     ups = config['status']
     
     uid_list = config['live']['uid_list']
+    global index
     if not uid_list:
         return
-    if config['live']['index'] >= len(uid_list):
+    if index >= len(uid_list):
         uid = uid_list[0]
-        config['live']['index'] = 1
+        index = 1
     else:
-        uid = uid_list[config['live']['index']]
-        config['live']['index'] += 1
-    await update_config(config)
+        uid = uid_list[index]
+        index += 1
 
     old_status = ups[uid]
     user = User(uid)
     user_info = (await user.get_info())['live_room']
+    print('直播:', index, uid)
     new_status = user_info['liveStatus']
     if new_status != old_status:
+        config = await read_config()
         config['status'][uid] = new_status
         await update_config(config)
 
         if new_status:
             bots = nonebot.get_bots()
-            name = (await user.get_info())['name'] # 获取昵称应转移至配置文件
+            name = config['uid'][uid]['name'] # 直接从配置文件读取名字
+            # name = (await user.get_info())['name'] # 获取昵称应转移至配置文件
             live_msg = f"{name} 开播啦！\n\n{user_info['title']}\n传送门→{user_info['url']}\n[CQ:image,file={user_info['cover']}]"
             groups = config["uid"][uid]["groups"]
             for group_id, bot_id in groups.items():
