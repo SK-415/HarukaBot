@@ -27,7 +27,8 @@ async def live_sched():
     old_status = ups[uid]
     user = User(uid)
     user_info = (await user.get_info())['live_room']
-    print('直播:', index, uid)
+    name = config['uid'][uid]['name'] # 直接从配置文件读取名字
+    logger.debug(f'爬取直播 [{index:03}] {name}({uid})')
     new_status = user_info['liveStatus']
     if new_status != old_status:
         config = await read_config()
@@ -36,7 +37,6 @@ async def live_sched():
 
         if new_status:
             bots = nonebot.get_bots()
-            name = config['uid'][uid]['name'] # 直接从配置文件读取名字
             # name = (await user.get_info())['name'] # 获取昵称应转移至配置文件
             live_msg = f"{name} 开播啦！\n\n{user_info['title']}\n传送门→{user_info['url']}\n[CQ:image,file={user_info['cover']}]"
             groups = config["uid"][uid]["groups"]

@@ -26,7 +26,8 @@ async def dy_sched():
         uid = uid_list[index]
         index += 1
 
-    print('动态:', index, uid)
+    name = config['uid'][uid]['name'] # 直接从配置文件读取名字
+    logger.debug(f'爬取动态 [{index:03}] {name}({uid})')
     user = User(uid)
     dynamics = (await user.get_dynamic())['cards'] # 获取最近十二条动态
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
