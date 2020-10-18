@@ -489,8 +489,8 @@ async def _(bot: Bot, event: Event, state: dict):
         new_config['uid'][uid]['live'] = sub_num
         new_config['status'][uid] = config['status'].get(uid, 0)
     
-    new_config['dynamic'] = {'uid_list': list(dy_counter), 'index': 0}
-    new_config['live'] = {'uid_list': list(config['status']), 'index': 0}
+    new_config['dynamic'] = {'uid_list': list(dy_counter)}
+    new_config['live'] = {'uid_list': list(config['status'])}
     
     await backup_config(config)
     await update_config(new_config)

@@ -130,7 +130,6 @@ class User():
 
 
 async def Get(url):
-    # start = time.time()
     DEFAULT_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                   "Chrome/79.0.3945.130 Safari/537.36",
@@ -139,20 +138,6 @@ async def Get(url):
     async with aiohttp.request('GET', url=url, headers=DEFAULT_HEADERS) as resp:
         return await resp.json(encoding='utf-8')
 
-
-# async def Get(url):
-#     """简单粗暴的请求模块"""
-#     start = time.time()
-#     DEFAULT_HEADERS = {
-#     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-#                   "Chrome/79.0.3945.130 Safari/537.36",
-#     "Referer": "https://www.bilibili.com/"
-#     }
-
-#     r = requests.get(url, headers=DEFAULT_HEADERS)
-#     r.encoding='utf-8'
-#     print(time.time()-start)
-#     return r.json()
 
 async def read_config():
     """读取用户注册信息"""
