@@ -19,7 +19,7 @@ nonebot.init()
 app = nonebot.get_asgi()
 
 nonebot.load_builtin_plugins()
-nonebot.load_plugins("plugins")
+nonebot.load_plugins("src/plugins")
 
 # Modify some config / config depends on loaded configs
 # 
@@ -28,14 +28,4 @@ nonebot.load_plugins("plugins")
 
 
 if __name__ == "__main__":
-    # 将工作目录切换到 bot.py 所在的文件夹
-    os.chdir(path.dirname(path.abspath(__file__)))
-
-    # 列出 \plugins 下所有的插件
-    for dirname in os.listdir('plugins'):
-        if dirname != '__pycache__' and path.isdir(path.join('plugins', dirname)):
-            # 检查是否有对应 data 文件夹, 没有就创建一个
-            if not path.isdir(path.join('data', dirname)):
-                os.makedirs(path.join('data', dirname))
-
     nonebot.run(app="bot:app")

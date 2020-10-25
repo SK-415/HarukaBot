@@ -5,6 +5,7 @@ data/
 go-cqhttp/
 log/
 test/
+sk_bot/
 
 .env
 .env.dev

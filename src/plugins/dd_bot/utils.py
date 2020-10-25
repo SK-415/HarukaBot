@@ -1,15 +1,9 @@
+import os
 import sqlite3
-# import requests
 import json
 import base64
 from pyppeteer import launch
-# import asyncio
-# import os
-# import sys
 from os import path
-# import functools
-# from nonebot.log import logger
-# import traceback
 import aiohttp
 from datetime import datetime
 
@@ -97,7 +91,6 @@ class Dynamic():
         await page.close()
         await browser.close()
     
-
     async def encode(self):
         """将图片转为base64码"""
         with open(self.img_path, 'rb') as f:
@@ -110,6 +103,7 @@ class Dynamic():
 
     async def test_img(self):
         return f"哈哈[CQ:image,file=" + self.image + "]"
+
 
 class User():
     def __init__(self, uid):
@@ -148,13 +142,16 @@ async def read_config():
         config = get_new_config()
     return config
 
+
 def get_new_config():
     return {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": [], "index": 0}, 'live': {'uid_list': [], 'index': 0}}
+
 
 async def update_config(config):
     """更新注册信息"""
     with open(get_path('config.json'), 'w', encoding='utf-8') as f:
         f.write(json.dumps(config, ensure_ascii=False, indent=4))
+
 
 async def backup_config(config):
     # backup_name = f"config{datetime.now().strftime('%Y.%m.%d %H-%M-%S')}.json"
@@ -162,13 +159,15 @@ async def backup_config(config):
     with open(get_path(backup_name), 'w', encoding='utf-8') as f:
         f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
+
 def get_path(name):
     """获取数据文件绝对路径"""
-    f_path = path.abspath(path.join('data', 'dd_bot', name))
+    src_path = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
+    dir_path = path.join(src_path, 'data', 'dd_bot')
+    f_path = path.join(dir_path, name)
     return f_path
 
-# def restart():
-#     # python = sys.executable
-#     # print(sys.argv)
-#     # os.execl(python, python, * sys.argv)
-#     sys.exit()
+
+# bot 启动时检查 src\data\dd_bot\ 目录是否存在
+if not path.isdir(get_path('')):
+    os.makedirs(get_path(''))
