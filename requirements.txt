@@ -1,0 +1,4 @@
+aiohttp==3.6.3
+nonebot2[scheduler]==2.0.0a3
+qrcode==6.1
+pyppeteer==0.2.2
