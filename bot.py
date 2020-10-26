@@ -14,7 +14,6 @@ logger.add(path.join('log', "error.log"),
            level="ERROR",
            format=default_format)
 
-# You can pass some keyword args config to init function
 nonebot.init()
 app = nonebot.get_asgi()
 

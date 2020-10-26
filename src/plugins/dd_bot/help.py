@@ -31,10 +31,6 @@ func_list = """DD机目前支持的功能有：
 help = on_command('帮助', rule=to_me(), priority=5)
 
 @help.handle()
-async def get_args(bot: Bot, event: Event, state: dict):
-    args = str(event.message).strip()
-    if args:
-        state['func'] = args
-    else:
-        await help.finish(func_list)
+async def _(bot: Bot, event: Event, state: dict):
+    await help.finish(func_list)
 
