@@ -496,26 +496,3 @@ async def _(bot: Bot, event: Event, state: dict):
     await update_config(new_config)
     await fix_config.finish('修复完成')
     
-
-__plugin_name__ = 'DD机'
-__plugin_usage__ = r"""DD机目前支持的功能有：
-
-主播列表
-添加主播 uid
-删除主播 uid
-开启动态 uid
-关闭动态 uid
-开启直播 uid
-关闭直播 uid
-开启at uid
-关闭at uid
-开启权限
-关闭权限
-
-
-开启权限后,当前群只有管理员或者机器人好友才能触发指令，输入命令时不要忘记空格
-
-其中“uid”请替换为UP的uid，注意是uid不是直播间id
-
-添加后默认开启直播和动态推送，在哪里（群聊/私聊）添加就会在哪里推送
-"""
