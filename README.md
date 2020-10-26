@@ -1,4 +1,11 @@
-## 目前本项目处于非常初期的测试阶段, 无法保证稳定性且可能发生未知错误. **非常不建议在生产环境使用!!!**. 如有需要请查看 [`dd-bot`](https://github.com/SK-415/dd-bot)
+# HarukaBot
 
-基于 [`nontbot2`](https://github.com/nonebot/nonebot2) 的 [`dd-bot`](https://github.com/SK-415/dd-bot) 移植, 待 [`nonebot2`](https://github.com/nonebot/nonebot2) 稳定后会正式将项目迁移过来.
+[![VERSION](https://img.shields.io/github/v/release/SK-415/HarukaBot)](https://github.com/SK-415/HarukaBot/releases)
+[![STARS](https://img.shields.io/github/stars/SK-415/HarukaBot)](https://github.com/SK-415/HarukaBot/stargazers)
+[![LICENSE](https://img.shields.io/github/license/SK-415/HarukaBot)](https://github.com/SK-415/HarukaBot/blob/master/LICENSE)
 
+## 简介
+
+一款将哔哩哔哩UP主的直播与动态信息推送至QQ的机器人. 基于 [`nonebot2`](https://github.com/nonebot/nonebot2) 开发, 前身为 [`dd-bot`](https://github.com/SK-415/dd-bot) .
+
+文档撰写中ing...
