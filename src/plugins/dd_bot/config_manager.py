@@ -3,7 +3,7 @@ from nonebot import on_command
 from nonebot.rule import to_me
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.permission import GROUP_ADMIN, PRIVATE_FRIEND, SUPERUSER, GROUP_OWNER
-from .utils import get_new_config, read_config, Dydb, User, update_config, backup_config
+from .utils import get_new_config, read_config, User, update_config, backup_config
 
 
 async def permission_check(bot: Bot, event: Event, state: dict):
@@ -36,7 +36,6 @@ async def _(bot: Bot, event: Event, state: dict):
     uid = state['uid']
     config = await read_config()
 
-    dydb = Dydb()
     if uid not in config["status"]: # uid不在配置文件就创建一个
         user = User(uid)
         name = ''
@@ -52,14 +51,8 @@ async def _(bot: Bot, event: Event, state: dict):
     else:
         name = config['uid'][uid]['name']
 
-    tables = dydb.get_table_list()
-    if 'uid' + uid not in tables:
-        dydb.create_table('uid'+uid, '(time int primary key, url varchar(50), is_recall boolean)') # 创建uid表
-
     if event.detail_type == "group": # 检测是否群消息
         group_id = str(event.group_id)
-        if 'qq' + group_id not in tables:
-            dydb.create_table('qq'+group_id, '(url varchar(50) primary key, message_id int, bot_id int)')
         if group_id not in config["uid"][uid]["groups"]:
             config["uid"][uid]["groups"][group_id] = event.self_id
         else:

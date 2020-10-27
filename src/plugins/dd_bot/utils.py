@@ -1,43 +1,10 @@
 import os
-import sqlite3
 import json
 import base64
 from pyppeteer import launch
 from os import path
 import aiohttp
 from datetime import datetime
-
-
-class Dydb():
-    def __init__(self):
-        self.path = get_path('dynamic.db')
-
-    def run_command(self, command, variables=[]):
-        conn = sqlite3.connect(self.path)
-        cursor = conn.cursor()
-        cursor.execute(command, variables)
-        results = cursor.fetchall()
-        cursor.close()
-        conn.commit()
-        conn.close()
-        return results
-
-    def get_table_list(self):
-        command = 'select name from sqlite_master where type="table" order by name;'
-        tables = self.run_command(command)
-        return [table[0] for table in tables]
-
-    def create_table(self, name, table_frame):
-        command = f'create table {name} {table_frame}'
-        self.run_command(command)
-
-    def insert_uid(self, uid, time, url, is_recall):
-        command = f'insert into uid{uid} (time, url, is_recall) values (?, ?, ?)'
-        self.run_command(command, (time, url, is_recall))
-    
-    def insert_qq(self, group_id, url, message_id, bot_id):
-        command = f'insert into qq{group_id} (url, message_id, bot_id) values (?, ?, ?)'
-        self.run_command(command, (url, message_id, bot_id))
 
 
 class Dynamic():
@@ -100,9 +67,6 @@ class Dynamic():
     async def get_path(self):
         self.image = "file:///" + self.img_path
         return self.image
-
-    async def test_img(self):
-        return f"哈哈[CQ:image,file=" + self.image + "]"
 
 
 class User():
