@@ -1,6 +1,7 @@
 # HarukaBot
 
 [![VERSION](https://img.shields.io/github/v/release/SK-415/HarukaBot)](https://github.com/SK-415/HarukaBot/releases)
+[![time tracker](https://wakatime.com/badge/github/SK-415/HarukaBot.svg)](https://wakatime.com/badge/github/SK-415/HarukaBot)
 [![STARS](https://img.shields.io/github/stars/SK-415/HarukaBot)](https://github.com/SK-415/HarukaBot/stargazers)
 [![LICENSE](https://img.shields.io/github/license/SK-415/HarukaBot)](https://github.com/SK-415/HarukaBot/blob/master/LICENSE)
 
