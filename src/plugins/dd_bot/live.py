@@ -1,9 +1,8 @@
 import nonebot
 from nonebot import scheduler
-from .utils import read_config, update_config
-from .utils import User
 from nonebot.log import logger
 
+from .utils import User, read_config, safe_send, update_config
 
 index = 0
 
@@ -44,11 +43,11 @@ async def live_sched():
                 if config["groups"][group_id]['uid'][uid]["live"]:
                     bot = bots[bot_id]
                     if config['groups'][group_id]['uid'][uid]['at']:
-                        await bot.send_group_msg(group_id=group_id, message="[CQ:at,qq=all] "+live_msg)
+                        await safe_send(bot, 'group', group_id, "[CQ:at,qq=all] "+live_msg)
                     else:
-                        await bot.send_group_msg(group_id=group_id, message=live_msg)
+                        await safe_send(bot, 'group', group_id, live_msg)
             users = config["uid"][uid]["users"]
             for user_id, bot_id in users.items():
                 if config["users"][user_id]['uid'][uid]["live"]:
                     bot = bots[bot_id]
-                    await bot.send_private_msg(user_id=user_id, message=live_msg)
+                    await safe_send(bot, 'private', user_id, live_msg)

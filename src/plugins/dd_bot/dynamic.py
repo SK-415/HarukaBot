@@ -1,11 +1,11 @@
-import nonebot
 import os
-from nonebot import scheduler
-from .utils import Dynamic, User
-from .utils import read_config
 from datetime import datetime, timedelta
+
+import nonebot
+from nonebot import scheduler
 from nonebot.log import logger
 
+from .utils import Dynamic, User, read_config, safe_send
 
 last_time = {}
 index = 0
@@ -30,11 +30,14 @@ async def dy_sched():
     name = config['uid'][uid]['name'] # 直接从配置文件读取名字
     logger.debug(f'爬取动态 [{index:03}] {name}({uid})')
     user = User(uid)
-    dynamics = (await user.get_dynamic())['cards'] # 获取最近十二条动态
+    dynamics = (await user.get_dynamic()).get('cards', []) # 获取最近十二条动态
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
     # await update_config(config)
 
-    if uid not in last_time:
+    if len(dynamics) == 0: # 没有发过动态或者动态全删的直接结束
+        return
+
+    if uid not in last_time: # 没有爬取过这位主播就把最新一条动态时间为 last_time
         dynamic = Dynamic(dynamics[0])
         last_time[uid] = dynamic.time
         return
@@ -50,9 +53,9 @@ async def dy_sched():
             for group_id, bot_id in config["uid"][uid]["groups"].items():
                 if config["groups"][group_id]['uid'][uid]["dynamic"]:
                     bot = bots[bot_id]
-                    await bot.send_group_msg(group_id=group_id, message=dynamic.message)
+                    await safe_send(bot, 'group', group_id, dynamic.message)
             for user_id, bot_id in config["uid"][uid]["users"].items():
                 if config["users"][user_id]['uid'][uid]["dynamic"]:
                     bot = bots[bot_id]
-                    await bot.send_private_msg(user_id=user_id, message= dynamic.message)
+                    await safe_send(bot, 'private', user_id, dynamic.message)
             last_time[uid] = dynamic.time

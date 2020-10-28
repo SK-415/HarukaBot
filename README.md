@@ -7,6 +7,6 @@
 
 ## 简介
 
-一款将哔哩哔哩UP主的直播与动态信息推送至QQ的机器人. 基于 [`nonebot2`](https://github.com/nonebot/nonebot2) 开发, 前身为 [`dd-bot`](https://github.com/SK-415/dd-bot) .
+一款将哔哩哔哩UP主的直播与动态信息推送至QQ的机器人. 基于 [`NoneBot2`](https://github.com/nonebot/nonebot2) 开发, 前身为 [`dd-bot`](https://github.com/SK-415/dd-bot) .
 
 文档撰写中ing...

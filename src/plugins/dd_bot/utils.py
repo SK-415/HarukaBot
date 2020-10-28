@@ -1,10 +1,14 @@
-import os
-import json
+import asyncio
 import base64
-from pyppeteer import launch
-from os import path
-import aiohttp
+import json
+import os
+import traceback
 from datetime import datetime
+from os import path
+
+import aiohttp
+from nonebot.log import logger
+from pyppeteer import launch
 
 
 class Dynamic():
@@ -131,6 +135,18 @@ def get_path(name):
     f_path = path.join(dir_path, name)
     return f_path
 
+async def safe_send(bot, send_type, type_id, message):
+    """发送出现错误时, 尝试重新发送, 并捕获异常不会中断运行"""
+    for _ in range(5):
+        try:
+            message_id = await bot.call_api('send_'+send_type+'_msg', **{
+                'message': message,
+                'user_id' if send_type == 'private' else 'group_id': type_id
+                })
+            return message_id
+        except:
+            logger.error(traceback.format_exc())
+            await asyncio.sleep(0.1)
 
 # bot 启动时检查 src\data\dd_bot\ 目录是否存在
 if not path.isdir(get_path('')):

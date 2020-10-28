@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import nonebot
-import os
 from os import path
 from nonebot.log import logger, default_format
 
