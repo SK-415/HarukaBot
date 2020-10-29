@@ -48,17 +48,23 @@ class Dynamic():
             return
         browser = await launch(args=['--no-sandbox'])
         page = await browser.newPage()
-        await page.goto(self.url, waitUntil="networkidle0")
-        # await page.waitForNavigation()
-        # await page.waitFor(1000)
-        await page.setViewport(viewport={'width': 1920, 'height': 1080})
-        card = await page.waitForSelector(".card")
-        # card = await page.querySelector(".card")
-        clip = await card.boundingBox()
-        bar = await page.querySelector(".text-bar")
-        bar_bound = await bar.boundingBox()
-        clip['height'] = bar_bound['y'] - clip['y']
-        await page.screenshot({'path': self.img_path, 'clip': clip})
+        for _ in range(3):
+            try:
+                await page.goto(self.url, waitUntil="networkidle0")
+                # await page.waitForNavigation()
+                # await page.waitFor(1000)
+                await page.setViewport(viewport={'width': 1920, 'height': 1080})
+                # card = await page.waitForSelector(".card")
+                card = await page.querySelector(".card")
+                clip = await card.boundingBox()
+                bar = await page.querySelector(".text-bar")
+                bar_bound = await bar.boundingBox()
+                clip['height'] = bar_bound['y'] - clip['y']
+                await page.screenshot({'path': self.img_path, 'clip': clip})
+                break
+            except:
+                logger.error(traceback.format_exc())
+                await asyncio.sleep(0.1)
         await page.close()
         await browser.close()
     
@@ -136,7 +142,7 @@ def get_path(name):
     return f_path
 
 async def safe_send(bot, send_type, type_id, message):
-    """发送出现错误时, 尝试重新发送, 并捕获异常不会中断运行"""
+    """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
     for _ in range(5):
         try:
             message_id = await bot.call_api('send_'+send_type+'_msg', **{
