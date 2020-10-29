@@ -82,7 +82,7 @@ class User():
         return (await Get(url))['data']
 
     async def get_dynamic(self):
-        # need_top: {1: 带置顶, 2: 不带置顶}
+        # need_top: {1: 带置顶, 0: 不带置顶}
         url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={self.uid}&offset_dynamic_id=0&need_top=0'
         return (await Get(url))['data']
     
@@ -131,7 +131,7 @@ async def backup_config(config):
 def get_path(name):
     """获取数据文件绝对路径"""
     src_path = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
-    dir_path = path.join(src_path, 'data', 'dd_bot')
+    dir_path = path.join(src_path, 'data', 'haruka_bot')
     f_path = path.join(dir_path, name)
     return f_path
 
@@ -148,6 +148,6 @@ async def safe_send(bot, send_type, type_id, message):
             logger.error(traceback.format_exc())
             await asyncio.sleep(0.1)
 
-# bot 启动时检查 src\data\dd_bot\ 目录是否存在
+# bot 启动时检查 src\data\haruka_bot\ 目录是否存在
 if not path.isdir(get_path('')):
     os.makedirs(get_path(''))
