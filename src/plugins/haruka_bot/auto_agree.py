@@ -18,4 +18,4 @@ group_invite = on_request(priority=5)
 @group_invite.handle()
 async def _(bot: Bot, event: Event, state: dict):
     if event.detail_type == 'group' and event.sub_type == 'invite' and event.user_id in bot.config.superusers:
-        await bot.set_group_add_request(flag=event.flag, sub_type='invite', approve=True)
+        await bot.set_group_add_request(flag=event.raw_event['flag'], sub_type='invite', approve=True)
