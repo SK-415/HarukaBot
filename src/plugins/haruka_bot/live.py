@@ -35,12 +35,12 @@ async def live_sched():
         await update_config(config)
 
         if new_status:
-            bots = nonebot.get_bots()
             # name = (await user.get_info())['name'] # 获取昵称应转移至配置文件
             live_msg = f"{name} 开播啦！\n\n{user_info['title']}\n传送门→{user_info['url']}\n[CQ:image,file={user_info['cover']}]"
             groups = config["uid"][uid]["groups"]
             for group_id, bot_id in groups.items():
                 if config["groups"][group_id]['uid'][uid]["live"]:
+                    bots = nonebot.get_bots()
                     bot = bots[bot_id]
                     if config['groups'][group_id]['uid'][uid]['at']:
                         await safe_send(bot, 'group', group_id, "[CQ:at,qq=all] "+live_msg)
@@ -49,5 +49,6 @@ async def live_sched():
             users = config["uid"][uid]["users"]
             for user_id, bot_id in users.items():
                 if config["users"][user_id]['uid'][uid]["live"]:
+                    bots = nonebot.get_bots()
                     bot = bots[bot_id]
                     await safe_send(bot, 'private', user_id, live_msg)

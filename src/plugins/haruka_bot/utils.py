@@ -2,12 +2,17 @@ import asyncio
 import base64
 import json
 import os
+import platform
+import subprocess
 import traceback
 from datetime import datetime
 from os import path
 
 import aiohttp
+import nonebot
+from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.log import logger
+import psutil
 from pyppeteer import launch
 
 
@@ -141,9 +146,9 @@ def get_path(name):
     f_path = path.join(dir_path, name)
     return f_path
 
-async def safe_send(bot, send_type, type_id, message):
+async def safe_send(bot: Bot, send_type, type_id, message):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
-    for _ in range(5):
+    for i in range(3):
         try:
             message_id = await bot.call_api('send_'+send_type+'_msg', **{
                 'message': message,
@@ -152,7 +157,41 @@ async def safe_send(bot, send_type, type_id, message):
             return message_id
         except:
             logger.error(traceback.format_exc())
+            if i == 2:
+                bot = await restart(bot)
+                message = '检测到推送出现异常，已尝试自动重启，如仍有问题请向机器人管理员反馈'
+                await asyncio.sleep(30)
+                message_id = await bot.call_api('send_'+send_type+'_msg', **{
+                    'message': message,
+                    'user_id' if send_type == 'private' else 'group_id': type_id
+                    })
+                return message_id
             await asyncio.sleep(0.1)
+
+
+async def restart(bot: Bot):
+    cqhttp_dir = (await bot.get_version_info())['coolq_directory']
+    pids = psutil.process_iter()
+    for pid in pids:
+        try:
+            if 'go-cqhttp' in pid.name() and \
+                pid.exe() == path.join(cqhttp_dir, pid.name()):
+                subprocess.Popen(
+                    pid.exe(), 
+                    cwd=pid.cwd(), 
+                    # stdout=subprocess.PIPE, 
+                    stderr=None if platform.system()=='Windows' else subprocess.DEVNULL, 
+                    creationflags=subprocess.CREATE_NEW_CONSOLE if platform.system()=='Windows' else 0
+                    )
+                pid.terminate()
+                while True:
+                    await asyncio.sleep(1)
+                    bots = nonebot.get_bots()
+                    if bot.self_id in bots:
+                        return bots[bot.self_id]
+        except psutil.ZombieProcess:
+            continue
+
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在
 if not path.isdir(get_path('')):

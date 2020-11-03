@@ -49,13 +49,14 @@ async def dy_sched():
             await dynamic.encode()
             os.remove(dynamic.img_path)
             await dynamic.format()
-            bots = nonebot.get_bots()
             for group_id, bot_id in config["uid"][uid]["groups"].items():
                 if config["groups"][group_id]['uid'][uid]["dynamic"]:
+                    bots = nonebot.get_bots()
                     bot = bots[bot_id]
                     await safe_send(bot, 'group', group_id, dynamic.message)
             for user_id, bot_id in config["uid"][uid]["users"].items():
                 if config["users"][user_id]['uid'][uid]["dynamic"]:
+                    bots = nonebot.get_bots()
                     bot = bots[bot_id]
                     await safe_send(bot, 'private', user_id, dynamic.message)
             last_time[uid] = dynamic.time
