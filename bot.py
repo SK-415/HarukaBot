@@ -24,6 +24,8 @@ if __name__ == "__main__":
            retention='1 week',
            diagnose=False,
            level="ERROR",
-           format=default_format)
+           format=default_format,
+           encoding='utf-8'
+           )
     
     nonebot.run(app="bot:app")
