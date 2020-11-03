@@ -10,9 +10,9 @@ from os import path
 
 import aiohttp
 import nonebot
-from nonebot.adapters.cqhttp import Bot, Event
-from nonebot.log import logger
 import psutil
+from nonebot.adapters.cqhttp import Bot
+from nonebot.log import logger
 from pyppeteer import launch
 
 
@@ -160,7 +160,6 @@ async def safe_send(bot: Bot, send_type, type_id, message):
             if i == 2:
                 bot = await restart(bot)
                 message = '检测到推送出现异常，已尝试自动重启，如仍有问题请向机器人管理员反馈'
-                await asyncio.sleep(30)
                 message_id = await bot.call_api('send_'+send_type+'_msg', **{
                     'message': message,
                     'user_id' if send_type == 'private' else 'group_id': type_id

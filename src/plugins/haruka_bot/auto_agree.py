@@ -8,7 +8,6 @@ friend_req = on_request(priority=5)
 
 @friend_req.handle()
 async def _(bot: Bot, event: Event, state: dict):
-    # print(event.type, event.detail_type)
     if event.detail_type == 'friend' and event.user_id in bot.config.superusers:
         await bot.set_friend_add_request(flag=event.id, approve=True)
 

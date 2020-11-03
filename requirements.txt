@@ -3,3 +3,4 @@ aiohttp>=3.6.3
 qrcode>=6.1
 pyppeteer>=0.2.2
 pillow>=8.0.1
+psutil>=5.7.3
