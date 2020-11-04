@@ -8,7 +8,7 @@ import traceback
 from datetime import datetime
 from os import path
 
-import aiohttp
+import httpx
 import nonebot
 import psutil
 from nonebot.adapters.cqhttp import Bot
@@ -108,8 +108,10 @@ async def Get(url):
                   "Chrome/79.0.3945.130 Safari/537.36",
     "Referer": "https://www.bilibili.com/"
     }
-    async with aiohttp.request('GET', url=url, headers=DEFAULT_HEADERS) as resp:
-        return await resp.json(encoding='utf-8')
+    async with httpx.AsyncClient() as client:
+        r = await client.get(url, headers=DEFAULT_HEADERS)
+    r.encoding = 'utf-8'
+    return r.json()
 
 
 async def read_config():

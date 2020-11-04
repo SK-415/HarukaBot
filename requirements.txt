@@ -1,6 +1,6 @@
-nonebot2[scheduler]~=2.0.0a3
-aiohttp>=3.6.3
+nonebot2[scheduler]~=2.0.0a4
 qrcode>=6.1
 pyppeteer>=0.2.2
 pillow>=8.0.1
 psutil>=5.7.3
+httpx>=0.16.1

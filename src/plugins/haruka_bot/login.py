@@ -1,10 +1,15 @@
-import base64, qrcode, io, aiohttp, asyncio
-from nonebot import on_command
-from nonebot.rule import to_me
-from nonebot.permission import GROUP_ADMIN, GROUP_OWNER, PRIVATE_FRIEND, SUPERUSER
-from nonebot.adapters.cqhttp import Bot, Event
+import asyncio
+import base64
+import io
 from urllib.parse import urlsplit
 
+import httpx
+import qrcode
+from nonebot import on_command
+from nonebot.adapters.cqhttp import Bot, Event
+from nonebot.permission import (GROUP_ADMIN, GROUP_OWNER, PRIVATE_FRIEND,
+                                SUPERUSER)
+from nonebot.rule import to_me
 
 login = on_command('登录', rule=to_me(), permission=SUPERUSER, 
     priority=5)
@@ -16,7 +21,6 @@ async def _(bot: Bot, event: Event, state: dict):
     await login.send(qr)
     while True:
         if await user.login_check():
-            await user.get_cookies()
             await login.send(str(user.cookies))
             break
         await asyncio.sleep(3)
@@ -30,12 +34,18 @@ class User():
     }
 
     async def get(self, url):
-        async with aiohttp.request('GET', url=url, headers=self.DEFAULT_HEADERS) as resp:
-            return await resp.json(encoding='utf-8')
+        async with httpx.AsyncClient() as client:
+            r = await client.get(url, headers=self.DEFAULT_HEADERS)
+        self.cookies = dict(r.cookies)
+        r.encoding = 'utf-8'
+        return r.json()
     
     async def post(self, url, data=''):
-        async with aiohttp.request('POST', url=url, headers=self.DEFAULT_HEADERS, data=data) as resp:
-            return await resp.json(encoding='utf-8')
+        async with httpx.AsyncClient() as client:
+            r = await client.post(url, headers=self.DEFAULT_HEADERS, data=data)
+        self.cookies = dict(r.cookies)
+        r.encoding = 'utf-8'
+        return r.json()
 
     async def login(self):
         get_login_url = 'https://passport.bilibili.com/qrcode/getLoginUrl'
@@ -63,7 +73,7 @@ class User():
             return True
         return False
     
-    async def get_cookies(self):
+    async def get_url_cookies(self):
         query = urlsplit(self.url).query
         cookies = {}
         for s in query.split('&'):
@@ -71,7 +81,7 @@ class User():
             cookies[key] = value
         self.cookies = cookies
         return self.cookies
-        return True
+
 
 if __name__ == "__main__":
     async def main():
