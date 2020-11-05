@@ -12,4 +12,4 @@ sk_bot/
 
 docker-compose.yml
 Dockerfile
-pyproject.toml
+poetry.lock

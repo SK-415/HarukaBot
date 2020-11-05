@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "haruka_bot"
+version = "1.0.0"
+description = "haruka_bot"
+authors = []
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+nb-cli = "^0.2.0"
+psutil = "^5.7.3"
+pyppeteer = "^0.2.2"
+nonebot2 = {extras = ["cli", "scheduler"], version = "^2.0.0-alpha.4"}
+qrcode = {extras = ["pil"], version = "^6.1"}
+"nonebot.plugins.server-status" = "^0.1.0-alpha.3"
+
+[tool.poetry.dev-dependencies]
+nonebot-test = "^0.1.0"
+pipreqs = "^0.4.10"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
