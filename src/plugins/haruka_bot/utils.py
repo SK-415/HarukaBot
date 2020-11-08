@@ -13,8 +13,14 @@ import nonebot
 import psutil
 from nonebot.adapters.cqhttp import Bot
 from nonebot.log import logger
-from pyppeteer import launch
 
+os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
+# os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://storage.googleapis.com'
+from pyppeteer import launch
+from pyppeteer.chromium_downloader import check_chromium, download_chromium
+
+if not check_chromium():
+    download_chromium()
 
 class Dynamic():
     def __init__(self, dynamic):
@@ -147,6 +153,7 @@ def get_path(name):
     dir_path = path.join(src_path, 'data', 'haruka_bot')
     f_path = path.join(dir_path, name)
     return f_path
+
 
 async def safe_send(bot: Bot, send_type, type_id, message):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
