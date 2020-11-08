@@ -1,4 +1,5 @@
 import nonebot
+from apscheduler.triggers.cron import CronTrigger
 from nonebot import scheduler
 from nonebot.log import logger
 
@@ -6,7 +7,7 @@ from .utils import User, read_config, safe_send, update_config
 
 index = 0
 
-@scheduler.scheduled_job('cron', second='*/10', id='live_sched')
+@scheduler.scheduled_job(CronTrigger(second='*/10'), id='live_sched')
 @logger.catch
 async def live_sched():
     config = await read_config()
