@@ -1,22 +1,20 @@
   
   
-<p align="center">
-  <img src="logo.png" width="200" height="200">
-</p>
+<div align="center">
+  <img src="logo.png" width="200" height="200" alt="logo">
   
-<h1 align="center">HarukaBot</h1>
-<p align="center">
-  <a href="https://github.com/SK-415/HarukaBot/releases">
-    <img src="https://img.shields.io/github/v/release/SK-415/HarukaBot" alt="VERSION">
-  </a>
-  <a href="https://wakatime.com/badge/github/SK-415/HarukaBot">
-    <img src="https://wakatime.com/badge/github/SK-415/HarukaBot.svg" alt="time tracker">
-  </a>
-  <a href="https://github.com/SK-415/HarukaBot/stargazers">
-    <img src="https://img.shields.io/github/stars/SK-415/HarukaBot" alt="STARS">
-  <a href="https://github.com/SK-415/HarukaBot/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/SK-415/HarukaBot" alt="LICENSE">
-  </a>
+# HarukaBot
+  
+[![VERSION](https://img.shields.io/github/v/release/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/releases)
+[![time tracker](https://wakatime.com/badge/github/SK-415/HarukaBot.svg )](https://wakatime.com/badge/github/SK-415/HarukaBot)
+[![STARS](https://img.shields.io/github/stars/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/stargazers)
+[![qq group](https://img.shields.io/badge/QQ%E7%BE%A4-629574472-orange )](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)
+[![LICENSE](https://img.shields.io/github/license/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/blob/master/LICENSE)
+  
+**由于学业原因, HarukaBot 将停更一段时间, 等我成绩恢复稳定后会继续更新.**  
+**虽然暂时不更新新功能, 但是在此期间我依然会继续完善文档同时在[QQ群](https://jq.qq.com/?_wv=1027&k=DveS3XKI )答疑.**
+  
+</div>
   
 ##  目录
   
@@ -40,12 +38,16 @@
   
 项目名称来源于B站 [@白神遥Haruka](https://space.bilibili.com/477332594 )
   
+logo 画师: [秦无](https://space.bilibili.com/4668826 )
+  
 HarukaBot 致力于为B站UP主们提供一个开源免费的粉丝群推送方案. 极大的减轻管理员负担, 不会再遇到突击无人推送的尴尬情况. 同时还能将B博动态截图转发至粉丝群, 活跃群内话题.
   
 > 介于作者技术力低下, HarukaBot 的体验可能并不是很好. 如果使用中有任何意见或者建议都欢迎提出, 我会努力去完善它. 
   
 ##  功能介绍
   
+  
+**以下仅为功能介绍, 并非实际命令名称. 具体命令向 bot 发送 `帮助` 查看, 群里要在所有命令前加上@**
   
 HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群/好友.
   
