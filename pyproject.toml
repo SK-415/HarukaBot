@@ -1,23 +1,29 @@
 [tool.poetry]
-name = "haruka_bot"
-version = "1.0.0"
-description = "haruka_bot"
-authors = []
+name = "haruka-bot"
+version = "1.0.1"
+description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
+authors = ["SK-415 <2967923486@qq.com>"]
+license = "GPL-3.0-or-later"
 readme = "README.md"
+homepage = "https://github.com/SK-415/HarukaBot"
+repository = "https://github.com/SK-415/HarukaBot/tree/master/src/plugins/haruka_bot"
+documentation = "https://github.com/SK-415/HarukaBot#readme"
+keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
+packages = [
+    { include = "haruka_bot/*.py", from = "./src/plugins/"}
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-nb-cli = "^0.2.0"
+qrcode = {extras = ["pil"], version = "^6.1"}
+nonebot2 = {extras = ["cli", "scheduler"], version = "^2.0.0-alpha.4"}
 psutil = "^5.7.3"
 pyppeteer = "^0.2.2"
-nonebot2 = {extras = ["cli", "scheduler"], version = "^2.0.0-alpha.4"}
-qrcode = {extras = ["pil"], version = "^6.1"}
 
 [tool.poetry.dev-dependencies]
-nonebot-test = "^0.1.0"
-pipreqs = "^0.4.10"
+nonebot2 = {extras = ["test"], version = "^2.0.0-alpha.4"}
 Nuitka = "^0.6.9"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
