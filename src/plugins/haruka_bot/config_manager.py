@@ -46,10 +46,14 @@ async def _(bot: Bot, event: Event, state: dict):
             await add_uid.finish("请输入有效的uid")
         config['status'][uid] = 0
         config['uid'][uid] = {'groups': {}, 'users': {}, 'dynamic': 0, 'live': 0, 'name': name}
-        config['dynamic']['uid_list'].append(uid) # 主播uid添加至动态列表，在DD机中应删除
+        config['dynamic']['uid_list'].append(uid) # 主播uid添加至动态列表
         config['live']['uid_list'].append(uid) # 主播uid添加至直播列表
     else:
         name = config['uid'][uid]['name']
+        if uid not in config['dynamic']['uid_list']: 
+            config['dynamic']['uid_list'].append(uid)
+        if uid not in config['live']['uid_list']:
+            config['live']['uid_list'].append(uid)
 
     if event.detail_type == "group": # 检测是否群消息
         group_id = str(event.group_id)
@@ -73,10 +77,10 @@ async def _(bot: Bot, event: Event, state: dict):
         else:
             await add_uid.finish(f"您已添加{name}（{uid}），请勿重复添加")
         if user_id in config["users"]:
-            config["users"][user_id]["uid"][uid] = {"live": True, "dynamic": True} # DD机中应改为 False
+            config["users"][user_id]["uid"][uid] = {"live": True, "dynamic": True}
         else:
-            config["users"][user_id] = {"uid": {uid: {"live": True, "dynamic": True}}} # DD机中应改为 False
-        config['uid'][uid]['dynamic'] += 1 # 动态推送数加一DD机中应注释
+            config["users"][user_id] = {"uid": {uid: {"live": True, "dynamic": True}}}
+        config['uid'][uid]['dynamic'] += 1
         config['uid'][uid]['live'] += 1
         await update_config(config)
         await add_uid.finish(f"已添加{name}（{uid}）")
@@ -98,7 +102,7 @@ async def _(bot: Bot, event: Event, state: dict):
     try:
         name = config['uid'][uid]['name']
     except KeyError:
-        delete_uid.finish("删除失败，uid不存在")
+        await delete_uid.finish("删除失败，uid不存在")
     if event.detail_type == 'group':
         group_id = str(event.group_id)
         try:
@@ -112,7 +116,7 @@ async def _(bot: Bot, event: Event, state: dict):
             if config['groups'][group_id]['uid'] == {} and config['groups'][group_id]['admin']:
                 del config['groups'][group_id]
         except KeyError:
-            delete_uid.finish("删除失败，uid不存在")
+            await delete_uid.finish("删除失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
@@ -126,7 +130,7 @@ async def _(bot: Bot, event: Event, state: dict):
             if config['users'][user_id]['uid'] == {}:
                 del config['users'][user_id]
         except KeyError:
-            delete_uid.finish("删除失败，uid不存在")
+            await delete_uid.finish("删除失败，uid不存在")
     # 如果无人再订阅动态，就从动态列表中移除
     if config['uid'][uid]['dynamic'] == 0 and uid in config['dynamic']['uid_list']:
         config['dynamic']['uid_list'].remove(uid)
@@ -189,20 +193,20 @@ async def _(bot: Bot, event: Event, state: dict):
         group_id = str(event.group_id)
         try:
             if config['groups'][group_id]['uid'][uid]['dynamic'] == True:
-                dynamic_on.finish('请勿重复开启动态推送')
+                await dynamic_on.finish('请勿重复开启动态推送')
             config['groups'][group_id]['uid'][uid]['dynamic'] = True
             config['uid'][uid]['dynamic'] += 1
         except KeyError:
-            dynamic_on.finish("开启失败，uid不存在")
+            await dynamic_on.finish("开启失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
             if config['users'][user_id]['uid'][uid]['dynamic'] == True:
-                dynamic_on.finish('请勿重复开启动态推送')
+                await dynamic_on.finish('请勿重复开启动态推送')
             config['users'][user_id]['uid'][uid]['dynamic'] = True
             config['uid'][uid]['dynamic'] += 1
         except KeyError:
-            dynamic_on.finish("开启失败，uid不存在")
+            await dynamic_on.finish("开启失败，uid不存在")
     # 如果是第一个开启的，就添加至动态推送列表
     if config['uid'][uid]['dynamic'] == 1:
         config['dynamic']['uid_list'].append(uid)
@@ -230,20 +234,20 @@ async def _(bot: Bot, event: Event, state: dict):
         group_id = str(event.group_id)
         try:
             if config['groups'][group_id]['uid'][uid]['dynamic'] == False:
-                dynamic_off.finish('请勿重复关闭动态推送')
+                await dynamic_off.finish('请勿重复关闭动态推送')
             config['groups'][group_id]['uid'][uid]['dynamic'] = False
             config['uid'][uid]['dynamic'] -= 1
         except KeyError:
-            dynamic_off.finish("关闭失败，uid不存在")
+            await dynamic_off.finish("关闭失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
             if config['users'][user_id]['uid'][uid]['dynamic'] == False:
-                dynamic_off.finish('请勿重复关闭动态推送')
+                await dynamic_off.finish('请勿重复关闭动态推送')
             config['users'][user_id]['uid'][uid]['dynamic'] = False
             config['uid'][uid]['dynamic'] -= 1
         except KeyError:
-            dynamic_off.finish("关闭失败，uid不存在")
+            await dynamic_off.finish("关闭失败，uid不存在")
     # 如果无人再订阅动态，就从动态列表中移除
     if config['uid'][uid]['dynamic'] == 0:
         config['dynamic']['uid_list'].remove(uid)
@@ -271,20 +275,20 @@ async def _(bot: Bot, event: Event, state: dict):
         group_id = str(event.group_id)
         try:
             if config['groups'][group_id]['uid'][uid]['live']:
-                live_on.finish('请勿重复开启直播推送')
+                await live_on.finish('请勿重复开启直播推送')
             config['groups'][group_id]['uid'][uid]['live'] = True
             config['uid'][uid]['live'] += 1
         except KeyError:
-            live_on.finish("开启失败，uid不存在")
+            await live_on.finish("开启失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
             if config['users'][user_id]['uid'][uid]['live']:
-                live_on.finish('请勿重复开启直播推送')
+                await live_on.finish('请勿重复开启直播推送')
             config['users'][user_id]['uid'][uid]['live'] = True
             config['uid'][uid]['live'] += 1
         except KeyError:
-            live_on.finish("开启失败，uid不存在")
+            await live_on.finish("开启失败，uid不存在")
     # 如果是第一个开启的，就添加至直播推送列表
     if config['uid'][uid]['live'] == 1:
         config['live']['uid_list'].append(uid)
@@ -312,20 +316,20 @@ async def _(bot: Bot, event: Event, state: dict):
         group_id = str(event.group_id)
         try:
             if not config['groups'][group_id]['uid'][uid]['live']:
-                live_off.finish('请勿重复关闭直播推送')
+                await live_off.finish('请勿重复关闭直播推送')
             config['groups'][group_id]['uid'][uid]['live'] = False
             config['uid'][uid]['live'] -= 1
         except KeyError:
-            live_off.finish("关闭失败，uid不存在")
+            await live_off.finish("关闭失败，uid不存在")
     elif event.detail_type == 'private':
         user_id = str(event.user_id)
         try:
             if not config['users'][user_id]['uid'][uid]['live']:
-                live_off.finish('请勿重复关闭直播推送')
+                await live_off.finish('请勿重复关闭直播推送')
             config['users'][user_id]['uid'][uid]['live'] = False
             config['uid'][uid]['live'] -= 1
         except KeyError:
-            live_off.finish("关闭失败，uid不存在")
+            await live_off.finish("关闭失败，uid不存在")
     # 如果无人再订阅动态，就从直播列表中移除
     if config['uid'][uid]['live'] == 0:
         config['live']['uid_list'].remove(uid)
