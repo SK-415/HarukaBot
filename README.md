@@ -27,8 +27,8 @@
 - [部署指南](#部署指南 )
   - [部署 go-cqhttp](#部署-go-cqhttp )
   - [部署 HarukaBot](#部署-harukabot )
-    - [方法一 懒人包 (部署方便无需依赖)](#方法一-懒人包-部署方便无需依赖 )
-    - [方法二 手动安装 (较为复杂全平台通用)](#方法二-手动安装-较为复杂全平台通用 )
+    - [方法一 手动安装 (较为复杂全平台通用)](#方法一-手动安装-较为复杂全平台通用 )
+    - [方法二 插件广场安装 (适用于 `NoneBot2` 用户)](#方法二-插件广场安装-适用于-nonebot2-用户 )
 - [支持作者](#支持作者 )
   
 ##  简介
@@ -157,16 +157,7 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
 ###  部署 HarukaBot
   
   
-####  方法一 懒人包 (部署方便无需依赖)
-  
-  
-1. 下载[懒人包](https://github.com/SK-415/HarukaBot/releases ), 解压到任意位置.
-  
-2. 编辑 `env.prod` 文件, 将主人QQ号添加至 *SUPERUSERS*, 例: `SUPERUSERS=[123456]`
-  
-3. 双击 `bot.exe` 启动
-  
-####  方法二 手动安装 (较为复杂全平台通用)
+####  方法一 手动安装 (较为复杂全平台通用)
   
   
 1. 安装 [Python3.7+](https://www.python.org/downloads/release/python-386/ ) (安装的时候一定要[**勾选 "Add Python 3.x to PATH"**](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624 ) )
@@ -180,6 +171,20 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
 4. 输入 `python bot.py` 启动 HarukaBot
   
 > 以后每次启动只需重复 3, 5 步骤
+  
+####  方法二 插件广场安装 (适用于 `NoneBot2` 用户)
+  
+  
+- 前往[插件广场](https://v2.nonebot.dev/plugin-store.html ), 找到 `HarukaBot`, 点击下方 `COPY NB-CLI COMMAND` 复制安装指令
+  
+- 在自己的 `NoneBot2` 实例根目录运行安装指令
+  
+- 在 `bot.py` 中添加 `nonebot.load_plugin("haruka_bot")`
+  
+- (可选) 在 `.env.prod` 或 `.env.dev` 中添加 `HARUKA_DIR=".\\data\\"`, 你也可以将 `.\\data\\` 改成任何其他路径. 
+  > 如果不添加, HarukaBot 会将配置文件保存于其安装包位置的 `data` 文件夹下, 不推荐.
+  
+- 完成后重启 `NoneBot2` 实例即可使用
   
 ##  支持作者
   
