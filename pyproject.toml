@@ -16,12 +16,12 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.7"
 qrcode = {extras = ["pil"], version = "^6.1"}
-nonebot2 = {extras = ["cli", "scheduler"], version = "^2.0.0-alpha.4"}
+nonebot2 = {extras = ["scheduler"], version = "^2.0.0-alpha.4"}
 psutil = "^5.7.3"
 pyppeteer = "^0.2.2"
 
 [tool.poetry.dev-dependencies]
-nonebot2 = {extras = ["test"], version = "^2.0.0-alpha.4"}
+nonebot2 = {extras = ["cli", "test"], version = "^2.0.0-alpha.4"}
 Nuitka = "^0.6.9"
 
 [build-system]

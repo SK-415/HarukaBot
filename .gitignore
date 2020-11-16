@@ -7,6 +7,7 @@ log/
 test/
 sk_bot/
 out/
+dist/
 
 .env
 .env.dev
@@ -15,7 +16,3 @@ Dockerfile
 poetry.lock
 
 _README.md
-dist/haruka_bot-1.0.0-py3-none-any.whl
-dist/haruka_bot-1.0.1-py3-none-any.whl
-dist/haruka-bot-1.0.0.tar.gz
-dist/haruka-bot-1.0.1.tar.gz
