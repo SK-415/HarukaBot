@@ -13,6 +13,7 @@ import nonebot
 import psutil
 from nonebot.adapters.cqhttp import Bot
 from nonebot.log import logger
+from nonebot import get_driver
 
 os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
 # os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://storage.googleapis.com'
@@ -149,8 +150,12 @@ async def backup_config(config):
 
 def get_path(name):
     """获取数据文件绝对路径"""
-    src_path = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
-    dir_path = path.join(src_path, 'data', 'haruka_bot')
+    config = get_driver().config
+    if config.haruka_dir:
+        dir_path = path.abspath(config.haruka_dir)
+    else:
+        src_path = path.dirname(path.abspath(__file__))
+        dir_path = path.join(src_path, 'data')
     f_path = path.join(dir_path, name)
     return f_path
 
