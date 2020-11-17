@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.0.3"
+version = "1.0.4"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "GPL-3.0-or-later"
@@ -23,6 +23,9 @@ pyppeteer = "^0.2.2"
 [tool.poetry.dev-dependencies]
 nonebot2 = {extras = ["cli", "test"], version = "^2.0.0-alpha.4"}
 Nuitka = "^0.6.9"
+
+[tool.poetry.extras]
+cli = ["hb-cli"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
