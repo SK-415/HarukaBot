@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.0.4"
+version = "1.0.5"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "GPL-3.0-or-later"
