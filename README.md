@@ -181,8 +181,8 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
   
 - 在 `bot.py` 中添加 `nonebot.load_plugin("haruka_bot")`
   
-- (可选) 在 `.env.prod` 或 `.env.dev` 中添加 `HARUKA_DIR=".\\data\\"`, 你也可以将 `.\\data\\` 改成任何其他路径. 
-  > 如果不添加, HarukaBot 会将配置文件保存于其安装包位置的 `data` 文件夹下, 不推荐.
+- (可选) 在 `.env.prod` 或 `.env.dev` 中添加 `HARUKA_DIR="./data/"`, 你也可以将 `./data/` 改成任何其他路径. 
+  > 如果不添加, HarukaBot 会将配置文件保存于其安装包位置 (site-packages/haruka_bot) 的 `data` 文件夹下, 不推荐.
   
 - 完成后重启 `NoneBot2` 实例即可使用
   
