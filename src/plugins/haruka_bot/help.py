@@ -7,7 +7,7 @@ from pydantic import main
 func_list = """DD机目前支持的功能有：
 
   主播列表
-  修复配置
+  更新配置
   开启权限
   关闭权限
   添加主播 uid

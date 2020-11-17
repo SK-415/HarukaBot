@@ -438,7 +438,7 @@ async def _(bot: Bot, event: Event, state: dict):
     await permission_off.finish(f"已关闭权限限制，所有人都能触发指令")
 
 
-fix_config = on_command('修复配置', rule=to_me(), 
+fix_config = on_command('更新配置', rule=to_me(), 
     permission=GROUP_OWNER | GROUP_ADMIN | PRIVATE_FRIEND | SUPERUSER, 
     priority=5)
 
@@ -448,6 +448,7 @@ async def _(bot: Bot, event: Event, state: dict):
     new_config = get_new_config()
     dy_counter = Counter() # 动态推送开启用户数统计
     live_counter = Counter() # 直播推送开启用户数统计
+    status_set = set() 
     
     for config_type in ['groups', 'users']:
         for type_id, type_config in config[config_type].items():
@@ -460,7 +461,7 @@ async def _(bot: Bot, event: Event, state: dict):
             for uid, status in uids.items():
                 new_config[config_type][type_id]['uid'][uid] = {'live': False, 'dynamic': False}
                 new_status = new_config[config_type][type_id]['uid'][uid]
-                if 'live' in status and status['live'] or status['live_reminder']:
+                if ('live' in status and status['live']) or ('live_reminder' in status and status['live_reminder']):
                     live_counter[uid] += 1
                     new_status['live'] = True
                 if status['dynamic']:
@@ -477,19 +478,22 @@ async def _(bot: Bot, event: Event, state: dict):
                         'dynamic': 0,
                         'name': config['uid'][uid]['name']
                         }
-                if new_status['live'] or new_status['dynamic']:
-                    new_config['uid'][uid][config_type][type_id] = str(config['uid'][uid][config_type][type_id])
+                        
+                status_set.add(uid)
+                # if new_status['live'] or new_status['dynamic']:
+                new_config['uid'][uid][config_type][type_id] = str(config['uid'][uid][config_type][type_id])
                 
     for uid, sub_num in dy_counter.items():
         new_config['uid'][uid]['dynamic'] = sub_num
     for uid, sub_num in live_counter.items():
         new_config['uid'][uid]['live'] = sub_num
-        new_config['status'][uid] = config['status'].get(uid, 0)
     
+    for uid in status_set:
+        new_config['status'][uid] = config['status'].get(uid, 0)
     new_config['dynamic'] = {'uid_list': list(dy_counter)}
-    new_config['live'] = {'uid_list': list(config['status'])}
+    new_config['live'] = {'uid_list': list(live_counter)}
     
     await backup_config(config)
     await update_config(new_config)
-    await fix_config.finish('修复完成')
+    await fix_config.finish('更新完成')
     

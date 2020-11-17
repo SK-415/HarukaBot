@@ -132,7 +132,7 @@ async def read_config():
 
 
 def get_new_config():
-    return {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": [], "index": 0}, 'live': {'uid_list': [], 'index': 0}}
+    return {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": []}, 'live': {'uid_list': []}}
 
 
 async def update_config(config):
@@ -173,37 +173,28 @@ async def safe_send(bot: Bot, send_type, type_id, message):
             logger.error(traceback.format_exc())
             if i == 2:
                 bot = await restart(bot)
-                message = '检测到推送出现异常，已尝试自动重启，如仍有问题请向机器人管理员反馈'
-                message_id = await bot.call_api('send_'+send_type+'_msg', **{
-                    'message': message,
+                warning_msg = '检测到推送出现异常，已尝试自动重启，如仍有问题请向机器人管理员反馈'
+                await bot.call_api('send_'+send_type+'_msg', **{
+                    'message': warning_msg,
                     'user_id' if send_type == 'private' else 'group_id': type_id
                     })
+                message_id = await bot.call_api('send_'+send_type+'_msg', **{
+                'message': message,
+                'user_id' if send_type == 'private' else 'group_id': type_id
+                })
                 return message_id
             await asyncio.sleep(0.1)
 
 
 async def restart(bot: Bot):
-    cqhttp_dir = (await bot.get_version_info())['coolq_directory']
-    pids = psutil.process_iter()
-    for pid in pids:
-        try:
-            if 'go-cqhttp' in pid.name() and \
-                pid.exe() == path.join(cqhttp_dir, pid.name()):
-                subprocess.Popen(
-                    pid.exe(), 
-                    cwd=pid.cwd(), 
-                    # stdout=subprocess.PIPE, 
-                    stderr=None if platform.system()=='Windows' else subprocess.DEVNULL, 
-                    creationflags=subprocess.CREATE_NEW_CONSOLE if platform.system()=='Windows' else 0
-                    )
-                pid.terminate()
-                while True:
-                    await asyncio.sleep(1)
-                    bots = nonebot.get_bots()
-                    if bot.self_id in bots:
-                        return bots[bot.self_id]
-        except psutil.ZombieProcess:
-            continue
+    await bot.set_restart()
+    await asyncio.sleep(1)
+    while True:
+        new_bot = nonebot.get_bots().get(bot.self_id, None)
+        if new_bot:
+            break
+        await asyncio.sleep(0.1)
+    return new_bot
 
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在
