@@ -5,7 +5,7 @@
   
 # HarukaBot
   
-[![VERSION](https://img.shields.io/github/v/release/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/releases)
+[![VERSION](https://img.shields.io/github/v/release/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/releases/latest)
 [![time tracker](https://wakatime.com/badge/github/SK-415/HarukaBot.svg )](https://wakatime.com/badge/github/SK-415/HarukaBot)
 [![STARS](https://img.shields.io/github/stars/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/stargazers)
 [![qq group](https://img.shields.io/badge/QQ%E7%BE%A4-629574472-orange )](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)
@@ -87,68 +87,70 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
 ###  部署 go-cqhttp
   
   
-1. 下载 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp/releases ) (Windows 用户选择 `windows-amd64.zip` 结尾).
+1. 下载 [`go-cqhttp`](https://github.com/Mrs4s/go-cqhttp/releases/latest ) (Windows 用户选择 `windows-amd64.zip` 结尾).
   
 2. 解压至一个空文件夹后, 双击启动, 此时文件夹内会生成一个 `config.json` 文件, 打开并编辑. 
 以下折叠部分为参考 (中文部分记得替换): 
   
-<details>
-<summary>config.json 设置参考</summary>
+	</br>
   
-```json
-{
-	"uin": 机器人QQ号,
-	"password": "QQ密码",
-	"encrypt_password": false,
-	"password_encrypted": "",
-	"enable_db": true,
-	"access_token": "",
-	"relogin": {
-		"enabled": true,
-		"relogin_delay": 3,
-		"max_relogin_times": 0
-	},
-	"_rate_limit": {
-		"enabled": false,
-		"frequency": 1,
-		"bucket_size": 1
-	},
-	"ignore_invalid_cqcode": false,
-	"force_fragmented": false,
-	"heartbeat_interval": 0,
-	"http_config": {
-		"enabled": false,
-		"host": "0.0.0.0",
-		"port": 5700,
-		"timeout": 0,
-		"post_urls": {}
-	},
-	"ws_config": {
-		"enabled": false,
-		"host": "0.0.0.0",
-		"port": 6700
-	},
-	"ws_reverse_servers": [
-		{
+	<details>
+	<summary>config.json 设置参考</summary>
+  
+	```json
+	{
+		"uin": 机器人QQ号,
+		"password": "QQ密码",
+		"encrypt_password": false,
+		"password_encrypted": "",
+		"enable_db": true,
+		"access_token": "",
+		"relogin": {
 			"enabled": true,
-			"reverse_url": "ws://127.0.0.1:8080/cqhttp/ws",
-			"reverse_api_url": "",
-			"reverse_event_url": "",
-			"reverse_reconnect_interval": 3000
+			"relogin_delay": 3,
+			"max_relogin_times": 0
+		},
+		"_rate_limit": {
+			"enabled": false,
+			"frequency": 1,
+			"bucket_size": 1
+		},
+		"ignore_invalid_cqcode": false,
+		"force_fragmented": false,
+		"heartbeat_interval": 0,
+		"http_config": {
+			"enabled": false,
+			"host": "0.0.0.0",
+			"port": 5700,
+			"timeout": 0,
+			"post_urls": {}
+		},
+		"ws_config": {
+			"enabled": false,
+			"host": "0.0.0.0",
+			"port": 6700
+		},
+		"ws_reverse_servers": [
+			{
+				"enabled": true,
+				"reverse_url": "ws://127.0.0.1:8080/cqhttp/ws",
+				"reverse_api_url": "",
+				"reverse_event_url": "",
+				"reverse_reconnect_interval": 3000
+			}
+		],
+		"post_message_format": "string",
+		"debug": false,
+		"log_level": "",
+		"web_ui": {
+			"enabled": false,
+			"host": "127.0.0.1",
+			"web_ui_port": 9999,
+			"web_input": false
 		}
-	],
-	"post_message_format": "string",
-	"debug": false,
-	"log_level": "",
-	"web_ui": {
-		"enabled": false,
-		"host": "127.0.0.1",
-		"web_ui_port": 9999,
-		"web_input": false
 	}
-}
-```
-</details>
+	```
+	</details>
   
 </br>
   
@@ -160,9 +162,9 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
 ####  方法一 手动安装 (较为复杂全平台通用)
   
   
-1. 安装 [Python3.7+](https://www.python.org/downloads/release/python-386/ ) (安装的时候一定要[**勾选 "Add Python 3.x to PATH"**](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624 ) )
+1. 安装 [Python3.7+](https://www.python.org/downloads/release/python-386/ ) (推荐 `3.8.6` 安装的时候一定要[**勾选 "Add Python 3.x to PATH"**](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624 ) )
   
-2. 克隆 or [下载](https://github.com/SK-415/HarukaBot/releases ) HarukaBot 源码到本地
+2. 克隆 or [下载](https://github.com/SK-415/HarukaBot/releases/latest ) HarukaBot 源码到本地
   
 3. 在源码根目录打开命令提示符 (对着文件夹内, 按住 shift 同时鼠标右键 -> 在此处打开 Powershell 窗口)
   
@@ -170,19 +172,17 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
   
 4. 输入 `python bot.py` 启动 HarukaBot
   
-> 以后每次启动只需重复 3, 5 步骤
+> 以后每次启动只需重复 3, 5 两步
   
 ####  方法二 插件广场安装 (适用于 `NoneBot2` 用户)
   
   
-- 前往[插件广场](https://v2.nonebot.dev/plugin-store.html ), 找到 `HarukaBot`, 点击下方 `COPY NB-CLI COMMAND` 复制安装指令
+- 使用[插件广场](https://v2.nonebot.dev/plugin-store.html )或者 `pip install haruka-bot`, 安装 `HarukaBot`
   
-- 在自己的 `NoneBot2` 实例根目录运行安装指令
-  
-- 在 `bot.py` 中添加 `nonebot.load_plugin("haruka_bot")`
+- 如果使用 pip 下载的还需要手动在 `bot.py` 中添加 `nonebot.load_plugin("haruka_bot")`
   
 - (可选) 在 `.env.prod` 或 `.env.dev` 中添加 `HARUKA_DIR="./data/"`, 你也可以将 `./data/` 改成任何其他路径. 
-  > 如果不添加, HarukaBot 会将配置文件保存于其安装包位置 (site-packages/haruka_bot) 的 `data` 文件夹下, 不推荐.
+  > 如果不添加, HarukaBot 会将配置文件保存于其安装包位置 (site-packages/haruka_bot) 的 `data` 文件夹中, 之后迁移会很麻烦, 并不推荐.
   
 - 完成后重启 `NoneBot2` 实例即可使用
   
