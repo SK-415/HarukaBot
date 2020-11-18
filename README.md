@@ -27,8 +27,9 @@
 - [部署指南](#部署指南 )
   - [部署 go-cqhttp](#部署-go-cqhttp )
   - [部署 HarukaBot](#部署-harukabot )
-    - [方法一 手动安装 (较为复杂全平台通用)](#方法一-手动安装-较为复杂全平台通用 )
-    - [方法二 插件广场安装 (适用于 `NoneBot2` 用户)](#方法二-插件广场安装-适用于-nonebot2-用户 )
+    - [方法一 脚手架部署 (推荐)](#方法一-脚手架部署-推荐 )
+    - [方法二 手动安装 (可获取实验性功能)](#方法二-手动安装-可获取实验性功能 )
+    - [方法三 插件广场安装 (适用于 `NoneBot2` 用户)](#方法三-插件广场安装-适用于-nonebot2-用户 )
 - [支持作者](#支持作者 )
   
 ##  简介
@@ -159,7 +160,21 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
 ###  部署 HarukaBot
   
   
-####  方法一 手动安装 (较为复杂全平台通用)
+####  方法一 脚手架部署 (推荐)
+  
+  
+1. 安装 [Python3.7+](https://www.python.org/downloads/release/python-386/ ) (推荐 `3.8.6` 安装的时候一定要[**勾选 "Add Python 3.x to PATH"**](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624 ) )
+  
+2. 打开一个文件夹 (建议新建), 对着空白处按住 Shift 单击鼠标右键, 选择 "在此处打开 Powershell 窗口"
+  
+3. 输入 `pip install haruka-bot[cli]` 安装脚手架
+  
+4. 输入 `hb run` 启动 bot
+  
+> 以后只需在**相同文件夹**内执行最后一步即可启动
+  
+  
+####  方法二 手动安装 (可获取实验性功能)
   
   
 1. 安装 [Python3.7+](https://www.python.org/downloads/release/python-386/ ) (推荐 `3.8.6` 安装的时候一定要[**勾选 "Add Python 3.x to PATH"**](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624 ) )
@@ -174,7 +189,7 @@ HarukaBot 专注于订阅B站UP主们的动态与开播提醒, 并转发至QQ群
   
 > 以后每次启动只需重复 3, 5 两步
   
-####  方法二 插件广场安装 (适用于 `NoneBot2` 用户)
+####  方法三 插件广场安装 (适用于 `NoneBot2` 用户)
   
   
 - 使用[插件广场](https://v2.nonebot.dev/plugin-store.html )或者 `pip install haruka-bot`, 安装 `HarukaBot`
