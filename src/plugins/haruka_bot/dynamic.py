@@ -4,14 +4,13 @@ from datetime import datetime, timedelta
 import nonebot
 from nonebot import scheduler
 from nonebot.log import logger
-from apscheduler.triggers.cron import CronTrigger
 
 from .utils import Dynamic, User, read_config, safe_send
 
 last_time = {}
 index = 0
 
-@scheduler.scheduled_job(CronTrigger(second='*/10'), id='dynamic_sched')
+@scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
 @logger.catch
 async def dy_sched():
     config = await read_config()

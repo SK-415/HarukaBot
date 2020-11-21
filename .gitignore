@@ -13,6 +13,5 @@ dist/
 .env.dev
 docker-compose.yml
 Dockerfile
-poetry.lock
 
-_README.md
+src/plugins/copyman.py

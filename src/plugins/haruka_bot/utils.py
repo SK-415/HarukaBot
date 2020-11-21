@@ -2,15 +2,12 @@ import asyncio
 import base64
 import json
 import os
-import platform
-import subprocess
 import traceback
 from datetime import datetime
 from os import path
 
 import httpx
 import nonebot
-import psutil
 from nonebot.adapters.cqhttp import Bot
 from nonebot.log import logger
 from nonebot import get_driver
