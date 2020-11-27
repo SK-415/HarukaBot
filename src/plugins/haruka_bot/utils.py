@@ -139,8 +139,7 @@ async def update_config(config):
 
 
 async def backup_config(config):
-    # backup_name = f"config{datetime.now().strftime('%Y.%m.%d %H-%M-%S')}.json"
-    backup_name = f"config{int(datetime.now().timestamp())}.json"
+    backup_name = f"config.{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json.bak"
     with open(get_path(backup_name), 'w', encoding='utf-8') as f:
         f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
