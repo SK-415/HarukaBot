@@ -7,6 +7,7 @@ from datetime import datetime
 from os import path
 
 import httpx
+import aiofiles
 import nonebot
 from nonebot.adapters.cqhttp import Bot
 from nonebot.log import logger
@@ -88,6 +89,219 @@ class Dynamic():
         return self.image
 
 
+class Config():
+    """操作 config.json 文件"""
+
+    def __init__(self, event=None):
+        self.config = None
+        if event:
+            self.id = event.self_id
+            if event.detail_type == 'private':
+                self.type = 'users'
+                self.type_id = str(event.user_id)
+            else:
+                self.type = 'groups'
+                self.type_id = str(event.group_id)
+    
+    async def read(self):
+        """读取用户注册信息"""
+
+        try:
+            async with aiofiles.open(get_path('config.json'), encoding='utf-8-sig') as f:
+                text = await f.read()
+            self.config = json.loads(text)
+        except FileNotFoundError:
+            self.config = self.new()
+        return self.config
+
+    def new(self):
+        """生成新的配置文件"""
+
+        self.config = {
+            "status": {},
+            "uid": {},
+            "groups": {},
+            "users": {},
+            "dynamic": {
+                "uid_list": []
+            },
+            'live': {
+                'uid_list': []
+            }
+        }
+        return self.config
+    
+    async def update(self, config):
+        """更新注册信息"""
+        
+        # await self.read()
+        async with aiofiles.open(get_path('config.json'), 'w', encoding='utf-8') as f:
+            await f.write(json.dumps(config, ensure_ascii=False, indent=4))
+    
+    async def add_uid(self, uid):
+        """添加主播"""
+
+        await self.read()
+        if uid not in self.config["status"]: # uid不在配置文件就创建一个
+            user = User(uid)
+            name = ''
+            try: # 应该改uid有效检测逻辑
+                user_info = await user.get_info()
+                name = user_info["name"]
+            except:
+                return("请输入有效的uid")
+            self.config['status'][uid] = 0
+            self.config['uid'][uid] = {'groups': {}, 'users': {}, 'dynamic': 0, 'live': 0, 'name': name}
+            self.config['dynamic']['uid_list'].append(uid) # 主播uid添加至动态列表
+            self.config['live']['uid_list'].append(uid) # 主播uid添加至直播列表
+        else:
+            name = self.config['uid'][uid]['name']
+            if uid not in self.config['dynamic']['uid_list']: 
+                self.config['dynamic']['uid_list'].append(uid)
+            if uid not in self.config['live']['uid_list']:
+                self.config['live']['uid_list'].append(uid)
+
+        if self.type_id not in self.config['uid'][uid][self.type]:
+            self.config['uid'][uid][self.type][self.type_id] = self.id
+        else:
+            return f'请勿重复添加 {name}（{uid}）'
+        if self.type_id in self.config[self.type]:
+            self.config[self.type][self.type_id]['uid'][uid] = {'live': True, 'dynamic': True}
+        else:
+            self.config[self.type][self.type_id] = {'uid': {uid: {'live': True, 'dynamic': True}}}
+        if self.type == 'groups':
+            self.config[self.type][self.type_id]['uid'][uid]['at'] = False
+            if 'admin' not in self.config[self.type][self.type_id]:
+                self.config[self.type][self.type_id]['admin'] = True
+
+        self.config['uid'][uid]['dynamic'] += 1
+        self.config['uid'][uid]['live'] += 1
+        await self.update(self.config)
+        return f"已添加 {name}（{uid}）"
+    
+    async def delete_uid(self, uid):
+        """删除主播"""
+
+        await self.read()
+        try:
+            name = self.config['uid'][uid]['name']
+            if self.config[self.type][self.type_id]['uid'][uid]['dynamic']:
+                self.config['uid'][uid]['dynamic'] -= 1
+            if self.config[self.type][self.type_id]['uid'][uid]['live']:
+                self.config['uid'][uid]['live'] -= 1
+            del self.config[self.type][self.type_id]['uid'][uid]
+            del self.config['uid'][uid][self.type][self.type_id]
+            # 如果用户没有关注则删除用户
+            if self.config[self.type][self.type_id]['uid'] == {} and (
+                'admin' not in self.config[self.type][self.type_id]['uid'] or
+                self.config[self.type][self.type_id]['admin']):
+                del self.config[self.type][self.type_id]
+        except KeyError:
+            return "删除失败，uid 不存在"
+
+        # 如果无人再订阅动态，就从动态列表中移除
+        if self.config['uid'][uid]['dynamic'] == 0 and uid in self.config['dynamic']['uid_list']:
+            self.config['dynamic']['uid_list'].remove(uid)
+        # 如果无人再订阅直播，就从直播列表中移除
+        if self.config['uid'][uid]['live'] == 0 and uid in self.config['live']['uid_list']:
+            self.config['live']['uid_list'].remove(uid)
+        # 如果没人订阅该主播，则将该主播彻底删除
+        if self.config['uid'][uid]['groups'] == {} and self.config['uid'][uid]['users'] == {}:
+            del self.config['uid'][uid]
+            del self.config['status'][uid]
+        
+        await self.update(self.config)
+        return f"已删除 {name}（{uid}）"
+
+    async def uid_list(self):
+        await self.read()
+        try:
+            uid_list = self.config[self.type][self.type_id]['uid']
+        except KeyError:
+            uid_list = {}
+        message = "以下为当前的订阅列表：\n\n"
+        for uid, status in uid_list.items():
+            name = self.config['uid'][uid]['name']
+            message += f"【{name}】"
+            message += f"直播推送：{'开' if status['live'] else '关'}，"
+            message += f"动态推送：{'开' if status['dynamic'] else '关'}"
+            message += f"（{uid}）\n"
+        return message
+
+    async def set(self, func, uid, status):
+        """开关各项功能"""
+
+        if func == 'at' and self.type == 'users':
+            return "只有群里才能name"
+
+        await self.read()
+        try:
+            name = self.config['uid'][uid]['name']
+            if self.config[self.type][self.type_id]['uid'][uid][func] == status:
+                return "请勿重复name"
+            self.config[self.type][self.type_id]['uid'][uid][func] = status
+
+            if func not in self.config['uid'][uid]:
+                await self.update(self.config)
+                return f"已name，{name}（{uid}）"
+
+            if status:
+                self.config['uid'][uid][func] += 1
+                # 如果是第一个开启的，就添加至爬取列表
+                if self.config['uid'][uid][func] == 1:
+                    self.config[func]['uid_list'].append(uid)
+            else:
+                self.config['uid'][uid][func] -= 1
+                # 如果无人再订阅动态，就从爬取列表中移除
+                if self.config['uid'][uid][func] == 0:
+                    self.config[func]['uid_list'].remove(uid)
+        except KeyError:
+            return "name失败，uid 不存在"
+
+        await self.update(self.config)
+        return f"已name，{name}（{uid}）"
+
+    async def set_permission(self, status):
+        if self.type == 'users':
+            return "只有群里才能name"
+        
+        await self.read()
+        if self.type_id not in self.config['groups']:
+            if status:
+                return "请勿重复name"
+            else:
+                self.config['groups'][self.type_id] = {'uid': {}, 'admin': False}
+        elif self.config['groups'][self.type_id]['admin'] == status:
+            return "请勿重复name"
+        else:
+            self.config['groups'][self.type_id]['admin'] = status
+
+        await self.update(self.config)
+        message = "已name，只有管理员才能使用" if status else "已name，所有人都能使用"
+        return message
+
+    # async def next_uid(self, func):
+    #     uid_list = config['live']['uid_list']
+    #     global index
+    #     if not uid_list:
+    #         return
+    #     if index >= len(uid_list):
+    #         uid = uid_list[0]
+    #         index = 1
+    #     else:
+    #         uid = uid_list[index]
+    #         index += 1
+
+    async def backup(self):
+        """备份当前配置文件"""
+
+        await self.read()
+        backup_name = f"config.{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json.bak"
+        async with aiofiles.open(get_path(backup_name), 'w', encoding='utf-8') as f:
+            await f.write(json.dumps(self.config, ensure_ascii=False, indent=4))
+        return True
+
+
 class User():
     def __init__(self, uid):
         self.uid = str(uid)
@@ -116,32 +330,6 @@ async def Get(url):
         r = await client.get(url, headers=DEFAULT_HEADERS)
     r.encoding = 'utf-8'
     return r.json()
-
-
-async def read_config():
-    """读取用户注册信息"""
-    try:
-        with open(get_path('config.json'), encoding='utf-8-sig') as f:
-            config = json.loads(f.read())
-    except FileNotFoundError:
-        config = get_new_config()
-    return config
-
-
-def get_new_config():
-    return {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": []}, 'live': {'uid_list': []}}
-
-
-async def update_config(config):
-    """更新注册信息"""
-    with open(get_path('config.json'), 'w', encoding='utf-8') as f:
-        f.write(json.dumps(config, ensure_ascii=False, indent=4))
-
-
-async def backup_config(config):
-    backup_name = f"config.{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json.bak"
-    with open(get_path(backup_name), 'w', encoding='utf-8') as f:
-        f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
 
 def get_path(name):

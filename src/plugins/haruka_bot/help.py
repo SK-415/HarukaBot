@@ -16,8 +16,8 @@ func_list = """DD机目前支持的功能有：
   关闭动态 uid
   开启直播 uid
   关闭直播 uid
-  开启at uid
-  关闭at uid
+  开启全体 uid
+  关闭全体 uid
 
 
 命令中的uid需要替换为对应主播的uid，注意是uid不是直播间id

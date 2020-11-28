@@ -5,7 +5,7 @@ import nonebot
 from nonebot import scheduler
 from nonebot.log import logger
 
-from .utils import Dynamic, User, read_config, safe_send
+from .utils import Dynamic, User, Config, safe_send
 
 last_time = {}
 index = 0
@@ -13,7 +13,8 @@ index = 0
 @scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
 @logger.catch
 async def dy_sched():
-    config = await read_config()
+    c = Config()
+    config = await c.read()
     ups = config['dynamic']['uid_list']
 
     uid_list = ups

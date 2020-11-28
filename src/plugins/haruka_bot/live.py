@@ -3,14 +3,15 @@ from apscheduler.triggers.cron import CronTrigger
 from nonebot import scheduler
 from nonebot.log import logger
 
-from .utils import User, read_config, safe_send, update_config
+from .utils import User, Config, safe_send
 
 index = 0
 
 @scheduler.scheduled_job('cron', second='*/10', id='live_sched')
 @logger.catch
 async def live_sched():
-    config = await read_config()
+    c = Config()
+    config = await c.read()
     ups = config['status']
     
     uid_list = config['live']['uid_list']
@@ -31,9 +32,8 @@ async def live_sched():
     logger.debug(f'爬取直播 [{index:03}] {name}({uid})')
     new_status = user_info['liveStatus']
     if new_status != old_status:
-        config = await read_config()
         config['status'][uid] = new_status
-        await update_config(config)
+        await c.update(config)
 
         if new_status:
             # name = (await user.get_info())['name'] # 获取昵称应转移至配置文件
