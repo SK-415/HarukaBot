@@ -177,13 +177,22 @@ async def _(bot: Bot, event: Event, state: dict):
         msg = await config.set_permission(False)
     await permission_on.finish(msg.replace('name', '关闭权限'))
 
+no_permission = on_command('主播列表',
+    aliases={
+    '开启权限',
+    '关闭权限',
+    '添加主播',
+    '删除主播',
+    '开启动态',
+    '关闭动态',
+    '开启直播',
+    '关闭直播',
+    '开启全体',
+    '关闭全体'
+    }, rule=to_me(), priority=20)
 
-# fix_config = on_command('更新配置', rule=to_me(), 
-#     permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
-#     priority=5)
+@no_permission.handle()
+async def _(bot: Bot, event: Event, state: dict):
+    await permission_on.finish("权限不足，目前只有管理员才能使用")
 
-# @fix_config.handle()
-# async def _(bot: Bot, event: Event, state: dict):
-#     await Config.update_config()
-#     await fix_config.finish('更新完成')
     
