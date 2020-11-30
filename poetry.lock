@@ -2,7 +2,7 @@
 name = "aiofiles"
 version = "0.5.0"
 description = "File support for asyncio."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 
@@ -858,6 +858,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "tinydb"
+version = "4.3.0"
+description = "TinyDB is a tiny, document oriented database optimized for your happiness :)"
+category = "main"
+optional = false
+python-versions = ">=3.5,<4.0"
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -982,7 +990,7 @@ cli = ["hb-cli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e50d03a5e36d52f9d3fc729189253b16f0793882c38f5b038eaf98e227241042"
+content-hash = "d44f443874d1501d262656dc7873dc037f2b40a6d356b5229fab8d833db60b03"
 
 [metadata.files]
 aiofiles = [
@@ -1475,6 +1483,10 @@ text-unidecode = [
 texttable = [
     {file = "texttable-1.6.3-py2.py3-none-any.whl", hash = "sha256:f802f2ef8459058736264210f716c757cbf85007a30886d8541aa8c3404f1dda"},
     {file = "texttable-1.6.3.tar.gz", hash = "sha256:ce0faf21aa77d806bbff22b107cc22cce68dc9438f97a2df32c93e9afa4ce436"},
+]
+tinydb = [
+    {file = "tinydb-4.3.0-py3-none-any.whl", hash = "sha256:c8a8887269927e077f3aa16fddbf4debd176c10edc4ac8a5ce48ced0b10adf8c"},
+    {file = "tinydb-4.3.0.tar.gz", hash = "sha256:1d102d06f9bb22d739d8061b490c64d420de70dca5f95ebd43a492c43c7bd303"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},

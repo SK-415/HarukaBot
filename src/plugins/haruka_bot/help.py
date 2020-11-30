@@ -1,13 +1,11 @@
 from nonebot import on_command
 from nonebot.rule import to_me
 from nonebot.adapters.cqhttp import Bot, Event
-from pydantic import main
 
 
 func_list = """DD机目前支持的功能有：
 
   主播列表
-  更新配置
   开启权限
   关闭权限
   添加主播 uid
