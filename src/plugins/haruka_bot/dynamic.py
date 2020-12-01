@@ -5,30 +5,25 @@ import nonebot
 from nonebot import scheduler
 from nonebot.log import logger
 
-from .utils import Dynamic, User, read_config, safe_send
+from .utils import Dynamic, User, safe_send
+from .config import Config
 
 last_time = {}
-index = 0
 
 @scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
 @logger.catch
 async def dy_sched():
-    config = await read_config()
-    ups = config['dynamic']['uid_list']
+    """直播推送"""
 
-    uid_list = ups
-    global index
-    if not uid_list:
-        return
-    if index >= len(uid_list):
-        uid = uid_list[0]
-        index = 1
-    else:
-        uid = uid_list[index]
-        index += 1
-
-    name = config['uid'][uid]['name'] # 直接从配置文件读取名字
-    logger.debug(f'爬取动态 [{index:03}] {name}({uid})')
+    with Config() as config:
+        # 12/0
+        uid = config.next_uid('dynamic')
+        if not uid:
+            return
+        push_list = config.get_push_list(uid, 'dynamic')
+    
+    name = push_list[0]['name']
+    logger.debug(f'爬取动态 {name}（{uid}）')
     user = User(uid)
     dynamics = (await user.get_dynamic()).get('cards', []) # 获取最近十二条动态
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
@@ -49,14 +44,12 @@ async def dy_sched():
             await dynamic.encode()
             os.remove(dynamic.img_path)
             await dynamic.format()
-            for group_id, bot_id in config["uid"][uid]["groups"].items():
-                if config["groups"][group_id]['uid'][uid]["dynamic"]:
-                    bots = nonebot.get_bots()
-                    bot = bots[bot_id]
-                    await safe_send(bot, 'group', group_id, dynamic.message)
-            for user_id, bot_id in config["uid"][uid]["users"].items():
-                if config["users"][user_id]['uid'][uid]["dynamic"]:
-                    bots = nonebot.get_bots()
-                    bot = bots[bot_id]
-                    await safe_send(bot, 'private', user_id, dynamic.message)
+
+            for sets in push_list:
+                if sets['at']:
+                    at_msg = '[CQ:at,qq=all] '
+                else:
+                    at_msg = ''
+                bot = nonebot.get_bots()[sets['bot_id']]
+                await safe_send(bot, sets['type'], sets['type_id'], at_msg + dynamic.message)
             last_time[uid] = dynamic.time

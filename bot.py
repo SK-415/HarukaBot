@@ -17,9 +17,7 @@ nonebot.load_plugins("src/plugins")
 # config = nonebot.get_driver().config
 # do something...
 
-
-if __name__ == "__main__":
-    logger.add(path.join('log', "error.log"),
+logger.add(path.join('log', "error.log"),
            rotation="00:00",
            retention='1 week',
            diagnose=False,
@@ -27,5 +25,7 @@ if __name__ == "__main__":
            format=default_format,
            encoding='utf-8'
            )
-    
+           
+
+if __name__ == "__main__":    
     nonebot.run(app="bot:app")

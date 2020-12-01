@@ -1,9 +1,7 @@
 import asyncio
 import base64
-import json
 import os
 import traceback
-from datetime import datetime
 from os import path
 
 import httpx
@@ -11,6 +9,7 @@ import nonebot
 from nonebot.adapters.cqhttp import Bot
 from nonebot.log import logger
 from nonebot import get_driver
+
 
 os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
 # os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://storage.googleapis.com'
@@ -116,33 +115,6 @@ async def Get(url):
         r = await client.get(url, headers=DEFAULT_HEADERS)
     r.encoding = 'utf-8'
     return r.json()
-
-
-async def read_config():
-    """读取用户注册信息"""
-    try:
-        with open(get_path('config.json'), encoding='utf-8-sig') as f:
-            config = json.loads(f.read())
-    except FileNotFoundError:
-        config = get_new_config()
-    return config
-
-
-def get_new_config():
-    return {"status": {}, "uid": {}, "groups": {}, "users": {}, "dynamic": {"uid_list": []}, 'live': {'uid_list': []}}
-
-
-async def update_config(config):
-    """更新注册信息"""
-    with open(get_path('config.json'), 'w', encoding='utf-8') as f:
-        f.write(json.dumps(config, ensure_ascii=False, indent=4))
-
-
-async def backup_config(config):
-    # backup_name = f"config{datetime.now().strftime('%Y.%m.%d %H-%M-%S')}.json"
-    backup_name = f"config{int(datetime.now().timestamp())}.json"
-    with open(get_path(backup_name), 'w', encoding='utf-8') as f:
-        f.write(json.dumps(config, ensure_ascii=False, indent=4))
 
 
 def get_path(name):
