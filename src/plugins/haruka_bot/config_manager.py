@@ -1,21 +1,9 @@
-from collections import Counter
-import os
 from nonebot import on_command
-from nonebot.rule import to_me
+# from nonebot.rule import to_me
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.permission import GROUP_ADMIN, SUPERUSER, GROUP_OWNER
 from .config import Config
-
-
-async def permission_check(bot: Bot, event: Event, state: dict):
-    config = Config()
-    if event.detail_type == 'private':
-        return True
-    group_id = str(event.group_id)
-    with Config() as config:
-        if config.get_admin(group_id):
-            return await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event)
-        return True
+from .utils import permission_check, to_me
 
 
 add_uid = on_command('添加主播', rule=to_me() & permission_check, priority=5)
@@ -167,6 +155,10 @@ async def _(bot: Bot, event: Event, state: dict):
     await permission_on.finish(msg.replace('name', '开启权限'))
 
 
+func_list = [
+    '主播列表', '开启权限', '关闭权限', '添加主播', '删除主播', 
+    '开启动态', '关闭动态', '开启直播', '关闭直播', '开启全体', '关闭全体']
+
 permission_off = on_command('关闭权限', rule=to_me(), 
     permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
     priority=5)
@@ -177,22 +169,27 @@ async def _(bot: Bot, event: Event, state: dict):
         msg = await config.set_permission(False)
     await permission_on.finish(msg.replace('name', '关闭权限'))
 
-no_permission = on_command('主播列表',
-    aliases={
-    '开启权限',
-    '关闭权限',
-    '添加主播',
-    '删除主播',
-    '开启动态',
-    '关闭动态',
-    '开启直播',
-    '关闭直播',
-    '开启全体',
-    '关闭全体'
-    }, rule=to_me(), priority=20)
+no_permission = on_command(func_list[0],
+    aliases=set(func_list[1:]), rule=to_me(), priority=20)
 
 @no_permission.handle()
 async def _(bot: Bot, event: Event, state: dict):
     await permission_on.finish("权限不足，目前只有管理员才能使用")
+
+
+help = on_command('帮助', rule=to_me(), priority=5)
+
+@help.handle()
+async def _(bot: Bot, event: Event, state: dict):
+    message = "DD机目前支持的功能有：\n\n"
+    for name in func_list:
+        message += name
+        if not name.endswith(('列表', '权限')):
+            message += " uid"
+        message += '\n'
+    message += "\n命令中的uid需要替换为对应主播的uid，注意是uid不是直播间id\n" + \
+        "\n群聊默认开启权限，只有管理员或机器人主人才能触发指令\n" + \
+        "\n所有群聊/私聊的推送都是分开的，在哪里添加就只会在哪里推送"
+    await help.finish(message)
 
     
