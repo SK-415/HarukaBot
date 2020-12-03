@@ -19,7 +19,7 @@ class Config():
         self.config.close()
     
     def _init(self, event=None):
-        self.config = TinyDB(get_path('config.json'))
+        self.config = TinyDB(get_path('config.json'), encoding='utf-8')
         self.uids = self.config.table('uids')
         self.groups = self.config.table('groups')
         self.uid_lists = self.config.table('uid_lists')
