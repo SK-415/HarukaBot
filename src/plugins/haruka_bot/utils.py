@@ -22,35 +22,37 @@ if not check_chromium():
     download_chromium()
 
 
-class User():
-    def __init__(self, uid):
-        self.uid = str(uid)
+class BiliAPI():
+    def __init__(self) -> None:
+        self.default_headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/79.0.3945.130 Safari/537.36",
+        "Referer": "https://www.bilibili.com/"
+        }
+        
+    async def get(self, url, headers=None, decode=True):
+        if not headers:
+            headers = self.default_headers
+        async with httpx.AsyncClient() as client:
+            r = await client.get(url, headers=headers)
+        if decode:
+            r.encoding = 'utf-8'
+            return r.json()
+        return r
     
-    async def get_info(self):
-        url = f'https://api.bilibili.com/x/space/acc/info?mid={self.uid}'
-        return (await Get(url))['data']
+    async def get_info(self, uid):
+        url = f'https://api.bilibili.com/x/space/acc/info?mid={uid}'
+        return (await self.get(url))['data']
 
-    async def get_dynamic(self):
+    async def get_dynamic(self, uid):
         # need_top: {1: 带置顶, 0: 不带置顶}
-        url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={self.uid}&offset_dynamic_id=0&need_top=0'
-        return (await Get(url))['data']
+        url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={uid}&offset_dynamic_id=0&need_top=0'
+        return (await self.get(url))['data']
     
-    async def get_live_info(self):
-        url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={self.uid}'
-        return (await Get(url))['data']
-
-
-async def Get(url):
-    DEFAULT_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                  "Chrome/79.0.3945.130 Safari/537.36",
-    "Referer": "https://www.bilibili.com/"
-    }
-    async with httpx.AsyncClient() as client:
-        r = await client.get(url, headers=DEFAULT_HEADERS)
-    r.encoding = 'utf-8'
-    return r.json()
-
+    async def get_live_info(self, uid):
+        url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={uid}'
+        return (await self.get(url))['data']
+        
 
 def get_path(name):
     """获取数据文件绝对路径"""
