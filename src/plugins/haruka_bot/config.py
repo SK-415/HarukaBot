@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 import nonebot
 from tinydb import TinyDB, Query
-from .utils import get_path, User
+from .utils import get_path, BiliAPI
 
 
 class Config():
@@ -76,9 +76,9 @@ class Config():
         if r: # 当前账号没订阅，但是其他账号添加过这个 uid
             name = r['name']
         else: # 没有账号订阅过这个 uid
-            user = User(uid)
+            api = BiliAPI()
             try: # 检测 uid 是否有效（逻辑需要修改）
-                user_info = await user.get_info()
+                user_info = await api.get_info(uid)
                 name = user_info["name"]
             except:
                 return "请输入有效的uid"
