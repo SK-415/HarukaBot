@@ -3,6 +3,8 @@ from datetime import datetime
 import nonebot
 from tinydb import TinyDB, Query
 from .utils import get_path, BiliAPI
+from .version import __version__
+from packaging.version import Version
 
 
 class Config():
@@ -23,6 +25,7 @@ class Config():
         self.uids = self.config.table('uids')
         self.groups = self.config.table('groups')
         self.uid_lists = self.config.table('uid_lists')
+        self.version = self.config.table('version')
 
         if event:
             self.bot_id = event.self_id
@@ -208,6 +211,18 @@ class Config():
             f.write(json.dumps(self.json, ensure_ascii=False, indent=4))
         return True
     
+    def new_version(self):
+        if 'version' not in self.config.tables():
+            self.version.insert({'version': __version__})
+            return True
+        current_version = Version(__version__)
+        old_version = Version(self.version.all()[0]['version'])
+        return current_version > old_version
+    
+    def update_version(self):
+        self.version.update({'version': __version__})
+                
+
     @classmethod
     async def update_config(cls):
         """升级为 TinyDB"""
@@ -229,6 +244,9 @@ class Config():
                                 await config.set(func, uid, status)
                         if 'admin' in type_config and not type_config['admin']:
                             await config.set_permission(False)
+            if config.new_version():
+                config.backup()
+                config.update_version()
 
 
 nonebot.get_driver().on_startup(Config.update_config)
