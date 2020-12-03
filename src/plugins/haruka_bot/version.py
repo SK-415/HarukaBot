@@ -1,4 +1,4 @@
-import pkg_resources
+from importlib.metadata import version
 
 
-__version__ = pkg_resources.get_distribution('haruka-bot').version
+__version__ = version('haruka-bot')
