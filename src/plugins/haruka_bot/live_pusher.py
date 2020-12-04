@@ -1,10 +1,9 @@
 import nonebot
-from apscheduler.triggers.cron import CronTrigger
-from nonebot import scheduler
 from nonebot.log import logger
 
-from .utils import BiliAPI, safe_send
 from .config import Config
+from .utils import BiliAPI, safe_send, scheduler
+
 
 uids = {}
 

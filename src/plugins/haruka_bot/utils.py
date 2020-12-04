@@ -5,7 +5,7 @@ from os import path
 
 import httpx
 import nonebot
-from nonebot import get_driver
+from nonebot import get_driver, require
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.log import logger
 from nonebot.permission import GROUP_ADMIN, GROUP_OWNER, SUPERUSER
@@ -119,6 +119,9 @@ async def restart(bot: Bot):
             break
         await asyncio.sleep(0.1)
     return new_bot
+
+
+scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在

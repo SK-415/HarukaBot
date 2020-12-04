@@ -2,12 +2,12 @@ import os
 from datetime import datetime, timedelta
 
 import nonebot
-from nonebot import scheduler
 from nonebot.log import logger
 
 from .config import Config
 from .dynamic import Dynamic
-from .utils import BiliAPI, safe_send
+from .utils import BiliAPI, safe_send, scheduler
+
 
 last_time = {}
 

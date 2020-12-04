@@ -6,6 +6,7 @@ go-cqhttp/
 log/
 test/
 sk_bot/
+_sk_bot/
 out/
 dist/
 
