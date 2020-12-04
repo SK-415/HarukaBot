@@ -10,6 +10,7 @@ from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.log import logger
 from nonebot.permission import GROUP_ADMIN, GROUP_OWNER, SUPERUSER
 from nonebot.rule import Rule
+from pydantic import BaseSettings
 
 # 更换 Chromium 下载地址为非 https 淘宝源
 os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
@@ -53,13 +54,24 @@ class BiliAPI():
     async def get_live_info(self, uid):
         url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={uid}'
         return (await self.get_json(url))['data']
-        
+
+
+class Config(BaseSettings):
+
+    haruka_dir: str = None
+    haruka_to_me: bool = True
+
+    class Config:
+        extra = 'ignore'
+
+global_config = nonebot.get_driver().config
+plugin_config = Config(**global_config.dict())
+
 
 def get_path(name):
     """获取数据文件绝对路径"""
-    config = get_driver().config
-    if config.haruka_dir:
-        dir_path = path.abspath(config.haruka_dir)
+    if plugin_config.haruka_dir:
+        dir_path = path.abspath(plugin_config.haruka_dir)
     else:
         src_path = path.dirname(path.abspath(__file__))
         dir_path = path.join(src_path, 'data')
@@ -79,8 +91,7 @@ async def permission_check(bot: Bot, event: Event, state: dict):
         return True
 
 def to_me():
-    config = get_driver().config
-    if config.haruka_to_me != False:
+    if plugin_config.haruka_to_me:
         from nonebot.rule import to_me
         return to_me()
     async def _to_me(bot: Bot, event: Event, state: dict):

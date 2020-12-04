@@ -167,6 +167,8 @@ class Config():
         
         q = Query()
         r = self.uid_lists.get(q[func].exists())
+        if not r: # 一次都没有添加过，uid_list 还没有创建
+            return None
         index = r['index']
         uid_list = r[func]
 
