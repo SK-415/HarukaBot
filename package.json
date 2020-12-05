@@ -1,0 +1,17 @@
+{
+  "name": "HarukaBot",
+  "version": "1.0.0",
+  "description": "A bilibili messages notification bot.",
+  "main": "index.js",
+  "repository": "https://github.com/SK-415/HarukaBot.git",
+  "author": "SK-415 <2967923486@qq.com>",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "@vuepress/plugin-back-to-top": "^1.7.1",
+    "vuepress": "^1.7.1"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  }
+}
