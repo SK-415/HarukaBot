@@ -172,7 +172,7 @@ class Config():
         index = r['index']
         uid_list = r[func]
 
-        if not uid_list:
+        if not uid_list: # uid_list 为空
             return None
         
         if index >= len(uid_list):
