@@ -3,15 +3,16 @@
 ::: warning 注意
 HarukaBot 一直是使用 go-cqhttp 进行开发的，同时适配了个别 go-cqhttp 独有的实现（如：`set_restart api`）。
 
-因此，**非常不建议**使用其他的 cqhttp 实现来代替 go-cqhttp，除非你愿意承担兼容性问题引发的后果。
+因此，**非常不建议**使用其他的 cqhttp 实现来代替 go-cqhttp，除非你愿意承担**兼容性问题**引发的**后果**。
 :::
 
 下载 [go-cqhttp](https://github.com/Mrs4s/go-cqhttp/releases/latest)（Windows 用户选择 `windows-amd64.zip` 结尾）。
 
-解压后或得 `go-cqhttp.exe`，在同目录下创建一个 `config.json` 文件，打开并填入如下内容：
+解压后获得 `go-cqhttp.exe`，在同目录下创建一个 `config.json` 文件，打开并填入如下内容：
 
-::: details 不会替换 QQ号 与 QQ密码？（点我展开）
+::: details 不知道如何替换 QQ号 与 QQ密码？（点我展开）
 修改 2-3 行为自己机器人的 QQ号 和 QQ密码，例如：
+
 ```json
 "uin": 12345,
 "password": "abcd1234",
@@ -60,5 +61,5 @@ HarukaBot 一直是使用 go-cqhttp 进行开发的，同时适配了个别 go-c
 	}
 }
 ```
-  
+
 编辑完重启 `go-cqhttp.exe`，跟随提示完成安全验证即可。
