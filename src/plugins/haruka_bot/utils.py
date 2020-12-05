@@ -5,11 +5,12 @@ from os import path
 
 import httpx
 import nonebot
-from nonebot import get_driver
+from nonebot import get_driver, require
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.log import logger
 from nonebot.permission import GROUP_ADMIN, GROUP_OWNER, SUPERUSER
 from nonebot.rule import Rule
+from pydantic import BaseSettings
 
 # 更换 Chromium 下载地址为非 https 淘宝源
 os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
@@ -22,41 +23,55 @@ if not check_chromium():
     download_chromium()
 
 
-class User():
-    def __init__(self, uid):
-        self.uid = str(uid)
+class BiliAPI():
+    def __init__(self) -> None:
+        self.default_headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/79.0.3945.130 Safari/537.36",
+        "Referer": "https://www.bilibili.com/"
+        }
+        
+    async def get(self, url, headers=None, cookies=None):
+        if not headers:
+            headers = self.default_headers
+        async with httpx.AsyncClient() as client:
+            r = await client.get(url, headers=headers, cookies=cookies)
+        r.encoding = 'utf-8'
+        return r
     
-    async def get_info(self):
-        url = f'https://api.bilibili.com/x/space/acc/info?mid={self.uid}'
-        return (await Get(url))['data']
+    async def get_json(self, url, **kw):
+        return (await self.get(url, **kw)).json()
+    
+    async def get_info(self, uid):
+        url = f'https://api.bilibili.com/x/space/acc/info?mid={uid}'
+        return (await self.get_json(url))['data']
 
-    async def get_dynamic(self):
+    async def get_dynamic(self, uid):
         # need_top: {1: 带置顶, 0: 不带置顶}
-        url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={self.uid}&offset_dynamic_id=0&need_top=0'
-        return (await Get(url))['data']
+        url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={uid}&offset_dynamic_id=0&need_top=0'
+        return (await self.get_json(url))['data']
     
-    async def get_live_info(self):
-        url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={self.uid}'
-        return (await Get(url))['data']
+    async def get_live_info(self, uid):
+        url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={uid}'
+        return (await self.get_json(url))['data']
 
 
-async def Get(url):
-    DEFAULT_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                  "Chrome/79.0.3945.130 Safari/537.36",
-    "Referer": "https://www.bilibili.com/"
-    }
-    async with httpx.AsyncClient() as client:
-        r = await client.get(url, headers=DEFAULT_HEADERS)
-    r.encoding = 'utf-8'
-    return r.json()
+class Config(BaseSettings):
+
+    haruka_dir: str = None
+    haruka_to_me: bool = True
+
+    class Config:
+        extra = 'ignore'
+
+global_config = nonebot.get_driver().config
+plugin_config = Config(**global_config.dict())
 
 
 def get_path(name):
     """获取数据文件绝对路径"""
-    config = get_driver().config
-    if config.haruka_dir:
-        dir_path = path.abspath(config.haruka_dir)
+    if plugin_config.haruka_dir:
+        dir_path = path.abspath(plugin_config.haruka_dir)
     else:
         src_path = path.dirname(path.abspath(__file__))
         dir_path = path.join(src_path, 'data')
@@ -76,8 +91,7 @@ async def permission_check(bot: Bot, event: Event, state: dict):
         return True
 
 def to_me():
-    config = get_driver().config
-    if config.haruka_to_me != False:
+    if plugin_config.haruka_to_me:
         from nonebot.rule import to_me
         return to_me()
     async def _to_me(bot: Bot, event: Event, state: dict):
@@ -116,6 +130,9 @@ async def restart(bot: Bot):
             break
         await asyncio.sleep(0.1)
     return new_bot
+
+
+scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在

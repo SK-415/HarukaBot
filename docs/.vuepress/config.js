@@ -1,0 +1,60 @@
+module.exports = {
+    title: 'HarukaBot',
+    description: 'B站 消息推送 QQ机器人',
+    head: [
+      ['link', { rel: 'icon', href: '/logo.png' }]
+    ],
+    themeConfig: {
+      logo: '/logo.png',
+      repo: 'SK-415/HarukaBot',
+      docsDir: 'docs',
+      docsBranch: 'master',
+      editLinks: true,
+      editLinkText: '在 GitHub 上编辑此页',
+      lastUpdated: '上次更新',
+      smoothScroll: true,
+
+      nav: [
+        { text: '主页', link: '/' },
+        { text: '安装', link: '/install/' },
+        { text: '使用帮助', link: '/uasge/' },
+        { text: '常见问题', link: '/usage/faq/' },
+        { 
+          text: '关于', 
+          items: [
+            { text: '关于项目', link: '/about/' },
+          ]
+        }
+      ],
+      sidebar: {
+        '/install/': [
+          {
+            title: '安装',
+            collapsable: false,
+            sidebar: 'auto',
+            children: [
+              '',
+              'install-go-cqhttp',
+              'install-HarukaBot',
+              'congrats'
+            ]
+          }
+        ],
+        '/usage/': [
+          {
+            title: '使用帮助',
+            collapsable: false,
+            sidebar: 'auto',
+            children: [
+              '',
+              'features'
+            ]
+          }
+        ]
+      },
+    },
+
+    plugins: [
+      '@vuepress/plugin-back-to-top'
+    ]
+  }

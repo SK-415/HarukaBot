@@ -4,6 +4,7 @@ from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.permission import GROUP_ADMIN, SUPERUSER, GROUP_OWNER
 from .config import Config
 from .utils import permission_check, to_me
+from .version import __version__
 
 
 add_uid = on_command('添加主播', rule=to_me() & permission_check, priority=5)
@@ -168,6 +169,16 @@ async def _(bot: Bot, event: Event, state: dict):
     with Config(event) as config:
         msg = await config.set_permission(False)
     await permission_on.finish(msg.replace('name', '关闭权限'))
+
+get_version = on_command('版本信息', rule=to_me(), priority=5)
+
+@get_version.handle()
+async def _(bot: Bot, event: Event, state: dict):
+    message = f"当前 HarukaBot 版本：{__version__}\n" +\
+        "\n使用中遇到问题欢迎加群反馈，\n" +\
+        "群号：629574472\n" +\
+        "\n常见问题：https://www.haruka-bot.live/usage/faq.html"
+    await get_version.finish(message)
 
 no_permission = on_command(func_list[0],
     aliases=set(func_list[1:]), rule=to_me(), priority=20)

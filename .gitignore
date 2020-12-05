@@ -5,7 +5,9 @@ data/
 go-cqhttp/
 log/
 test/
+_test/
 sk_bot/
+_sk_bot/
 out/
 dist/
 
@@ -16,3 +18,5 @@ Dockerfile
 
 src/plugins/copyman.py
 src/plugins/test.py
+src/plugins/_copyman.py
+node_modules

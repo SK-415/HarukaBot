@@ -2,12 +2,12 @@ import os
 from datetime import datetime, timedelta
 
 import nonebot
-from nonebot import scheduler
 from nonebot.log import logger
 
 from .config import Config
 from .dynamic import Dynamic
-from .utils import User, safe_send
+from .utils import BiliAPI, safe_send, scheduler
+
 
 last_time = {}
 
@@ -24,8 +24,8 @@ async def dy_sched():
     
     name = push_list[0]['name']
     logger.debug(f'爬取动态 {name}（{uid}）')
-    user = User(uid)
-    dynamics = (await user.get_dynamic()).get('cards', []) # 获取最近十二条动态
+    api = BiliAPI()
+    dynamics = (await api.get_dynamic(uid)).get('cards', []) # 获取最近十二条动态
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
     # await update_config(config)
 
