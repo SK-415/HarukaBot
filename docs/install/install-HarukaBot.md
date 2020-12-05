@@ -1,27 +1,33 @@
 #  安装 HarukaBot
 
 ::: warning 前提条件
-HarukaBot 依赖于 [Python3.8+](https://www.python.org/downloads/release/python-386/)，不会安装的可以参考 [廖雪峰的教程](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624)。
+HarukaBot 依赖于 [Python3.8+](https://www.python.org/downloads/release/python-386/) 与 [nonebot2](https://github.com/nonebot/nonebot2) ，不会安装 [Python3.8+](https://www.python.org/downloads/release/python-386/) 的可以参考 [廖雪峰的教程](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624)。
 :::
+
+::: danger **重要**
+如果您曾经是 [nonebot](https://github.com/nonebot/nonebot) 的用户，或者您不知道在此之前有没有安装和卸载过 nonebot ，那么您需要在**进行一切步骤之前**，在Powershell/cmd内 执行`pip uninstall nonebot `  命令**卸载** [nonebot](https://github.com/nonebot/nonebot) ，nonebot 与 nonebot2 **并不兼容**，如果您仍需使用 nonebot 并且想体验与使用 HarukaBot ，您需要创建 Python虚拟环境 。
+ :::
 
 ## 脚手架安装（推荐)
 
 1. 打开终端，并选择一个文件夹用来存放数据。
 
     ::: tip Windows 用户可以这么做
-    打开一个文件夹，对着文件夹内空白处，按住 shift 同时单击鼠标右键 -> 在此处打开 Powershell 窗口。
+    打开一个文件夹，对着文件夹内空白处，按住 shift 同时单击鼠标右键 -> 在此处打开 Powershell/命令 窗口。
     :::
 
-2. 安装脚手架。
+2. 在终端内输入以下命令安装脚手架。
 
     <code-group>
     <code-block title="pip">
+
     ```sh
     pip install hb-cli
     ```
     </code-block>
 
     <code-block title="poetry">
+
     ```sh
     poetry add hb-cli
     ```
@@ -67,6 +73,7 @@ HarukaBot 依赖于 [Python3.8+](https://www.python.org/downloads/release/python
 
 <code-group>
 <code-block title="pip">
+
 ```sh
 #master
 pip install --upgrade git+https://github.com/SK-415/HarukaBot.git#master
@@ -76,6 +83,7 @@ pip install --upgrade git+https://github.com/SK-415/HarukaBot.git#dev
 </code-block>
 
 <code-block title="poetry">
+
 ```sh
 #master
 poetry add git+https://github.com/SK-415/HarukaBot.git#master
@@ -105,6 +113,7 @@ poetry add git+https://github.com/SK-415/HarukaBot.git#dev
     </code-block>
 
     <code-block title="poetry">
+
     ```sh
     poetry add haruka-bot
     ```
