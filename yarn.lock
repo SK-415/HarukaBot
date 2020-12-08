@@ -7610,8 +7610,8 @@ vuepress-plugin-smooth-scroll@^0.0.3:
 
 vuepress@^1.7.1:
   version "1.7.1"
-  resolved "https://registry.yarnpkg.com/vuepress/-/vuepress-1.7.1.tgz#bb0e139d8c407a0b5aa962cf9577832a5808937e"
-  integrity sha512-AdA3do1L4DNzeF8sMTE+cSUJ5hR/6f3YujU8DVowi/vFOg/SX2lJF8urvDkZUSXzaAT6aSgkI9L+B6D+i7SJjA==
+  resolved "https://registry.npm.taobao.org/vuepress/download/vuepress-1.7.1.tgz#bb0e139d8c407a0b5aa962cf9577832a5808937e"
+  integrity sha1-uw4TnYxAegtaqWLPlXeDKlgIk34=
   dependencies:
     "@vuepress/core" "1.7.1"
     "@vuepress/theme-default" "1.7.1"
@@ -7619,6 +7619,11 @@ vuepress@^1.7.1:
     envinfo "^7.2.0"
     opencollective-postinstall "^2.0.2"
     update-notifier "^4.0.0"
+
+vuetify@^2.3.19:
+  version "2.3.19"
+  resolved "https://registry.npm.taobao.org/vuetify/download/vuetify-2.3.19.tgz#94ae6a8b0e2d52266b2a47c6a11021c63aa1b7b0"
+  integrity sha1-lK5qiw4tUiZrKkfGoRAhxjqht7A=
 
 watchpack-chokidar2@^2.0.1:
   version "2.0.1"

@@ -17,7 +17,7 @@ module.exports = {
       nav: [
         { text: '主页', link: '/' },
         { text: '安装', link: '/install/' },
-        { text: '使用帮助', link: '/uasge/' },
+        { text: '使用帮助', link: '/usage/' },
         { text: '常见问题', link: '/usage/faq/' },
         { 
           text: '关于', 
@@ -44,10 +44,11 @@ module.exports = {
           {
             title: '使用帮助',
             collapsable: false,
-            sidebar: 'auto',
+            // sidebar: 'auto',
             children: [
               '',
-              'features'
+              'settings',
+              'faq'
             ]
           }
         ]

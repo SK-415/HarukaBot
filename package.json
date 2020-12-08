@@ -8,7 +8,8 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@vuepress/plugin-back-to-top": "^1.7.1",
-    "vuepress": "^1.7.1"
+    "vuepress": "^1.7.1",
+    "vuetify": "^2.3.19"
   },
   "scripts": {
     "docs:dev": "vuepress dev docs",
