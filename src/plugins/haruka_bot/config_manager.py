@@ -1,5 +1,4 @@
 from nonebot import on_command
-# from nonebot.rule import to_me
 from nonebot.adapters.cqhttp import Bot, Event
 from nonebot.permission import GROUP_ADMIN, SUPERUSER, GROUP_OWNER
 from .config import Config
@@ -157,8 +156,8 @@ async def _(bot: Bot, event: Event, state: dict):
 
 
 func_list = [
-    '主播列表', '开启权限', '关闭权限', '添加主播', '删除主播', 
-    '开启动态', '关闭动态', '开启直播', '关闭直播', '开启全体', '关闭全体']
+    '主播列表', '开启权限', '关闭权限', '添加主播', '删除主播', '开启动态',
+    '关闭动态', '开启直播', '关闭直播', '开启全体', '关闭全体', '版本信息']
 
 permission_off = on_command('关闭权限', rule=to_me(), 
     permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
@@ -200,7 +199,7 @@ async def _(bot: Bot, event: Event, state: dict):
         message += '\n'
     message += "\n命令中的uid需要替换为对应主播的uid，注意是uid不是直播间id\n" + \
         "\n群聊默认开启权限，只有管理员或机器人主人才能触发指令\n" + \
-        "\n所有群聊/私聊的推送都是分开的，在哪里添加就只会在哪里推送"
+        "\n所有群聊/私聊的推送都是分开的，在哪里添加就会在哪里推送"
     await help.finish(message)
 
     
