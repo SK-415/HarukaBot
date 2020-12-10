@@ -1,4 +1,4 @@
-[![HarukaBot](https://socialify.git.ci/SK-415/HarukaBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSK-415%2FHarukaBot-docs%2Fmain%2Fdocs%2F.vuepress%2Fpublic%2Flogo.png&owner=1&pattern=Circuit%20Board&stargazers=1&theme=Light)](https://www.haruka-bot.live/)
+[![HarukaBot](https://socialify.git.ci/SK-415/HarukaBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSK-415%2FHarukaBot%2Fmaster%2Fdocs%2F.vuepress%2Fpublic%2Flogo.png&owner=1&pattern=Circuit%20Board&stargazers=1&theme=Light)](https://www.haruka-bot.live/)
 
 # HarukaBot ——你的“单推”小助手
 
