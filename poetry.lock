@@ -960,7 +960,7 @@ cli = ["hb-cli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "e4804bfdcd1d3b06709801cb0fad757bd00e5333e2e44a4b64c68c23cc547638"
+content-hash = "4917a4702f2fa442220a3db3157d207baa043a359880b7e78e46e136a9eacac9"
 
 [metadata.files]
 appdirs = [

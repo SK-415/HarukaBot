@@ -14,22 +14,19 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 qrcode = {extras = ["pil"], version = "^6.1"}
 pyppeteer = "^0.2.2"
-hb-cli = {version = "^0.1.1", optional = true}
 tinydb = "^4.3.0"
 packaging = "^20.7"
 nonebot-plugin-apscheduler = "^0.1.0"
 pydantic = "^1.7.3"
+nonebot2 = "^2.0.0-alpha.7"
 
 [tool.poetry.dev-dependencies]
 Nuitka = "^0.6.9"
 autopep8 = "^1.5.4"
 nb-cli = "^0.2.0"
-
-[tool.poetry.extras]
-cli = ["hb-cli"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
