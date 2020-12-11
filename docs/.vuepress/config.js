@@ -22,6 +22,7 @@ module.exports = {
         { 
           text: '关于', 
           items: [
+            { text: '更新日志', link: '/about/CHANGELOG/'},
             { text: '关于项目', link: '/about/' },
           ]
         }
