@@ -19,11 +19,7 @@ class Dynamic():
         self.url = "https://t.bilibili.com/" + str(self.id)
         self.time = dynamic['desc']['timestamp']
         # self.origin_id = dynamic['desc']['orig_dy_id']
-        try:
-            self.name = dynamic['desc']['user_profile']['info']['uname']
-        except:
-            logger.error("uname 错误，一下为 dynamic 内容")
-            logger.error(dynamic)
+        self.name = dynamic['desc']['user_profile']['info']['uname']
         self.uid = dynamic['desc']['user_profile']['info']['uid']
         self.img_name = str(self.uid) + str(self.time) + '.png'
         self.img_path = get_path(self.img_name)

@@ -38,7 +38,13 @@ async def dy_sched():
         return
     
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
-        dynamic = Dynamic(dynamic)
+        try:
+            dynamic = Dynamic(dynamic)
+            10/0
+        except Exception as e:
+            logger.error('uname 错误，以下为 dynamics 内容：')
+            logger.error(dynamics)
+            raise e
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
             await dynamic.get_screenshot()
             await dynamic.encode()
