@@ -196,6 +196,12 @@ class Config():
             return True
         return self.groups.get(q.group_id == group_id)['admin']
 
+    @classmethod
+    def get_name(cls, uid):
+        """获取 uid 对应的昵称"""
+        q = Query()
+        return (cls().config.get(q.uid == str(uid)))['name']
+    
     def read(self):
         """读取用户注册信息"""
 
