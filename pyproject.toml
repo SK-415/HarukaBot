@@ -13,6 +13,9 @@ packages = [
     { include = "haruka_bot/*.py", from = "./src/plugins/"}
 ]
 
+[tool.poetry.scripts]
+hb = 'haruka_bot.cli.__main__:main'
+
 [tool.poetry.dependencies]
 python = "^3.8"
 qrcode = {extras = ["pil"], version = "^6.1"}

@@ -213,6 +213,7 @@ class Config():
     def backup(self):
         """备份当前配置文件"""
 
+        # FIXME 如果 config.json 不存在，不备份
         self.read()
         backup_name = f"config.{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json.bak"
         with open(get_path(backup_name), 'w', encoding='utf-8') as f:
