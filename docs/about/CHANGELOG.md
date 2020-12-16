@@ -1,5 +1,13 @@
 # 更新日志
 
+## v1.1.1
+
+- 修复动态推送时可能产生 uname 错误
+
+- 将 hb-cli 与 HarukaBot 合并
+
+- 文档添加“怎么更新 HarukaBot？”
+
 ## v1.1.0
 
 - 使用 [TinyDB](https://github.com/msiemens/tinydb)，彻底重构对配置文件的操作逻辑
