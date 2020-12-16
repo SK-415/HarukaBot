@@ -403,7 +403,7 @@ python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
 
 [[package]]
 name = "nb-cli"
-version = "0.2.0"
+version = "0.3.1"
 description = "CLI for nonebot2"
 category = "dev"
 optional = false
@@ -414,7 +414,7 @@ click = ">=7.1.2,<8.0.0"
 colorama = ">=0.4.3,<0.5.0"
 cookiecutter = ">=1.7.2,<2.0.0"
 docker-compose = ">=1.27.2,<2.0.0"
-nonebot2 = ">=2.0.0-alpha.4,<3.0.0"
+nonebot2 = ">=2.0.0-alpha.7,<3.0.0"
 pyfiglet = ">=0.8.post1,<0.9"
 pyinquirer = "1.0.3"
 
@@ -908,7 +908,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "fd27c88b18bc1b11ce648c2124eebb799a7fbc1fcd5cdcd0b755a54a02272c2a"
+content-hash = "3a689c01207f80b9b5056ce1eab600e0d020a2b80d9dec485a0e3ed8656e4314"
 
 [metadata.files]
 appdirs = [
@@ -1123,8 +1123,8 @@ markupsafe = [
     {file = "MarkupSafe-1.1.1.tar.gz", hash = "sha256:29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"},
 ]
 nb-cli = [
-    {file = "nb-cli-0.2.0.tar.gz", hash = "sha256:d53ab571beee259af99a8cb4574ef85b6c1d821549f857eb45c83b3cb4f903a4"},
-    {file = "nb_cli-0.2.0-py3-none-any.whl", hash = "sha256:c0975f18bb19da99278ea60c48b668fc6e5fa371b118e8e86d42e989933186ba"},
+    {file = "nb-cli-0.3.1.tar.gz", hash = "sha256:9706fedbac49b7f3f7fbca0f20309b5d202ddabe5dbbf30bedac2414be6700cf"},
+    {file = "nb_cli-0.3.1-py3-none-any.whl", hash = "sha256:454b18b4b7bc8a5f6476c3ca8ca91b331c64a9766553433ee684c604c115d29f"},
 ]
 nonebot-plugin-apscheduler = [
     {file = "nonebot-plugin-apscheduler-0.1.0.tar.gz", hash = "sha256:897239c147a989984e9eb62738f553d7f94c0c25295939bd364e356a1441c9fb"},
