@@ -25,14 +25,14 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
     <code-block title="pip">
 
     ```sh
-    pip install hb-cli
+    pip install haruka-bot
     ```
     </code-block>
 
     <code-block title="poetry">
 
     ```sh
-    poetry add hb-cli
+    poetry add haruka-bot
     ```
     </code-block>
     </code-group>
@@ -44,6 +44,10 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
     ```
 
 > 以后启动只需在**相同文件夹**内执行最后一步即可
+
+::: tip 怎么更新 HarukaBot？
+详见 [常见问题](../usage/faq.md#怎么更新-harukabot)
+:::
 
 ## 从插件广场安装（适用于 NoneBot2 用户)
 
@@ -72,7 +76,7 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 
 ## 从 GitHub 安装（包含尚未发布的特性）
 
-已经按照上面两个方法之一安装完成后，可以从 GitHub 获取尚未发布的特性。
+安装
 
 <code-group>
 <code-block title="pip">
@@ -96,6 +100,12 @@ poetry add git+https://github.com/SK-415/HarukaBot.git#dev
 </code-block>
 </code-group>
 
+运行
+
+```sh
+hb run
+```
+
 ##  手动安装（不推荐）
 
 > 由于历史原因遗留的方法，不再提供支持，非常不推荐使用。
@@ -108,20 +118,9 @@ poetry add git+https://github.com/SK-415/HarukaBot.git#dev
 
 2. 安装依赖。
 
-    <code-group>
-    <code-block title="pip">
     ```sh
-    pip install haruka-bot
+    poetry install --no-dev
     ```
-    </code-block>
-
-    <code-block title="poetry">
-
-    ```sh
-    poetry add haruka-bot
-    ```
-    </code-block>
-    </code-group>
 
 3. 启动 HarukaBot
 

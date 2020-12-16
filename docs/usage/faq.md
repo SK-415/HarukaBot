@@ -1,5 +1,43 @@
 # 常见问题
 
+## 怎么更新 HarukaBot？
+
+更新至最新稳定版（推荐）
+
+<code-group>
+<code-block title="pip">
+
+```sh
+pip install --upgrade haruka-bot
+```
+</code-block>
+
+<code-block title="poetry">
+
+```sh
+poetry add haruka-bot@latest
+```
+</code-block>
+</code-group>
+
+更新至最新测试版
+
+<code-group>
+<code-block title="pip">
+
+```sh
+pip install --upgrade --pre haruka-bot
+```
+</code-block>
+
+<code-block title="poetry">
+
+```sh
+poetry add --allow-prereleases haruka-bot@latest
+```
+</code-block>
+</code-group>
+
 ## 如何查看别人的 UID？
 
 ::: warning 注意
