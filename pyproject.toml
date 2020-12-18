@@ -31,6 +31,11 @@ nonebot2 = "^2.0.0-alpha.7"
 autopep8 = "^1.5.4"
 nb-cli = "^0.3.1"
 
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
