@@ -194,7 +194,7 @@ async def _(bot: Bot, event: Event, state: dict):
     message = "DD机目前支持的功能有：\n\n"
     for name in func_list:
         message += name
-        if not name.endswith(('列表', '权限')):
+        if not name.endswith(('列表', '权限', '版本信息')):
             message += " uid"
         message += '\n'
     message += "\n命令中的uid需要替换为对应主播的uid，注意是uid不是直播间id\n" + \
