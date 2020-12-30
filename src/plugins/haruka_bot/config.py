@@ -25,6 +25,7 @@ class Config():
         self.uids = self.config.table('uids')
         self.groups = self.config.table('groups')
         self.uid_lists = self.config.table('uid_lists')
+        self.login = self.config.table('login')
         self.version = self.config.table('version')
 
         if event:
@@ -199,6 +200,7 @@ class Config():
     @classmethod
     def get_name(cls, uid):
         """获取 uid 对应的昵称"""
+
         q = Query()
         return (cls().config.get(q.uid == str(uid)))['name']
     
@@ -220,6 +222,31 @@ class Config():
             f.write(json.dumps(self.json, ensure_ascii=False, indent=4))
         return True
     
+    @classmethod
+    def get_login(cls):
+        """获取登录信息"""
+
+        if 'login' not in cls().config.tables():
+            tokens = {
+                'access_token': '',
+                'refresh_token': ''
+            }
+            cls().login.insert(tokens)
+        else:
+            tokens = cls().login.all()[0]
+        if tokens == {'access_token': '', 'refresh_token': ''}:
+            return None
+        return tokens
+
+    @classmethod
+    def update_login(cls, tokens):
+        """更新登录信息"""
+
+        cls().login.update({
+            'access_token': tokens['access_token'],
+            'refresh_token': tokens['refresh_token']
+        })
+
     def new_version(self):
         if 'version' not in self.config.tables():
             self.version.insert({'version': __version__})

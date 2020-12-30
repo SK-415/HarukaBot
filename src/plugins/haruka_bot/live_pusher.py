@@ -2,7 +2,8 @@ import nonebot
 from nonebot.log import logger
 
 from .config import Config
-from .utils import BiliAPI, safe_send, scheduler
+from .utils import safe_send, scheduler
+from .bilireq import BiliReq
 
 
 uids = {}
@@ -21,8 +22,8 @@ async def live_sched():
         push_list = config.get_push_list(uid, 'live')
         
     old_status = uids[uid]
-    api = BiliAPI()
-    user_info = (await api.get_info(uid))['live_room']
+    b = BiliReq()
+    user_info = (await b.get_info(uid))['live_room']
     name = push_list[0]['name']
     logger.debug(f'爬取直播 {name}（{uid}）')
     new_status = user_info['liveStatus']
