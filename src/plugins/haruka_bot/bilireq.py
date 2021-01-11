@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import io
+import json
 import time
 from hashlib import md5
 from urllib.parse import urlencode
@@ -58,7 +59,14 @@ class BiliReq():
         }
         return (await self.get(url, params=params)).json()['data']
     
-    async def get_live_list(self):
+    async def get_live_list(self, uids):
+        """根据 UID 获取直播间信息列表"""
+
+        url = 'https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids'
+        data = {'uids': uids}
+        return (await self.post(url, headers=self.default_headers, data=json.dumps(data))).json()['data']
+    
+    async def get_is_live_list(self):
         url = 'https://api.live.bilibili.com/xlive/app-interface/v1/relation/liveAnchor'
         params = {'access_key': self.login['access_token']}
         return (await self.get(url, params=params)).json()['data']

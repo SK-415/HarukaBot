@@ -186,6 +186,17 @@ class Config():
             index += 1
         self.uid_lists.update({'index': index}, q[func].exists())
         return uid
+    
+    
+    def get_uid_list(self, name):
+        """获取需要爬取的 UID 列表"""
+
+        q = Query()
+        r = self.uid_lists.get(q[name].exists())
+        if not r:
+            return []
+        return r[name]
+
 
     def get_push_list(self, uid, func):
         """获取推送列表"""

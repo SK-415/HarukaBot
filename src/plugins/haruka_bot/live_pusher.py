@@ -6,7 +6,7 @@ from .utils import safe_send, scheduler
 from .bilireq import BiliReq
 
 
-uids = {}
+status = {}
 
 @scheduler.scheduled_job('cron', second='*/10', id='live_sched')
 @logger.catch
@@ -14,28 +14,30 @@ async def live_sched():
     """直播推送"""
 
     with Config() as config:
-        uid = config.next_uid('live')
-        if not uid:
+        uids = config.get_uid_list('live')
+        if not uids:
             return
-        if uid not in uids:
-            uids[uid] = 1
-        push_list = config.get_push_list(uid, 'live')
-        
-    old_status = uids[uid]
-    b = BiliReq()
-    user_info = (await b.get_info(uid))['live_room']
-    name = push_list[0]['name']
-    logger.debug(f'爬取直播 {name}（{uid}）')
-    new_status = user_info['liveStatus']
-    if new_status == old_status:
-        return
+        br = BiliReq()
+        logger.debug(f'爬取直播列表')
+        r = await br.get_live_list(uids)
+        for uid, info in r.items():
+            if uid not in status:
+                status[uid] = 1
+            old_status = status[uid]
+            new_status = info['live_status']
+            if new_status == old_status:
+                return
+            status[uid] = new_status
+            if new_status:
+                room_id = info['short_id'] if info['short_id'] else info['room_id']
+                url = 'https://live.bilibili.com/' + str(room_id)
+                name = info['uname']
+                title = info['title']
+                cover = info['cover_from_user'] if info['cover_from_user'] else info['keyframe']
+                push_list = config.get_push_list(uid, 'live')
 
-    uids[uid] = new_status
-    if new_status:
-        live_msg = f"{name} 开播啦！\n\n{user_info['title']}\n传送门→{user_info['url']}\n[CQ:image,file={user_info['cover']}]"
-        for sets in push_list:
-            at_msg = ''
-            if sets['at']:
-                at_msg = '[CQ:at,qq=all] '
-            bot = nonebot.get_bots()[sets['bot_id']]
-            await safe_send(bot, sets['type'], sets['type_id'], at_msg + live_msg)
+                live_msg = f"{name} 开播啦！\n\n{title}\n传送门→{url}\n[CQ:image,file={cover}]"
+                for sets in push_list:
+                    at_msg = '[CQ:at,qq=all] ' if sets['at'] else ''
+                    bot = nonebot.get_bots()[sets['bot_id']]
+                    await safe_send(bot, sets['type'], sets['type_id'], at_msg + live_msg)
