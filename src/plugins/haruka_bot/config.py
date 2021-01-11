@@ -2,7 +2,8 @@ import json
 from datetime import datetime
 import nonebot
 from tinydb import TinyDB, Query
-from .utils import get_path, BiliAPI
+
+from .utils import get_path
 from .version import __version__
 from packaging.version import Version
 
@@ -80,9 +81,10 @@ class Config():
         if r: # 当前账号没订阅，但是其他账号添加过这个 uid
             name = r['name']
         else: # 没有账号订阅过这个 uid
-            api = BiliAPI()
+            from .bilireq import BiliReq
+            br = BiliReq()
             try: # 检测 uid 是否有效（逻辑需要修改）
-                user_info = await api.get_info(uid)
+                user_info = await br.get_info(uid)
                 name = user_info["name"]
             except:
                 return "请输入有效的uid"
