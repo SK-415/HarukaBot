@@ -2,7 +2,8 @@ import json
 from datetime import datetime
 import nonebot
 from tinydb import TinyDB, Query
-from .utils import get_path, BiliAPI
+
+from .utils import get_path
 from .version import __version__
 from packaging.version import Version
 
@@ -25,6 +26,7 @@ class Config():
         self.uids = self.config.table('uids')
         self.groups = self.config.table('groups')
         self.uid_lists = self.config.table('uid_lists')
+        self.login = self.config.table('login')
         self.version = self.config.table('version')
 
         if event:
@@ -79,9 +81,10 @@ class Config():
         if r: # 当前账号没订阅，但是其他账号添加过这个 uid
             name = r['name']
         else: # 没有账号订阅过这个 uid
-            api = BiliAPI()
+            from .bilireq import BiliReq
+            br = BiliReq()
             try: # 检测 uid 是否有效（逻辑需要修改）
-                user_info = await api.get_info(uid)
+                user_info = await br.get_info(uid)
                 name = user_info["name"]
             except:
                 return "请输入有效的uid"
@@ -183,6 +186,17 @@ class Config():
             index += 1
         self.uid_lists.update({'index': index}, q[func].exists())
         return uid
+    
+    
+    def get_uid_list(self, name):
+        """获取需要爬取的 UID 列表"""
+
+        q = Query()
+        r = self.uid_lists.get(q[name].exists())
+        if not r:
+            return []
+        return r[name]
+
 
     def get_push_list(self, uid, func):
         """获取推送列表"""
@@ -199,6 +213,7 @@ class Config():
     @classmethod
     def get_name(cls, uid):
         """获取 uid 对应的昵称"""
+
         q = Query()
         return (cls().config.get(q.uid == str(uid)))['name']
     
@@ -220,6 +235,31 @@ class Config():
             f.write(json.dumps(self.json, ensure_ascii=False, indent=4))
         return True
     
+    @classmethod
+    def get_login(cls):
+        """获取登录信息"""
+
+        if 'login' not in cls().config.tables():
+            tokens = {
+                'access_token': '',
+                'refresh_token': ''
+            }
+            cls().login.insert(tokens)
+        else:
+            tokens = cls().login.all()[0]
+        if tokens == {'access_token': '', 'refresh_token': ''}:
+            return None
+        return tokens
+
+    @classmethod
+    def update_login(cls, tokens):
+        """更新登录信息"""
+
+        cls().login.update({
+            'access_token': tokens['access_token'],
+            'refresh_token': tokens['refresh_token']
+        })
+
     def new_version(self):
         if 'version' not in self.config.tables():
             self.version.insert({'version': __version__})
