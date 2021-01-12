@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.2.0-alpha.0"
+version = "1.2.0-alpha.1"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "AGPL-3.0-or-later"
@@ -33,11 +33,6 @@ python-dotenv = "^0.15.0"
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
 ipython = "^7.19.0"
-
-[[tool.poetry.source]]
-name = "aliyun"
-url = "https://mirrors.aliyun.com/pypi/simple/"
-default = true
 
 [[tool.poetry.source]]
 name = "aliyun"
