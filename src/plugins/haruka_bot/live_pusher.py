@@ -24,7 +24,7 @@ async def live_sched():
             if uid not in status:
                 status[uid] = 1
             old_status = status[uid]
-            new_status = info['live_status']
+            new_status = 0 if info['live_status'] == 2 else info['live_status']
             if new_status == old_status:
                 return
             status[uid] = new_status
