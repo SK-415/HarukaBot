@@ -21,14 +21,13 @@ async def live_sched():
         logger.debug(f'爬取直播列表')
         r = await br.get_live_list(uids)
         for uid, info in r.items():
-            if uid not in status:
-                status[uid] = 1
-            old_status = status[uid]
             new_status = 0 if info['live_status'] == 2 else info['live_status']
-            if new_status == old_status:
-                return
-            status[uid] = new_status
-            if new_status:
+            if uid not in status:
+                status[uid] = new_status
+                continue
+            old_status = status[uid]
+            logger.debug(f"uid: {uid}, old: {old_status}, new: {new_status}, status: {status}")
+            if new_status != old_status and new_status: # 判断是否推送过
                 room_id = info['short_id'] if info['short_id'] else info['room_id']
                 url = 'https://live.bilibili.com/' + str(room_id)
                 name = info['uname']
@@ -41,3 +40,4 @@ async def live_sched():
                     at_msg = '[CQ:at,qq=all] ' if sets['at'] else ''
                     bot = nonebot.get_bots()[sets['bot_id']]
                     await safe_send(bot, sets['type'], sets['type_id'], at_msg + live_msg)
+            status[uid] = new_status
