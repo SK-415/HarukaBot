@@ -3,12 +3,12 @@ import os
 import traceback
 from os import path
 
-import httpx
 import nonebot
 from nonebot import get_driver, require
-from nonebot.adapters.cqhttp import Bot, Event
+from nonebot.adapters.cqhttp import Bot, Event, MessageEvent
 from nonebot.log import logger
-from nonebot.permission import GROUP_ADMIN, GROUP_OWNER, SUPERUSER
+from nonebot.permission import SUPERUSER
+from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.rule import Rule
 from pydantic import BaseSettings
 
@@ -31,7 +31,7 @@ class Config(BaseSettings):
     class Config:
         extra = 'ignore'
 
-global_config = nonebot.get_driver().config
+global_config = get_driver().config
 plugin_config = Config(**global_config.dict())
 
 
@@ -46,10 +46,10 @@ def get_path(name):
     return f_path
 
 
-async def permission_check(bot: Bot, event: Event, state: dict):
+async def permission_check(bot: Bot, event: MessageEvent, state: dict):
     from .config import Config
     config = Config()
-    if event.detail_type == 'private':
+    if event.message_type == 'private':
         return True
     group_id = str(event.group_id)
     with Config() as config:

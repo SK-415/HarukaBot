@@ -1,6 +1,7 @@
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, Event
-from nonebot.permission import GROUP_ADMIN, SUPERUSER, GROUP_OWNER
+from nonebot.permission import SUPERUSER
+from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 
 from .bilireq import BiliReq
 from .config import Config
