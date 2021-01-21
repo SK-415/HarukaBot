@@ -353,7 +353,7 @@ reference = "aliyun"
 
 [[package]]
 name = "nonebot2"
-version = "2.0.0a8"
+version = "2.0.0a8.post2"
 description = "An asynchronous python bot framework."
 category = "main"
 optional = false

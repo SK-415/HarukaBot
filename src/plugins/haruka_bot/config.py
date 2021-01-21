@@ -32,7 +32,7 @@ class Config():
         self.version = self.config.table('version')
 
         if event:
-            self.bot_id = event.self_id
+            self.bot_id = str(event.self_id)
             self.type = event.message_type
             self.type_id = str(event.group_id) if self.type == 'group' else str(event.user_id)
     
