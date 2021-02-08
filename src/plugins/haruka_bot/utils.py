@@ -6,9 +6,10 @@ from os import path
 import nonebot
 from nonebot import get_driver, require
 from nonebot.adapters.cqhttp import Bot, Event, MessageEvent
+from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
+from nonebot.adapters.cqhttp.exception import ActionFailed, NetworkError
 from nonebot.log import logger
 from nonebot.permission import SUPERUSER
-from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.rule import Rule
 from pydantic import BaseSettings
 
@@ -66,15 +67,24 @@ def to_me():
     return Rule(_to_me)
 
 
-async def safe_send(bot: Bot, send_type, type_id, message):
+async def safe_send(bot_id, send_type, type_id, message):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
+    
+    try:
+        bot = nonebot.get_bots()[bot_id]
+    except KeyError:
+        logger.error(f"推送失败，Bot ID：{bot_id} 未连接")
+        return
+
     try:
         return await bot.call_api('send_'+send_type+'_msg', **{
         'message': message,
         'user_id' if send_type == 'private' else 'group_id': type_id
         })
-    except:
-        logger.error(traceback.format_exc())
+    except ActionFailed as e:
+        logger.error(f"推送失败（操作失败），错误信息：{e.info}")
+    except NetworkError as e:
+        logger.error(f"推送失败（网络错误），错误信息：{e.msg}")
 
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler

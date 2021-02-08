@@ -17,8 +17,8 @@ async def live_sched():
         uids = config.get_uid_list('live')
         if not uids:
             return
+        logger.debug(f'爬取直播列表，目前开播{sum(status.values())}人，总共{len(status)}人')
         br = BiliReq()
-        logger.debug(f'爬取直播列表')
         r = await br.get_live_list(uids)
         for uid, info in r.items():
             new_status = 0 if info['live_status'] == 2 else info['live_status']
@@ -26,7 +26,6 @@ async def live_sched():
                 status[uid] = new_status
                 continue
             old_status = status[uid]
-            logger.debug(f"uid: {uid}, old: {old_status}, new: {new_status}, status: {status}")
             if new_status != old_status and new_status: # 判断是否推送过
                 room_id = info['short_id'] if info['short_id'] else info['room_id']
                 url = 'https://live.bilibili.com/' + str(room_id)
@@ -38,6 +37,5 @@ async def live_sched():
                 live_msg = f"{name} 开播啦！\n\n{title}\n传送门→{url}\n[CQ:image,file={cover}]"
                 for sets in push_list:
                     at_msg = '[CQ:at,qq=all] ' if sets['at'] else ''
-                    bot = nonebot.get_bots()[sets['bot_id']]
-                    await safe_send(bot, sets['type'], sets['type_id'], at_msg + live_msg)
+                    await safe_send(sets['bot_id'], sets['type'], sets['type_id'], at_msg + live_msg)
             status[uid] = new_status

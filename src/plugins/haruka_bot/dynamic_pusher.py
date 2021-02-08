@@ -47,6 +47,5 @@ async def dy_sched():
             await dynamic.format()
 
             for sets in push_list:
-                bot = nonebot.get_bots()[sets['bot_id']]
-                await safe_send(bot, sets['type'], sets['type_id'], dynamic.message)
+                await safe_send(sets['bot_id'], sets['type'], sets['type_id'], dynamic.message)
             last_time[uid] = dynamic.time
