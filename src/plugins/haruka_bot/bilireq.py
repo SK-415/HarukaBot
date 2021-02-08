@@ -25,13 +25,13 @@ class BiliReq():
         self.login = Config.get_login()
     
     async def get(self, url, **kw):
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(trust_env=False) as client:
             r = await client.get(url, **kw)
         r.encoding = 'utf-8'
         return r
 
     async def post(self, url, **kw):
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(trust_env=False) as client:
             r = await client.post(url, **kw)
         r.encoding = 'utf-8'
         return r
