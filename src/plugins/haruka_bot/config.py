@@ -117,6 +117,15 @@ class Config():
             (q.type_id == self.type_id))
         self.update_uid_lists()
         return f"已删除 {r['name']}（{uid}）"
+    
+    async def delete_push_list(self):
+        """删除指定对象的推送列表"""
+
+        q = Query()
+        self.config.remove(
+            (q.type == self.type) &
+            (q.type_id == self.type_id))
+        self.update_uid_lists()
 
     async def uid_list(self):
         """主播列表"""
