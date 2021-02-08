@@ -68,35 +68,13 @@ def to_me():
 
 async def safe_send(bot: Bot, send_type, type_id, message):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
-    i = 0
-    while True:
-        try:
-            i += 1
-            return await send(bot, send_type, type_id, message)
-        except:
-            logger.error(traceback.format_exc())
-            if i == 3:
-                bot = await restart(bot)
-                warning_msg = '检测到推送出现异常，已尝试自动重启，如仍有问题请向机器人管理员反馈'
-                await send(bot, send_type, type_id, warning_msg)
-                return await send(bot, send_type, type_id, message)
-            await asyncio.sleep(0.1)
-
-async def send(bot, send_type, type_id, message):
-    return await bot.call_api('send_'+send_type+'_msg', **{
+    try:
+        return await bot.call_api('send_'+send_type+'_msg', **{
         'message': message,
         'user_id' if send_type == 'private' else 'group_id': type_id
         })
-
-async def restart(bot: Bot):
-    await bot.set_restart()
-    await asyncio.sleep(1)
-    while True:
-        new_bot = nonebot.get_bots().get(bot.self_id, None)
-        if new_bot:
-            break
-        await asyncio.sleep(0.1)
-    return new_bot
+    except:
+        logger.error(traceback.format_exc())
 
 
 scheduler = require('nonebot_plugin_apscheduler').scheduler
