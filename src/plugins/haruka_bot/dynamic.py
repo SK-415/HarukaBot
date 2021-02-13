@@ -1,11 +1,12 @@
 import asyncio
-import base64
 import traceback
-from os import path
 
+from http.client import BadStatusLine
 from nonebot.log import logger
+from nonebot.exception import NoLogException
+from pyppeteer import launch
+from pyppeteer.errors import TimeoutError
 
-from .utils import get_path, launch
 from .config import Config
 
 
@@ -22,56 +23,48 @@ class Dynamic():
         # self.origin_id = dynamic['desc']['orig_dy_id']
         self.uid = dynamic['desc']['user_profile']['info']['uid']
         self.name = dynamic['desc']['user_profile']['info'].get('uname', Config.get_name(self.uid))
-        self.img_name = str(self.uid) + str(self.time) + '.png'
-        self.img_path = get_path(self.img_name)
 
     async def format(self):
-        if self.type == 1:
-            self.message = f"{self.name}转发了一条动态：\n\n传送门→" + self.url + "[CQ:image,file=" + self.image + "]\n"
-            return self.message
-        elif self.type == 8:
-            bv_url = 'https://www.bilibili.com/video/' + self.dynamic['desc']['bvid']
-            self.message = f"{self.name}发布了新投稿\n\n传送门→" + bv_url + "[CQ:image,file=" + self.image + "]\n"
-        elif self.type == 16:
-            self.message = f"{self.name}发布了短视频\n\n传送门→" + self.url + "[CQ:image,file=" + self.image + "]\n"
-        elif self.type == 64:
-            self.message = f"{self.name}发布了新专栏\n\n传送门→" + self.url + "[CQ:image,file=" + self.image + "]\n"
-        elif self.type == 256:
-            self.message = f"{self.name}发布了新音频\n\n传送门→" + self.url + "[CQ:image,file=" + self.image + "]\n"
-        else:
-            self.message = f"{self.name}发布了新动态\n\n传送门→" + self.url + "[CQ:image,file=" + self.image + "]\n"
+        type_msg = {
+            0: "发布了新动态",
+            1: "转发了一条动态",
+            8: "发布了新投稿",
+            16: "发布了短视频",
+            64: "发布了新专栏",
+            256: "发布了新音频"
+        }
+        self.message = f"{self.name}{type_msg.get(self.type, type_msg[0])}：" +\
+            f"\n\n传送门→{self.url}[CQ:image,file={self.img}]\n"
 
-    async def get_screenshot(self):
-        if path.isfile(self.img_path):
-            return
+    async def get_screenshot(self, retry=3):
         browser = await launch(args=['--no-sandbox'])
         page = await browser.newPage()
-        for _ in range(3):
+        for i in range(retry + 1):
             try:
-                await page.goto(self.url, waitUntil="networkidle0")
-                # await page.waitForNavigation()
-                # await page.waitFor(1000)
+                await page.goto(self.url, waitUntil="networkidle0", timeout=10000)
                 await page.setViewport(viewport={'width': 1920, 'height': 1080})
-                # card = await page.waitForSelector(".card")
                 card = await page.querySelector(".card")
                 clip = await card.boundingBox()
                 bar = await page.querySelector(".text-bar")
                 bar_bound = await bar.boundingBox()
                 clip['height'] = bar_bound['y'] - clip['y']
-                await page.screenshot({'path': self.img_path, 'clip': clip})
+                self.img = "base64://" +\
+                    await page.screenshot(clip=clip, encoding='base64')
                 break
+            except TimeoutError as e:
+                logger.error(f"截图失败，连接超时。已重试 {i} 次，剩余 {retry - i} 次")
+            except BadStatusLine as e:
+                logger.error(f"截图失败，连接错误。已重试 {i} 次，剩余 {retry - i} 次")
             except:
-                logger.error(traceback.format_exc())
-                await asyncio.sleep(0.1)
-        await page.close()
+                logger.error("截图失败，未知错误")
+                await browser.close()
+                raise
+            finally:
+                if i == retry:
+                    try:
+                        getattr(self, 'img')
+                    except AttributeError:
+                        logger.error("已达到重试上限，将在下个轮询中重新尝试")
+                        raise
+            await asyncio.sleep(0.1)
         await browser.close()
-    
-    async def encode(self):
-        """将图片转为base64码"""
-        with open(self.img_path, 'rb') as f:
-            self.image = "base64://" + base64.b64encode(f.read()).decode('utf-8')
-            return self.image
-    
-    async def get_path(self):
-        self.image = "file:///" + self.img_path
-        return self.image

@@ -1,3 +1,4 @@
+import time
 import os
 from datetime import datetime, timedelta
 
@@ -13,7 +14,6 @@ from .bilireq import BiliReq
 last_time = {}
 
 @scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
-@logger.catch
 async def dy_sched():
     """直播推送"""
 
@@ -41,10 +41,14 @@ async def dy_sched():
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
         dynamic = Dynamic(dynamic)
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
-            await dynamic.get_screenshot()
-            await dynamic.encode()
-            os.remove(dynamic.img_path)
+            start = time.time()
+            logger.info("开始截图")
+            try:
+                await dynamic.get_screenshot()
+            except AttributeError:
+                return
             await dynamic.format()
+            logger.info(f"截图成功，共耗时{time.time()-start}")
 
             for sets in push_list:
                 await safe_send(sets['bot_id'], sets['type'], sets['type_id'], dynamic.message)

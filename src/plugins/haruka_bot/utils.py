@@ -16,7 +16,6 @@ from pydantic import BaseSettings
 # 更换 Chromium 下载地址为非 https 淘宝源
 os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
 # os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://storage.googleapis.com'
-from pyppeteer import launch # 不能删，隔壁 dynamic.py 还要调用的
 from pyppeteer.chromium_downloader import check_chromium, download_chromium
 
 # 检查 Chromium 是否下载
