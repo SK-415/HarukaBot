@@ -52,11 +52,11 @@ class Dynamic():
                     await page.screenshot(clip=clip, encoding='base64')
                 break
             except TimeoutError as e:
-                logger.error(f"截图失败，连接超时。已重试 {i} 次，剩余 {retry - i} 次")
+                logger.error(f"截图失败（连接超时） 已重试（{i}/{retry}）")
             except BadStatusLine as e:
-                logger.error(f"截图失败，连接错误。已重试 {i} 次，剩余 {retry - i} 次")
+                logger.error(f"截图失败（连接错误） 已重试（{i}/{retry}）")
             except:
-                logger.error("截图失败，未知错误")
+                logger.error("截图失败（未知错误），以下为错误日志")
                 await browser.close()
                 raise
             finally:

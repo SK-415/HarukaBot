@@ -8,6 +8,8 @@ from urllib.parse import urlencode
 
 import httpx
 import qrcode
+from httpx import ConnectTimeout, ReadTimeout
+from nonebot.log import logger
 
 from .config import Config
 
@@ -23,18 +25,24 @@ class BiliReq():
             'Referer': 'https://www.bilibili.com/'
         }
         self.login = Config.get_login()
+
+    async def request(self, method, url, **kw):
+        # TODO 处理 -412
+        async with httpx.AsyncClient(trust_env=False) as client:
+            try:
+                r = await client.request(method, url, **kw)
+            except ConnectTimeout:
+                logger.error(f"连接超时（{url}）")
+            except ReadTimeout:
+                logger.error(f"接收超时（{url}）")
+        r.encoding = 'utf-8'
+        return r
     
     async def get(self, url, **kw):
-        async with httpx.AsyncClient(trust_env=False) as client:
-            r = await client.get(url, **kw)
-        r.encoding = 'utf-8'
-        return r
+        return await self.request('GET', url, **kw)
 
     async def post(self, url, **kw):
-        async with httpx.AsyncClient(trust_env=False) as client:
-            r = await client.post(url, **kw)
-        r.encoding = 'utf-8'
-        return r
+        return await self.request('POST', url, **kw)
     
     async def get_info(self, uid):
         url = f'https://api.bilibili.com/x/space/acc/info?mid={uid}'
