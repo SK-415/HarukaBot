@@ -33,7 +33,7 @@ async def live_sched():
                 cover = info['cover_from_user'] if info['cover_from_user'] else info['keyframe']
                 push_list = config.get_push_list(uid, 'live')
 
-                live_msg = f"{name} 开播啦！\n\n{title}\n传送门→{url}\n[CQ:image,file={cover}]"
+                live_msg = f"{name} 开播啦！\n\n{title}\n传送门→{url}\n[CQ:image,file={cover}]\n"
                 for sets in push_list:
                     at_msg = '[CQ:at,qq=all] ' if sets['at'] else ''
                     await safe_send(sets['bot_id'], sets['type'], sets['type_id'], at_msg + live_msg)
