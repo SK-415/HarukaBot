@@ -2,6 +2,7 @@ import asyncio
 import base64
 import io
 import json
+from logging import exception
 import time
 from hashlib import md5
 from urllib.parse import urlencode
@@ -33,8 +34,13 @@ class BiliReq():
                 r = await client.request(method, url, **kw)
             except ConnectTimeout:
                 logger.error(f"连接超时（{url}）")
+                raise
             except ReadTimeout:
                 logger.error(f"接收超时（{url}）")
+                raise
+            except exception as e:
+                logger.error(f"未知错误（url）")
+                raise 
         r.encoding = 'utf-8'
         return r
     
