@@ -13,6 +13,7 @@ from httpx import ConnectTimeout, ReadTimeout
 from nonebot.log import logger
 
 from .config import Config
+from .utils import plugin_config
 
 
 class BiliReq():
@@ -26,10 +27,17 @@ class BiliReq():
             'Referer': 'https://www.bilibili.com/'
         }
         self.login = Config.get_login()
+        if plugin_config.haruka_ignore_proxy:
+            self.proxies = {
+                'http': None,
+                'https': None
+            }
+        else:
+            self.proxies = None
 
     async def request(self, method, url, **kw):
         # TODO 处理 -412
-        async with httpx.AsyncClient(trust_env=False) as client:
+        async with httpx.AsyncClient(proxies=self.proxies) as client:
             try:
                 r = await client.request(method, url, **kw)
             except ConnectTimeout:
