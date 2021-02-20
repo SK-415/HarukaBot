@@ -55,8 +55,9 @@ class Dynamic():
                 logger.error(f"截图失败（连接超时） 已重试（{i}/{retry}）")
             except BadStatusLine as e:
                 logger.error(f"截图失败（连接错误） 已重试（{i}/{retry}）")
-            except:
+            except Exception as e:
                 logger.error("截图失败（未知错误），以下为错误日志")
+                logger.error(traceback(e))
                 await browser.close()
                 raise
             finally:
@@ -65,6 +66,7 @@ class Dynamic():
                         getattr(self, 'img')
                     except AttributeError:
                         logger.error("已达到重试上限，将在下个轮询中重新尝试")
+                        await browser.close()
                         raise
             await asyncio.sleep(0.1)
         await browser.close()
