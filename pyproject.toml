@@ -29,7 +29,6 @@ nonebot2 = "2.0.0a10"
 rsa = "^4.7"
 click = "^7.1.2"
 python-dotenv = "^0.15.0"
-fonttools = "^4.20.0"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
