@@ -1,6 +1,8 @@
 import json
 from datetime import datetime
+
 import nonebot
+from nonebot.adapters.cqhttp import MessageEvent
 from tinydb import TinyDB, Query
 
 from .utils import get_path
@@ -11,10 +13,10 @@ from packaging.version import Version
 class Config():
     """操作 config.json 文件"""
 
-    def __init__(self, event=None):
+    def __init__(self, event:MessageEvent=None):
         self._init(event)
     
-    def __enter__(self, event=None):
+    def __enter__(self, event:MessageEvent=None):
         self._init(event)
         return self
     
@@ -30,9 +32,9 @@ class Config():
         self.version = self.config.table('version')
 
         if event:
-            self.bot_id = event.self_id
-            self.type = event.detail_type
-            self.type_id = str(event.group_id) if event.group_id else str(event.user_id)
+            self.bot_id = str(event.self_id)
+            self.type = event.message_type
+            self.type_id = str(event.group_id) if self.type == 'group' else str(event.user_id)
     
     def uid_exist(self, uid, type_id=False):
         q = Query()
@@ -115,6 +117,15 @@ class Config():
             (q.type_id == self.type_id))
         self.update_uid_lists()
         return f"已删除 {r['name']}（{uid}）"
+    
+    async def delete_push_list(self):
+        """删除指定对象的推送列表"""
+
+        q = Query()
+        self.config.remove(
+            (q.type == self.type) &
+            (q.type_id == self.type_id))
+        self.update_uid_lists()
 
     async def uid_list(self):
         """主播列表"""

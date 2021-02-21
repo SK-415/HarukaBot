@@ -1,19 +1,15 @@
-import os
 from datetime import datetime, timedelta
 
-import nonebot
 from nonebot.log import logger
 
+from .bilireq import BiliReq
 from .config import Config
 from .dynamic import Dynamic
 from .utils import safe_send, scheduler
-from .bilireq import BiliReq
-
 
 last_time = {}
 
 @scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
-@logger.catch
 async def dy_sched():
     """直播推送"""
 
@@ -41,12 +37,12 @@ async def dy_sched():
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
         dynamic = Dynamic(dynamic)
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
-            await dynamic.get_screenshot()
-            await dynamic.encode()
-            os.remove(dynamic.img_path)
+            try:
+                await dynamic.get_screenshot()
+            except AttributeError:
+                return
             await dynamic.format()
 
             for sets in push_list:
-                bot = nonebot.get_bots()[sets['bot_id']]
-                await safe_send(bot, sets['type'], sets['type_id'], dynamic.message)
+                await safe_send(sets['bot_id'], sets['type'], sets['type_id'], dynamic.message)
             last_time[uid] = dynamic.time

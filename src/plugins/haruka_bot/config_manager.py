@@ -1,6 +1,8 @@
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot, Event
-from nonebot.permission import GROUP_ADMIN, SUPERUSER, GROUP_OWNER
+from nonebot.adapters.cqhttp import Bot, Event, GroupDecreaseNoticeEvent
+from nonebot.permission import SUPERUSER
+from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
+from nonebot.plugin import on_notice
 
 from .bilireq import BiliReq
 from .config import Config
@@ -205,12 +207,32 @@ async def _(bot: Bot, event: Event, state: dict):
     await help.finish(message)
 
 
-login = on_command('测试登录', rule=to_me(), permission=SUPERUSER, 
-    priority=5)
+group_decrease = on_notice(priority=5)
 
-@login.handle()
-async def _(bot: Bot, event: Event, state: dict):
-    b = BiliReq()
-    await login.send(f"[CQ:image,file=base64://{await b.get_qr()}]")
-    await login.send(str(await b.qr_login()))
+@group_decrease.handle()
+async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
+    if event.self_id == event.user_id:
+        event.message_type = 'group'
+        c = Config(event)
+        await c.delete_push_list()
+
+
+friend_decrease = on_notice(priority=5)
+
+@group_decrease.handle()
+async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
+    if event.self_id == event.user_id:
+        event.message_type = 'group'
+        c = Config(event)
+        await c.delete_push_list()
+
+
+# login = on_command('测试登录', rule=to_me(), permission=SUPERUSER, 
+#     priority=5)
+
+# @login.handle()
+# async def _(bot: Bot, event: Event, state: dict):
+#     b = BiliReq()
+#     await login.send(f"[CQ:image,file=base64://{await b.get_qr()}]")
+#     await login.send(str(await b.qr_login()))
     
