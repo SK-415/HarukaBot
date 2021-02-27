@@ -1,16 +1,19 @@
+import nonebot
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, Event, GroupDecreaseNoticeEvent
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.plugin import on_notice
-
+from .b_message import send_msg
 from .bilireq import BiliReq
 from .config import Config
-from .utils import permission_check, to_me
+from .utils import permission_check, to_me ,safe_send
 from .version import __version__
+from .login_manage import BiliApi
+import json
 
 
-add_uid = on_command('添加主播', rule=to_me() & permission_check, priority=5)
+add_uid = on_command('添加监控', rule=to_me() & permission_check, priority=5)
 
 @add_uid.handle()
 async def get_args(bot: Bot, event: Event, state: dict):
@@ -18,14 +21,14 @@ async def get_args(bot: Bot, event: Event, state: dict):
     if args:
         state['uid'] = args
 
-@add_uid.got('uid', prompt='请输入主播的 uid')
+@add_uid.got('uid', prompt='请输入要监控up主的 uid')
 async def _(bot: Bot, event: Event, state: dict):
     uid = state['uid']
     with Config(event) as config:
         await add_uid.finish(await config.add_uid(uid))
 
 
-delete_uid = on_command('删除主播', rule=to_me() & permission_check, priority=5)
+delete_uid = on_command('删除监控', rule=to_me() & permission_check, priority=5)
 
 @delete_uid.handle()
 async def get_args(bot: Bot, event: Event, state: dict):
@@ -33,14 +36,13 @@ async def get_args(bot: Bot, event: Event, state: dict):
     if args:
         state['uid'] = args
 
-@delete_uid.got('uid', prompt='请输入主播的 uid')
+@delete_uid.got('uid', prompt='请输入要删除up主的 uid')
 async def _(bot: Bot, event: Event, state: dict):
     uid = state['uid']
     with Config(event) as config:
         await delete_uid.finish(await config.delete_uid(uid))
 
-
-uid_list = on_command('主播列表', rule=to_me() & permission_check, priority=5)
+uid_list = on_command('关注列表', rule=to_me() & permission_check, priority=5)
 
 @uid_list.handle()
 async def _(bot: Bot, event: Event, state: dict):
@@ -110,7 +112,70 @@ async def _(bot: Bot, event: Event, state: dict):
     with Config(event) as config:
         msg = await config.set('live', uid, False)
     await live_off.finish(msg.replace('name', '关闭直播'))
+##############
 
+dyff = on_command('动态测试', rule=to_me(), 
+    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
+    priority=5)
+
+@dyff.handle()
+async def handle_first_recive(bot: Bot, event: Event, state: dict):
+    args = str(event.message).strip()
+    if args:
+        state['uid'] = args
+
+@dyff.got('uid', prompt='请输入id')
+async def _(bot: Bot, event: Event, state: dict):
+    uid = state['uid']
+    msg = await BiliApi().dynamic_new(uid)
+    if msg['count'] == 20:
+        t = "max"
+    else:
+        t = msg['count']
+    await bot.send(event,f"截止此动态id，一共获取到了{t}条新动态。")
+    i = 1
+    for d in msg['data']:
+        await bot.send(event,f"这是第{i}条动态=>UP主{d['uname']}{d['type_message']}，=>{d['message']}")
+        i = i+1
+    if msg['data'][0]['dynamic_id'] == msg['max_dynamic_id']:
+        await at_on.finish(f"操作完毕!最新一条的动态id是{msg['max_dynamic_id']}")
+    else:
+        await at_on.finish(f"操作不完全!你还没有写翻页机制，快去写！")
+
+
+at_dy_on = on_command('开启动态全体', rule=to_me(), 
+    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
+    priority=5)
+
+@at_dy_on.handle()
+async def handle_first_recive(bot: Bot, event: Event, state: dict):
+    args = str(event.message).strip()
+    if args:
+        state['uid'] = args
+
+@at_dy_on.got('uid', prompt='请输入主播的 uid')
+async def _(bot: Bot, event: Event, state: dict):
+    uid = state['uid']
+    with Config(event) as config:
+        msg = await config.set('dynamic_at', uid, True)
+    await at_on.finish(msg.replace('name', '开启动态全体'))
+
+at_dy_off = on_command('关闭动态全体', rule=to_me(), 
+    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
+    priority=5)
+
+@at_dy_off.handle()
+async def handle_first_recive(bot: Bot, event: Event, state: dict):
+    args = str(event.message).strip()
+    if args:
+        state['uid'] = args
+
+@at_dy_off.got('uid', prompt='请输入主播的 uid')
+async def _(bot: Bot, event: Event, state: dict):
+    uid = state['uid']
+    with Config(event) as config:
+        msg = await config.set('dynamic_at', uid, False)
+    await at_on.finish(msg.replace('name', '关闭动态全体'))
 
 at_on = on_command('开启全体', rule=to_me(), 
     permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
@@ -157,7 +222,6 @@ async def _(bot: Bot, event: Event, state: dict):
     with Config(event) as config:
         msg = await config.set_permission(True)
     await permission_on.finish(msg.replace('name', '开启权限'))
-
 
 func_list = [
     '主播列表', '开启权限', '关闭权限', '添加主播', '删除主播', '开启动态',
@@ -227,12 +291,50 @@ async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
         await c.delete_push_list()
 
 
-# login = on_command('测试登录', rule=to_me(), permission=SUPERUSER, 
-#     priority=5)
+login = on_command('测试登录', rule=to_me(), permission=SUPERUSER, 
+    priority=5)
 
-# @login.handle()
-# async def _(bot: Bot, event: Event, state: dict):
-#     b = BiliReq()
-#     await login.send(f"[CQ:image,file=base64://{await b.get_qr()}]")
-#     await login.send(str(await b.qr_login()))
+@login.handle()
+async def _(bot: Bot, event: Event, state: dict):
+    b = BiliReq()
+    print(nonebot.get_bots())
+    await login.send(f'[CQ:image,file=base64://{await b.get_qr()}]')
+    # await login.send(str(await b.qr_login()))
+
+fcd = on_command('验证码测试', rule=to_me(), 
+    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
+    priority=5)
+
+@fcd.handle()
+async def handle_first_recive(bot: Bot, event: Event, state: dict):
+    args = str(event.message).strip()
+    if args:
+        state['uid'] = args
+
+@fcd.got('uid', prompt='请输入接收方的 uid')
+async def _(bot: Bot, event: Event, state: dict):
+    uid = state['uid']
+    print(state)
+    print(event.get_user_id())
+    qq = event.get_user_id()
+    b = BiliReq()
+    msg_key,codes,uid = await b.send_msg(uid=uid,qq=qq)
+    await at_on.finish('操作成功 ！你是qq用户:' + qq + ' 已经给uid：' + str(uid) + '发送验证码：' + str(codes) + '  message_key为' + str(msg_key))
     
+fcdc = on_command('验证测试', rule=to_me(), 
+    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
+    priority=5)
+
+@fcdc.handle()
+async def handle_first_recive(bot: Bot, event: Event, state: dict):
+    args = str(event.message).strip()
+    if args:
+        state['code'] = args
+
+@fcdc.got('code', prompt='请输入对应验证码')
+async def _(bot: Bot, event: Event, state: dict):
+    code = state['code']
+    qq = event.get_user_id()
+    b = BiliReq()
+    msg = await b.codetest(qq,code)
+    await at_on.finish(msg)

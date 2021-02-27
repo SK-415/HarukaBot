@@ -11,7 +11,7 @@ last_time = {}
 
 @scheduler.scheduled_job('cron', second='*/10', id='dynamic_sched')
 async def dy_sched():
-    """直播推送"""
+    """动态推送"""
 
     with Config() as config:
         uid = config.next_uid('dynamic')
@@ -44,5 +44,22 @@ async def dy_sched():
             await dynamic.format()
 
             for sets in push_list:
-                await safe_send(sets['bot_id'], sets['type'], sets['type_id'], dynamic.message)
+                # 发之前截下先看看
+                # 先搞过来看看type是不是group
+                if sets['type'] == "group":
+                    try:
+                    # 旧数据没有dynamic_at，为了防止报错
+                        if sets['dynamic_at']:
+                            # 开启@全员
+                            mess = f"[CQ:at,qq=all]" + dynamic.message
+                        else:
+                            # 没开@全员
+                            mess = dynamic.message
+                    except:
+                        mess = dynamic.message
+                else:
+                    # 私聊推送
+                    mess = dynamic.message
+
+                await safe_send(sets['bot_id'], sets['type'], sets['type_id'], mess)
             last_time[uid] = dynamic.time

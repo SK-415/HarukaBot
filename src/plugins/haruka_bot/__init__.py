@@ -5,8 +5,10 @@ try:
     from . import utils
     from . import config_manager
     from . import live_pusher
-    from . import dynamic_pusher
+    # from . import dynamic_pusher
+    from . import keep_online
     from . import auto_agree
+    from . import new_dynamic
 except ValueError:
     pass
 

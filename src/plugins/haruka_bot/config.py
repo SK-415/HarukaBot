@@ -24,12 +24,21 @@ class Config():
         self.config.close()
     
     def _init(self, event=None):
+        # 实例化
         self.config = TinyDB(get_path('config.json'), encoding='utf-8')
+        # ？？不存在的东西
         self.uids = self.config.table('uids')
+        # 貌似是加入的群
         self.groups = self.config.table('groups')
+        # uid列表
         self.uid_lists = self.config.table('uid_lists')
+        # 登录进来的东西
         self.login = self.config.table('login')
+        # 版本
         self.version = self.config.table('version')
+        # 
+        self._default = self.config.table('_default')
+
 
         if event:
             self.bot_id = str(event.self_id)
@@ -92,14 +101,24 @@ class Config():
                 return "请输入有效的uid"
             
         self.config.insert({
+            # 如你所见，就是uid
             'uid': uid,
+            # 名字
             'name': name,
+            # 猜测是推送属性
             'type': self.type, 
+            # 群聊就是群号 私聊订阅就是qq号
             'type_id': self.type_id,
+            # 监测直播
             'live': True,
+            # 监测动态
             'dynamic': True,
+            # 是否开启艾特全员（直播）
             'at': False,
-            'bot_id': self.bot_id
+            # 机器人id
+            'bot_id': self.bot_id,
+            # 动态是否艾特全员
+            'dynamic_at':False
             })
         self.update_uid_lists()
         return f"已添加 {name}（{uid}）"
@@ -126,6 +145,21 @@ class Config():
             (q.type == self.type) &
             (q.type_id == self.type_id))
         self.update_uid_lists()
+
+    async def group_uid_list(self):
+        """返回一个以群为键，群订阅的主播为值的一个字典"""
+        q = Query()
+        g = self.groups.all()
+        u = self._default.all()
+        dictu = {}
+        for group in g:
+            userlist = []
+            groupid = group['group_id']
+            for user in u:
+                if user['type'] == "group" and user['type_id'] == str(groupid):
+                    userlist.append(user)
+            dictu[int(groupid)] = userlist
+        return dictu
 
     async def uid_list(self):
         """主播列表"""
@@ -252,13 +286,23 @@ class Config():
 
         if 'login' not in cls().config.tables():
             tokens = {
-                'access_token': '',
-                'refresh_token': ''
+                # uid
+                'DedeUserID':'',
+                # 不知道
+                'DedeUserID__ckMd5':'',
+                # 不知道
+                'SESSDATA':'',
+                # token
+                'bili_jct':'',
+                # 不知道
+                'sid':'',
+                'access_token':'',
+                'refresh_token':''
             }
             cls().login.insert(tokens)
         else:
             tokens = cls().login.all()[0]
-        if tokens == {'access_token': '', 'refresh_token': ''}:
+        if tokens == {'DedeUserID':'','DedeUserID__ckMd5':'','SESSDATA':'','bili_jct':'','sid':'','access_token':'','refresh_token':''}:
             return None
         return tokens
 
@@ -267,8 +311,13 @@ class Config():
         """更新登录信息"""
 
         cls().login.update({
-            'access_token': tokens['access_token'],
-            'refresh_token': tokens['refresh_token']
+            'DedeUserID':tokens['DedeUserID'],
+            'DedeUserID__ckMd5':tokens['DedeUserID__ckMd5'],
+            'SESSDATA':tokens['SESSDATA'],
+            'bili_jct':tokens['bili_jct'],
+            'sid':tokens['sid'],
+            'access_token':tokens['access_token'],
+            'refresh_token':tokens['refresh_token']
         })
 
     def new_version(self):

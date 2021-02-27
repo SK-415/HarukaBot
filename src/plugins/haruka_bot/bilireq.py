@@ -6,13 +6,14 @@ from logging import exception
 import time
 from hashlib import md5
 from urllib.parse import urlencode
-
+import random,uuid,datetime
 import httpx
 import qrcode
 from httpx import ConnectTimeout, ReadTimeout
 from nonebot.log import logger
 
 from .config import Config
+from .mod import RedisDB
 
 
 class BiliReq():
@@ -26,14 +27,10 @@ class BiliReq():
             'Referer': 'https://www.bilibili.com/'
         }
         self.login = Config.get_login()
-        self.proxies = {
-            'http': None,
-            'https': None
-        }
 
     async def request(self, method, url, **kw):
         # TODO 处理 -412
-        async with httpx.AsyncClient(proxies=self.proxies) as client:
+        async with httpx.AsyncClient(trust_env=False) as client:
             try:
                 r = await client.request(method, url, **kw)
             except ConnectTimeout:
@@ -142,3 +139,51 @@ class BiliReq():
             elif code == 86038:
                 return "二维码已失效，请重新登录"
             await asyncio.sleep(1)
+    
+    async def send_msg(self,uid,qq,count=4,title="NGWORKS"):
+        with Config() as config:
+            cookie = config.get_login()
+            codes =("".join(random.sample("0123456789", count)))
+            msg = {'content':"【" + title + "】验证码："+ str(codes) + "，有人正在以你的账号名义加入我的粉丝群，我们为了确保是你本人操作，特向您发送验证码，请您在重新加入时输入，三十分钟内有效，非本人操作请与我联系。"}
+            url ="https://api.vc.bilibili.com/web_im/v1/web_im/send_msg"
+            params = {
+                'msg[sender_uid]':cookie['DedeUserID'],
+                'msg[receiver_id]':uid,
+                'msg[receiver_type]':1,
+                'msg[msg_type]':1,
+                'msg[msg_status]': 0,
+                'msg[content]':json.dumps(msg),
+                'csrf_token':cookie['bili_jct'],
+                'csrf':cookie['bili_jct'],
+                'msg[timestamp]': int(time.time()*1000),
+                'msg[dev_id]': str(uuid.uuid4()),
+                'build': 0,
+                'mobi_app': 'web'
+            }
+            r = (await self.post(url, params=params, cookies = cookie)).json()
+            print(r)
+            msg_key = r['data']['msg_key']
+            if r['code'] == 0:
+                # 成功了才会被存进去
+                with RedisDB(11) as db:
+                # 注意redis的11号数据库将被用来存储验证码
+                    db.set(uid,codes,300)
+                    db.set(qq,uid,300)
+                    listl = [msg_key,codes,uid]
+                    return listl
+            else:
+                return False
+    async def codetest(self,qq,code):
+        with RedisDB(11) as db:
+            try:
+                uid = db.get(qq)
+                tcode = db.get(uid)
+                if code == tcode:
+                    db.delete(qq)
+                    db.delete(uid)
+                    return "验证通过"
+                else:
+                    return "验证不通过,验证码错误"
+            except:
+                return "别玩了！先去获取验证码吧！"
+

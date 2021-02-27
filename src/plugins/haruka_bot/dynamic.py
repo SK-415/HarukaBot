@@ -31,7 +31,7 @@ class Dynamic():
             8: "发布了新投稿",
             16: "发布了短视频",
             64: "发布了新专栏",
-            256: "发布了新音频"
+            256: "发布了新音频",
         }
         self.message = f"{self.name}{type_msg.get(self.type, type_msg[0])}：" +\
             f"\n\n传送门→{self.url}[CQ:image,file={self.img}]\n"
@@ -55,9 +55,8 @@ class Dynamic():
                 logger.error(f"截图失败（连接超时） 已重试（{i}/{retry}）")
             except BadStatusLine as e:
                 logger.error(f"截图失败（连接错误） 已重试（{i}/{retry}）")
-            except Exception as e:
+            except:
                 logger.error("截图失败（未知错误），以下为错误日志")
-                logger.error(traceback(e))
                 await browser.close()
                 raise
             finally:
@@ -66,7 +65,6 @@ class Dynamic():
                         getattr(self, 'img')
                     except AttributeError:
                         logger.error("已达到重试上限，将在下个轮询中重新尝试")
-                        await browser.close()
                         raise
             await asyncio.sleep(0.1)
         await browser.close()
