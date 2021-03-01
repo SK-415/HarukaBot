@@ -216,16 +216,6 @@ async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
         await c.delete_push_list()
 
 
-friend_decrease = on_notice(priority=5)
-
-@group_decrease.handle()
-async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
-    if event.self_id == event.user_id:
-        event.message_type = 'group'
-        c = Config(event)
-        await c.delete_push_list()
-
-
 # login = on_command('测试登录', rule=to_me(), permission=SUPERUSER, 
 #     priority=5)
 
