@@ -42,7 +42,7 @@ class Dynamic():
         for i in range(retry + 1):
             try:
                 await page.goto(self.url, waitUntil="networkidle0", timeout=10000)
-                await page.setViewport(viewport={'width': 1920, 'height': 1080})
+                await page.setViewport(viewport={'width': 2560, 'height': 1080})
                 card = await page.querySelector(".card")
                 clip = await card.boundingBox()
                 bar = await page.querySelector(".text-bar")

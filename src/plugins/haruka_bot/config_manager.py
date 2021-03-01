@@ -1,8 +1,7 @@
-from nonebot import on_command
+from nonebot import on_command, on_notice
 from nonebot.adapters.cqhttp import Bot, Event, GroupDecreaseNoticeEvent
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
-from nonebot.plugin import on_notice
 
 from .bilireq import BiliReq
 from .config import Config
@@ -208,16 +207,6 @@ async def _(bot: Bot, event: Event, state: dict):
 
 
 group_decrease = on_notice(priority=5)
-
-@group_decrease.handle()
-async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
-    if event.self_id == event.user_id:
-        event.message_type = 'group'
-        c = Config(event)
-        await c.delete_push_list()
-
-
-friend_decrease = on_notice(priority=5)
 
 @group_decrease.handle()
 async def _(bot: Bot, event: GroupDecreaseNoticeEvent, state: dict):
