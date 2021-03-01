@@ -1,7 +1,7 @@
 import asyncio
 import os
 import traceback
-from os import path
+from pathlib import Path
 
 import nonebot
 from nonebot import get_driver, require
@@ -35,15 +35,14 @@ global_config = get_driver().config
 plugin_config = Config(**global_config.dict())
 
 
-def get_path(name):
+def get_path(*other):
     """获取数据文件绝对路径"""
     if plugin_config.haruka_dir:
-        dir_path = path.abspath(plugin_config.haruka_dir)
+        dir_path = Path(plugin_config.haruka_dir).absolute()
     else:
-        src_path = path.dirname(path.abspath(__file__))
-        dir_path = path.join(src_path, 'data')
-    f_path = path.join(dir_path, name)
-    return f_path
+        dir_path = Path.cwd().joinpath('data')
+        # dir_path = Path.cwd().joinpath('data', 'haruka_bot')
+    return str(dir_path.joinpath(*other))
 
 
 async def permission_check(bot: Bot, event: MessageEvent, state: dict):
@@ -90,5 +89,7 @@ scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在
-if not path.isdir(get_path('')):
-    os.makedirs(get_path(''))
+# if not path.isdir(get_path('')):
+#     os.makedirs(get_path(''))
+if not Path(get_path()).is_dir():
+    Path(get_path()).mkdir()
