@@ -1,4 +1,4 @@
-[![HarukaBot](https://socialify.git.ci/SK-415/HarukaBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSK-415%2FHarukaBot%2Fmaster%2Fdocs%2F.vuepress%2Fpublic%2Flogo.png&owner=1&pattern=Circuit%20Board&stargazers=1&theme=Light)](https://www.haruka-bot.live/)
+[![HarukaBot](https://socialify.git.ci/SK-415/HarukaBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSK-415%2FHarukaBot%2Fmaster%2Fdocs%2F.vuepress%2Fpublic%2Flogo.png&owner=1&pattern=Circuit%20Board&stargazers=1&theme=Light)](https://haruka-bot.live/)
 
 # HarukaBot ——你的“单推”小助手
 
@@ -6,10 +6,10 @@
   
 logo 画师：[@秦无](https://space.bilibili.com/4668826 )
 
-[![VERSION](https://img.shields.io/github/v/release/SK-415/HarukaBot )](https://github.com/SK-415/HarukaBot/releases/latest)
+[![VERSION](https://img.shields.io/pypi/v/haruka-bot)](https://haruka-bot.live/about/CHANGELOG.html)
 [![time tracker](https://wakatime.com/badge/github/SK-415/HarukaBot.svg )](https://wakatime.com/badge/github/SK-415/HarukaBot)
 [![qq group](https://img.shields.io/badge/QQ%E7%BE%A4-629574472-orange )](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)
-[![docs](https://img.shields.io/badge/%E6%96%87%E6%A1%A3-%E7%82%B9%E5%87%BB%E6%9F%A5%E7%9C%8B-green)](https://www.haruka-bot.live/)
+[![docs](https://img.shields.io/badge/%E6%96%87%E6%A1%A3-%E7%82%B9%E5%87%BB%E6%9F%A5%E7%9C%8B-green)](https://haruka-bot.live/)
 
 ## 简介
 
@@ -19,9 +19,7 @@ HarukaBot 致力于为B站UP主们提供一个开源免费的粉丝群推送方�
   
 > 介于作者技术力低下，HarukaBot 的体验可能并不是很好。如果使用中有任何意见或者建议都欢迎提出，我会努力去完善它。
 
-## 文档
-
-在[这里](https://www.haruka-bot.live/)查看 HarukaBot 的安装方法与详细说明。
+## [文档（点我查看）](https://haruka-bot.live/)
 
 ## 功能介绍
 
