@@ -1067,7 +1067,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "20b10dacbb23b17addbd7f4752d793ecff1e0c6758bbabe61101a9f3751f66ef"
+content-hash = "238b5972fb2434d2cff9529d170845d5bb1465d5dcfebea77467e876b9ba75b5"
 
 [metadata.files]
 appdirs = [
