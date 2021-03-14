@@ -11,8 +11,6 @@ driver = nonebot.get_driver()
 driver.register_adapter('cqhttp', Bot)
 app = nonebot.get_asgi()
 
-nonebot.load_builtin_plugins()
-nonebot.load_plugin('nonebot_plugin_apscheduler')
 # 删除 haruka_bot 导入，否则 nonebot 导入时会忽略
 del sys.modules['haruka_bot']
 nonebot.load_plugin("haruka_bot")

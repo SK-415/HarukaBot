@@ -10,8 +10,6 @@ driver = nonebot.get_driver()
 driver.register_adapter('cqhttp', Bot)
 app = nonebot.get_asgi()
 
-nonebot.load_builtin_plugins()
-nonebot.load_plugin('nonebot_plugin_apscheduler')
 nonebot.load_plugins("src/plugins")
 
 # Modify some config / config depends on loaded configs
