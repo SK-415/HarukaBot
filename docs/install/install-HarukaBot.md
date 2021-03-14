@@ -11,7 +11,7 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 那么在**开始安装之前**，请先尝试在终端（Powershell/cmd）内执行 `pip uninstall nonebot` **卸载** NoneBot，或者创建一个 [虚拟环境](https://docs.python.org/zh-cn/3/library/venv.html#creating-virtual-environments) 使 HarukaBot 可以与 NoneBot 共存。
  :::
 
-## 脚手架安装（推荐)
+## 脚手架安装（推荐）
 
 1. 打开终端，并选择一个文件夹用来存放数据。
 
@@ -49,32 +49,19 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 详见 [常见问题](../usage/faq.md#怎么更新-harukabot)
 :::
 
-## 从插件广场安装（适用于 NoneBot2 用户)
+## 从 NoneBot2 插件商店安装（适用于 NoneBot2 用户）
 
-1. 使用 `nb-cli` 命令从[插件广场](https://v2.nonebot.dev/plugin-store.html)安装。
+1. 使用 `nb-cli` 命令从 [NoneBot2 商店](https://v2.nonebot.dev/store.html) 安装。
 
     ```sh
     nb plugin install haruka_bot
     ```
 
-2. （可选）在 bot 根目录的 `.env.*` 文件中，添加 `HARUKA_DIR="./data/"` 设置 HarukaBot 数据文件的存储路径。你也可以将 `./data/` 改成任何其他路径。
+2. （可选）在 bot 根目录的 `.env.*` 文件中，添加 `HARUKA_DIR="储存路径"` （不设置默认为 `./data/`）设置 HarukaBot 数据文件的存储路径。
 
-    > 如果不添加，HarukaBot 会将数据文件保存于其安装包位置下（site-packages/haruka_bot/data），之后迁移会很麻烦，非常不推荐。
+3. 安装完成后重启 `NoneBot2 项目` 即可使用。
 
-3. 在 `bot.py` 中，导入定时任务插件。
-
-    ```python {1}
-    nonebot.load_plugin('nonebot_plugin_apscheduler')
-    nonebot.load_plugin('haruka_bot')
-    ```
-
-    ::: warning 注意
-    `nonebot_plugin_apscheduler` 必须比 `haruka_bot` 先导入。
-    :::
-
-4. 安装完成后重启 `NoneBot2 实例` 即可使用。
-
-## 从 GitHub 安装（包含尚未发布的特性）
+## 从 GitHub 安装（包含不稳定的新特性）
 
 安装
 

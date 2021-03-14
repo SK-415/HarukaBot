@@ -16,10 +16,10 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 帮助' }, 
-      { position: 'left', msg: 'DD机目前支持的功能有：\n主播列表\n开启权限\n关闭权限\n添加主播 uid\n删除主播 uid\n开启动态 uid\n关闭动态 uid\n开启直播 uid\n关闭直播 uid\n开启全体 uid\n关闭全体 uid\n命令中的uid需要替换为对应主播的uid，注意是uid不是直播间id\n\n群聊默认开启权限，只有管理员或机器人主人才能触发指令\n\n所有群聊/私聊的推送都是分开的，在哪里添加就只会在哪里推送' }
+      { position: 'left', msg: 'DD机目前支持的功能有：\n\n主播列表\n开启权限\n关闭权限\n添加主播 uid\n删除主播 uid\n开启动态 uid\n关闭动态 uid\n开启直播 uid\n关闭直播 uid\n开启全体 uid\n关闭全体 uid\n版本信息\n\n命令中的uid需要替换为对应主播的uid，注意是uid不是直播间id\n\n群聊默认开启权限，只有管理员或机器人主人才能触发指令\n\n所有群聊/私聊的推送都是分开的，在哪里添加就只会在哪里推送' }
       ]"/>
   :::
 </ClientOnly>
@@ -30,7 +30,7 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 主播列表' },
       { position: 'left', msg: '以下为当前的订阅列表：\n\n【白神遥Haruka】直播推送：开，动态推送：开（477332594）\n【SK_415】直播推送：开，动态推送：关（10352806）' }
@@ -58,7 +58,7 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 开启权限' },
       { position: 'left', msg: '已开启权限，只有管理员才能使用' },
@@ -90,7 +90,7 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 添加主播 477332594' },
       { position: 'left', msg: '已添加 白神遥Haruka（477332594）' },
@@ -116,7 +116,7 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 开启动态 477332594' },
       { position: 'left', msg: '已开启动态，白神遥Haruka（477332594）' },
@@ -143,7 +143,7 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 开启直播 477332594' },
       { position: 'left', msg: '已开启直播，白神遥Haruka（477332594）' },
@@ -174,13 +174,27 @@
 
 <ClientOnly>
   ::: details 示例（点我展开）
-  示例版本：v1.0.7
+  示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 开启全体 477332594' },
       { position: 'left', msg: '已开启全体，白神遥Haruka（477332594）' },
       { position: 'right', msg: '<a>@HarukaBot</a> 关闭全体 10352806' },
       { position: 'left', msg: '已关闭全体，SK_415（10352806）' },
       { position: 'left', msg: '<a>@全体成员</a> 白神遥Haruka 开播啦！\n\n海豹学歌！耶耶耶\n传送门→<a href=&quot;https://live.bilibili.com/21652717&quot; target=&quot;_blank&quot;>https://live.bilibili.com/21652717</a>\n<img src=&quot;/live-example.jpg&quot;/>' }
+      ]"/>
+  :::
+</ClientOnly>
+
+## 版本信息
+
+获取 HarukaBot 当前版本信息。
+
+<ClientOnly>
+  ::: details 示例（点我展开）
+  示例版本：v1.2.3
+  <Messenger :messages="[
+      { position: 'right', msg: '<a>@HarukaBot</a> 版本信息' },
+      { position: 'left', msg: '当前 HarukaBot 版本：1.2.3\n\n使用中遇到问题欢迎加群反馈，\n群号：629574472\n\n常见问题：https://www.haruka-bot.live/usage/faq.html' }
       ]"/>
   :::
 </ClientOnly>

@@ -4,6 +4,9 @@ module.exports = {
     head: [
       ['link', { rel: 'icon', href: '/logo.png' }]
     ],
+    markdown: {
+      lineNumbers: true
+    },
     themeConfig: {
       logo: '/logo.png',
       repo: 'SK-415/HarukaBot',
