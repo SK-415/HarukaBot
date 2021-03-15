@@ -30,4 +30,4 @@ logger.add(path.join('log', "error.log"),
            
 
 if __name__ == "__main__":
-    nonebot.run(app="bot:app")
+    nonebot.run(app="bot:app", reload_dirs="src")

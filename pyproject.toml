@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.2.2"
+version = "1.2.3"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "AGPL-3.0-or-later"
@@ -24,16 +24,17 @@ pyppeteer = "^0.2.5"
 tinydb = "^4.3.0"
 packaging = "^20.9"
 nonebot-plugin-apscheduler = "^0.1.2"
-pydantic = "1.7.3"
-nonebot2 = "2.0.0a10"
+pydantic = "^1.8.1"
 rsa = "^4.7"
 click = "^7.1.2"
 python-dotenv = "^0.15.0"
+httpx = "^0.17.0"
+nonebot-adapter-cqhttp = "^2.0.0-alpha.11"
+nonebot2 = "^2.0.0-alpha.11"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
-nb-cli = "^0.3.2"
-pyinstaller = "^4.2"
+nb-cli = "^0.4.0"
 
 [[tool.poetry.source]]
 name = "aliyun"

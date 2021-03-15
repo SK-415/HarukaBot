@@ -89,7 +89,5 @@ scheduler = require('nonebot_plugin_apscheduler').scheduler
 
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在
-# if not path.isdir(get_path('')):
-#     os.makedirs(get_path(''))
 if not Path(get_path()).is_dir():
-    Path(get_path()).mkdir()
+    Path(get_path()).mkdir(parents=True)
