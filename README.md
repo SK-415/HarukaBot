@@ -17,7 +17,7 @@ logo 画师：[@秦无](https://space.bilibili.com/4668826 )
 
 HarukaBot 致力于为B站UP主们提供一个开源免费的粉丝群推送方案。极大的减轻管理员负担，不会再遇到突击无人推送的尴尬情况。同时还能将B博动态截图转发至粉丝群，活跃群内话题。
 
-> 介于作者技术力低下，HarukaBot 的体验可能并不是很好。如果使用中有任何意见或者建议都欢迎提交issue或**[添加Haruka反馈交流群](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)**进行反馈，我会努力去完善它。
+> 介于作者技术力低下，HarukaBot 的体验可能并不是很好。如果使用中有任何意见或者建议都欢迎提交issue或[添加Haruka反馈交流群](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)进行反馈，我会努力去完善它。
 
 ## [文档（点我查看）](https://haruka-bot.live/)
 
