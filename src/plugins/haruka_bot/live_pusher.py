@@ -8,7 +8,7 @@ from .bilireq import BiliReq
 
 status = {}
 
-@scheduler.scheduled_job('cron', second='*/10', id='live_sched')
+@scheduler.scheduled_job('interval', seconds=10, id='live_sched')
 async def live_sched():
     """直播推送"""
 
