@@ -373,7 +373,7 @@ reference = "aliyun"
 
 [[package]]
 name = "nonebot-adapter-cqhttp"
-version = "2.0.0a11.post2"
+version = "2.0.0a12"
 description = "OneBot(CQHTTP) adapter for nonebot2"
 category = "main"
 optional = false
@@ -381,7 +381,7 @@ python-versions = ">=3.7.3,<4.0.0"
 
 [package.dependencies]
 httpx = ">=0.17.0,<0.18.0"
-nonebot2 = ">=2.0.0-alpha.11,<3.0.0"
+nonebot2 = ">=2.0.0-alpha.12,<3.0.0"
 
 [package.source]
 type = "legacy"
@@ -407,7 +407,7 @@ reference = "aliyun"
 
 [[package]]
 name = "nonebot2"
-version = "2.0.0a11"
+version = "2.0.0a12"
 description = "An asynchronous python bot framework."
 category = "main"
 optional = false
@@ -1067,7 +1067,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "238b5972fb2434d2cff9529d170845d5bb1465d5dcfebea77467e876b9ba75b5"
+content-hash = "e6d9b396512cbf2f8048d4033cefad119e04ac88a38ad0ed2ec7f86e4c479332"
 
 [metadata.files]
 appdirs = [
@@ -1196,18 +1196,16 @@ nb-cli = [
     {file = "nb_cli-0.4.0-py3-none-any.whl", hash = "sha256:6e3608f0e63baff1f832095da07bae4fc2b78619383cd1f54f7333e216864a35"},
 ]
 nonebot-adapter-cqhttp = [
-    {file = "nonebot-adapter-cqhttp-2.0.0a11.post2.tar.gz", hash = "sha256:925037b686da639d8ba6ccc4109254850e0cfe423e9e4a8ce96a9941d7e8c2e9"},
-    {file = "nonebot-adapter-cqhttp-2.0.0a11.tar.gz", hash = "sha256:3e00b0782e51870a6072af96bd29b6f04fefd9d4f58f45c273377009e40e288a"},
-    {file = "nonebot_adapter_cqhttp-2.0.0a11-py3-none-any.whl", hash = "sha256:e62c82294b7196da2591ddd3598327b58206113838092d9f6cef0e858d645874"},
-    {file = "nonebot_adapter_cqhttp-2.0.0a11.post2-py3-none-any.whl", hash = "sha256:b162ed794c4257fea2a487770db33bf32bcb76274e917729c56b52cfc0e42d00"},
+    {file = "nonebot-adapter-cqhttp-2.0.0a12.tar.gz", hash = "sha256:fac7ed1748c147d06231b89e665ef57658be9c0781eaeb5c5e1ec615313fb10e"},
+    {file = "nonebot_adapter_cqhttp-2.0.0a12-py3-none-any.whl", hash = "sha256:d835345517b905140ea6f5cb3556dffc13aa7f3da1e0afa0acd7a2a0f2bbfdd7"},
 ]
 nonebot-plugin-apscheduler = [
     {file = "nonebot-plugin-apscheduler-0.1.2.tar.gz", hash = "sha256:1765336cd388dde15f723ed12dbca942b04e4c25d5d7786878e447b09e68b909"},
     {file = "nonebot_plugin_apscheduler-0.1.2-py3-none-any.whl", hash = "sha256:eed7b9e60d08826ae4919f82dc240fc7ec469185271c2271e14438a3e0ca7692"},
 ]
 nonebot2 = [
-    {file = "nonebot2-2.0.0a11-py3-none-any.whl", hash = "sha256:3387dd0a1e1cc5ce3d9b7a3a5a05563863f6dbe761a60ec12bd52283e3d6c896"},
-    {file = "nonebot2-2.0.0a11.tar.gz", hash = "sha256:7ccefa3b802efd121e2d2f81f694a4fcb067f4e706c2b03752cee78edeea4726"},
+    {file = "nonebot2-2.0.0a12-py3-none-any.whl", hash = "sha256:0c6dab316894c98be8b72e5e97044817cd1587865e558a4bae177d66bd9b8a53"},
+    {file = "nonebot2-2.0.0a12.tar.gz", hash = "sha256:3941a8934eef27e8abcb59d282ea4bfc3eaf5918186934c624c86b51a0be3c62"},
 ]
 packaging = [
     {file = "packaging-20.9-py2.py3-none-any.whl", hash = "sha256:67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a"},
