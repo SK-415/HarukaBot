@@ -18,8 +18,9 @@ module.exports = {
       smoothScroll: true,
 
       nav: [
-        { text: '主页', link: '/' },
+        // { text: '主页', link: '/' },
         { text: '安装', link: '/install/' },
+        { text: '小小白白话文', link: '/level-0/'},
         { text: '使用帮助', link: '/usage/' },
         { text: '常见问题', link: '/usage/faq/' },
         { 
@@ -53,6 +54,20 @@ module.exports = {
               '',
               'settings',
               'faq'
+            ]
+          }
+        ],
+        '/level-0/':[
+          {
+            title: '小小白白话文',
+            collapsable: false,
+            // sidebar: 'auto',
+            children: [
+              '',
+              'ch01',
+              'ch02',
+              'ch03',
+              'ch04'
             ]
           }
         ]
