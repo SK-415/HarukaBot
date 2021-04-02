@@ -30,15 +30,15 @@ click = "^7.1.2"
 python-dotenv = "^0.15.0"
 httpx = "^0.17.0"
 nonebot-adapter-cqhttp = "^2.0.0-alpha.12"
-nonebot2 = "^2.0.0-alpha.12"
+nonebot2 = "2.0.0a13.post1"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
 nb-cli = "^0.4.0"
 
 [[tool.poetry.source]]
-name = "aliyun"
-url = "https://mirrors.aliyun.com/pypi/simple/"
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 default = true
 
 [build-system]
