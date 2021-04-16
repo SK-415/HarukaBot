@@ -18,7 +18,7 @@ HarukaBot 一直是使用 go-cqhttp 进行开发的，同时适配了部分 go-c
 使用 Windows 自带记事本修改可能会导致编码问题，因此**强烈建议**使用第三方文本编辑器，如 [NotePad3](https://www.rizonesoft.com/downloads/notepad3/)，[VS Code](https://code.visualstudio.com/Download)，[Sublime Text](http://www.sublimetext.com/3)
 :::
 
-```hjson {4,5,71,101,104,106,108}
+```yml {4,5,71,101,104,106,108}
 # go-cqhttp 默认配置文件
 
 account: # 账号相关
