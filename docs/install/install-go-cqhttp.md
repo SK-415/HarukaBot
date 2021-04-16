@@ -12,13 +12,15 @@ HarukaBot 一直是使用 go-cqhttp 进行开发的，同时适配了部分 go-c
 文件名中包含 `amd64` 为 64位 版，`386` 为 32位 版。
 :::
 
-2. 解压后获得 `go-cqhttp.exe` 或 `./go-cqhttp`。运行 `go-cqhttp` 程序，会在同一目录下生成一个 `config.yml` 文件。打开 `config.yml` 修改如下内容（高亮行为需要改动的部分）
+2. 解压后获得 `go-cqhttp.exe` 或 `./go-cqhttp`。运行 `go-cqhttp` 程序，会在同一目录下生成一个 `config.yml` 文件。打开 `config.yml` 修改下方对应**高亮行**的内容。
 
 ::: warning 注意
 使用 Windows 自带记事本修改可能会导致编码问题，因此**强烈建议**使用第三方文本编辑器，如 [NotePad3](https://www.rizonesoft.com/downloads/notepad3/)，[VS Code](https://code.visualstudio.com/Download)，[Sublime Text](http://www.sublimetext.com/3)
 :::
 
-```yml {4,5,71,101,104,106,108}
+**示例版本：go-cqhttp v1.0.0-beta3**
+
+```yml {4,5,71,101,104}
 # go-cqhttp 默认配置文件
 
 account: # 账号相关
@@ -124,9 +126,9 @@ servers:
       # 注意 设置了此项地址后下面两项将会被忽略
       universal: ws://127.0.0.1:8080/cqhttp/ws
       # 反向WS API 地址
-      api: ""
+      api: ws://your_websocket_api.server
       # 反向WS Event 地址
-      event: ""
+      event: ws://your_websocket_event.server
       # 重连间隔 单位毫秒
       reconnect-interval: 3000
       middlewares:
