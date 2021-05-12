@@ -19,18 +19,19 @@ hb = 'haruka_bot.cli.__main__:main'
 
 [tool.poetry.dependencies]
 python = "^3.8"
-qrcode = {extras = ["pil"], version = "^6.1"}
+qrcode = "^6.1"
 pyppeteer = "^0.2.5"
-tinydb = "^4.3.0"
+tinydb = "^4.4.0"
 packaging = "^20.9"
 nonebot-plugin-apscheduler = "^0.1.2"
-pydantic = "^1.8.1"
-rsa = "^4.7"
+pydantic = "^1.8.2"
+rsa = "^4.7.2"
 click = "^7.1.2"
-python-dotenv = "^0.15.0"
+python-dotenv = "^0.17.1"
 httpx = "^0.17.0"
-nonebot-adapter-cqhttp = "^2.0.0-alpha.12"
+nonebot-adapter-cqhttp = "^2.0.0-alpha.13"
 nonebot2 = "2.0.0a13.post1"
+pillow = "^8.2.0"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
