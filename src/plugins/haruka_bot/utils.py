@@ -8,6 +8,7 @@ from nonebot import get_driver, require
 from nonebot.adapters.cqhttp import Bot, Event, MessageEvent
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.adapters.cqhttp.exception import ActionFailed, NetworkError
+from nonebot.exception import FinishedException
 from nonebot.log import logger
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
@@ -47,14 +48,15 @@ def get_path(*other):
 
 async def permission_check(bot: Bot, event: MessageEvent, state: dict):
     from .config import Config
-    config = Config()
     if event.message_type == 'private':
-        return True
+        return
     group_id = str(event.group_id)
     with Config() as config:
         if config.get_admin(group_id):
-            return await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event)
-        return True
+            if not await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event):
+                await bot.send(event, '权限不足，目前只有管理员才能使用')
+                raise FinishedException
+
 
 def to_me():
     if plugin_config.haruka_to_me:

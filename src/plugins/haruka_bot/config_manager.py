@@ -3,13 +3,14 @@ from nonebot.adapters.cqhttp import Bot, Event, GroupDecreaseNoticeEvent
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 
-from .bilireq import BiliReq
 from .config import Config
 from .utils import permission_check, to_me
 from .version import __version__
 
 
-add_uid = on_command('添加主播', rule=to_me() & permission_check, priority=5)
+add_uid = on_command('添加主播', rule=to_me(), priority=5)
+
+add_uid.handle()(permission_check)
 
 @add_uid.handle()
 async def get_args(bot: Bot, event: Event, state: dict):
@@ -24,7 +25,9 @@ async def _(bot: Bot, event: Event, state: dict):
         await add_uid.finish(await config.add_uid(uid))
 
 
-delete_uid = on_command('删除主播', rule=to_me() & permission_check, priority=5)
+delete_uid = on_command('删除主播', rule=to_me(), priority=5)
+
+delete_uid.handle()(permission_check)
 
 @delete_uid.handle()
 async def get_args(bot: Bot, event: Event, state: dict):
@@ -39,7 +42,9 @@ async def _(bot: Bot, event: Event, state: dict):
         await delete_uid.finish(await config.delete_uid(uid))
 
 
-uid_list = on_command('主播列表', rule=to_me() & permission_check, priority=5)
+uid_list = on_command('主播列表', rule=to_me(), priority=5)
+
+uid_list.handle()(permission_check)
 
 @uid_list.handle()
 async def _(bot: Bot, event: Event, state: dict):
@@ -47,7 +52,9 @@ async def _(bot: Bot, event: Event, state: dict):
         await uid_list.finish(await config.uid_list())
 
 
-dynamic_on = on_command('开启动态', rule=to_me() & permission_check, priority=5)
+dynamic_on = on_command('开启动态', rule=to_me(), priority=5)
+
+dynamic_on.handle()(permission_check)
 
 @dynamic_on.handle()
 async def handle_first_recive(bot: Bot, event: Event, state: dict):
@@ -63,7 +70,9 @@ async def _(bot: Bot, event: Event, state: dict):
     await dynamic_on.finish(msg.replace('name', '开启动态'))
 
 
-dynamic_off = on_command('关闭动态', rule=to_me() & permission_check, priority=5)
+dynamic_off = on_command('关闭动态', rule=to_me(), priority=5)
+
+dynamic_off.handle()(permission_check)
 
 @dynamic_off.handle()
 async def handle_first_recive(bot: Bot, event: Event, state: dict):
@@ -79,7 +88,9 @@ async def _(bot: Bot, event: Event, state: dict):
     await dynamic_off.finish(msg.replace('name', '关闭动态'))
 
 
-live_on = on_command('开启直播', rule=to_me() & permission_check, priority=5)
+live_on = on_command('开启直播', rule=to_me(), priority=5)
+
+live_on.handle()(permission_check)
 
 @live_on.handle()
 async def handle_first_recive(bot: Bot, event: Event, state: dict):
@@ -95,7 +106,9 @@ async def _(bot: Bot, event: Event, state: dict):
     await live_on.finish(msg.replace('name', '开启直播'))
     
 
-live_off = on_command('关闭直播', rule=to_me() & permission_check, priority=5)
+live_off = on_command('关闭直播', rule=to_me(), priority=5)
+
+live_off.handle()(permission_check)
 
 @live_off.handle()
 async def handle_first_recive(bot: Bot, event: Event, state: dict):
@@ -157,7 +170,7 @@ async def _(bot: Bot, event: Event, state: dict):
         msg = await config.set_permission(True)
     await permission_on.finish(msg.replace('name', '开启权限'))
 
-
+# TODO 使用 doc 代替命令名列表
 func_list = [
     '主播列表', '开启权限', '关闭权限', '添加主播', '删除主播', '开启动态',
     '关闭动态', '开启直播', '关闭直播', '开启全体', '关闭全体', '版本信息']
@@ -181,13 +194,6 @@ async def _(bot: Bot, event: Event, state: dict):
         "群号：629574472\n" +\
         "\n常见问题：https://haruka-bot.live/usage/faq.html"
     await get_version.finish(message)
-
-no_permission = on_command(func_list[0],
-    aliases=set(func_list[1:]), rule=to_me(), priority=20)
-
-@no_permission.handle()
-async def _(bot: Bot, event: Event, state: dict):
-    await permission_on.finish("权限不足，目前只有管理员才能使用")
 
 
 help = on_command('帮助', rule=to_me(), priority=5)
