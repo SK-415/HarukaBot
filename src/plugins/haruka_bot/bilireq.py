@@ -15,6 +15,19 @@ from nonebot.log import logger
 from .config import Config
 
 
+class RequestError(Exception):
+    def __init__(self, code, message=None, data=None):
+        self.code = code
+        self.message = message
+        self.data = data
+    
+    def __repr__(self):
+        return f"<RequestError code={self.code} message={self.message}>"
+    
+    def __str__(self):
+        return self.__repr__()
+
+
 class BiliReq():
     def __init__(self):
         self.appkey = "4409e2ce8ffd12b8"
@@ -32,21 +45,25 @@ class BiliReq():
         }
 
     async def request(self, method, url, **kw):
-        # TODO 处理 -412
         async with httpx.AsyncClient(proxies=self.proxies) as client:
             try:
-                r = await client.request(method, url, **kw)
+                res = await client.request(method, url, **kw)
+                res.encoding = 'utf-8'
+                res = res.json()
             except ConnectTimeout:
                 logger.error(f"连接超时（{url}）")
-                raise
             except ReadTimeout:
                 logger.error(f"接收超时（{url}）")
                 raise
             except exception as e:
                 logger.error(f"未知错误（url）")
                 raise 
-        r.encoding = 'utf-8'
-        return r
+            
+            if res['code'] != 0:
+                raise RequestError(code=res['code'],
+                                    message=res['message'],
+                                    data=res['data'])
+            return res['data']
     
     async def get(self, url, **kw):
         return await self.request('GET', url, **kw)
@@ -56,17 +73,17 @@ class BiliReq():
     
     async def get_info(self, uid):
         url = f'https://api.bilibili.com/x/space/acc/info?mid={uid}'
-        return (await self.get(url, headers=self.default_headers)).json()['data']
+        return await self.get(url, headers=self.default_headers)
 
     async def get_user_dynamics(self, uid):
         # need_top: {1: 带置顶, 0: 不带置顶}
         url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={uid}&offset_dynamic_id=0&need_top=0'
-        return (await self.get(url, headers=self.default_headers)).json()['data']
+        return await self.get(url, headers=self.default_headers)
     
     async def get_new_dynamics(self):
         url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new'
         params = {'type_list': 268435455, 'access_key': self.login['access_token']}
-        return (await self.get(url, params=params)).json()['data']
+        return await self.get(url, params=params)
 
     async def get_history_dynamics(self, offset_id):
         url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_history'
@@ -75,23 +92,23 @@ class BiliReq():
             'access_key': self.login['access_token'],
             'offset_dynamic_id': offset_id
         }
-        return (await self.get(url, params=params)).json()['data']
+        return await self.get(url, params=params)
     
     async def get_live_list(self, uids):
         """根据 UID 获取直播间信息列表"""
 
         url = 'https://api.live.bilibili.com/room/v1/Room/get_status_info_by_uids'
         data = {'uids': uids}
-        return (await self.post(url, headers=self.default_headers, data=json.dumps(data))).json()['data']
+        return await self.post(url, headers=self.default_headers, data=json.dumps(data))
     
     async def get_is_live_list(self):
         url = 'https://api.live.bilibili.com/xlive/app-interface/v1/relation/liveAnchor'
         params = {'access_key': self.login['access_token']}
-        return (await self.get(url, params=params)).json()['data']
+        return await self.get(url, params=params)
     
     async def get_live_info(self, uid):
         url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={uid}'
-        return (await self.get(url, headers=self.default_headers)).json()['data']
+        return await self.get(url, headers=self.default_headers)
 
     def _sign(self, params):
         """获取 params 的 sign 值"""
@@ -111,11 +128,11 @@ class BiliReq():
         }
         params['sign'] = self._sign(params)
         url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
-        r = (await self.post(url, params=params)).json()
-        self.auth_code = r['data']['auth_code']
+        r = await self.post(url, params=params)
+        self.auth_code = r['auth_code']
 
         qr = qrcode.QRCode()
-        qr.add_data(r['data']['url'])
+        qr.add_data(r['url'])
         img = qr.make_image()
         buf = io.BytesIO()
         img.save(buf, format='PNG')
@@ -133,12 +150,11 @@ class BiliReq():
         params['sign'] = self._sign(params)
         url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/poll"
         while True:
-            r = (await self.post(url, params=params)).json()
-            code = r['code']
-            if code == 0:
-                tokens = r['data']
+            try:
+                tokens = await self.post(url, params=params)
                 Config.update_login(tokens)
                 return "登入成功"
-            elif code == 86038:
-                return "二维码已失效，请重新登录"
-            await asyncio.sleep(1)
+            except RequestError as e:
+                if e.code == 86038:
+                    return "二维码已失效，请重新登录"
+                await asyncio.sleep(1)
