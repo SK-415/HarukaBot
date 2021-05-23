@@ -3,9 +3,9 @@ from nonebot.adapters.cqhttp import Bot, Event, GroupDecreaseNoticeEvent
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 
-from ..database import DB as Config
-from ..utils import permission_check, to_me
-from ..version import __version__
+from ...database import DB as Config
+from ...utils import permission_check, to_me
+from ...version import __version__
 
 
 add_uid = on_command('添加主播', rule=to_me(), priority=5)

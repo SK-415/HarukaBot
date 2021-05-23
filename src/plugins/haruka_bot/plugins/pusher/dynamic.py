@@ -2,10 +2,10 @@ from datetime import datetime, timedelta
 
 from nonebot.log import logger
 
-from .bilireq import BiliReq
-from .database import DB as Config
-from .dynamic import Dynamic
-from .utils import safe_send, scheduler
+from ...bilireq import BiliReq
+from ...database import DB as Config
+from ...dynamic import Dynamic
+from ...utils import safe_send, scheduler
 
 last_time = {}
 
