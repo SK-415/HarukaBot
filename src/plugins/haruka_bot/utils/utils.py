@@ -1,18 +1,17 @@
-import asyncio
 import os
-import traceback
 from pathlib import Path
 
 import nonebot
-from nonebot import get_driver, require
+from nonebot import require
 from nonebot.adapters.cqhttp import Bot, Event, MessageEvent
-from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.adapters.cqhttp.exception import ActionFailed, NetworkError
+from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
 from nonebot.log import logger
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
-from pydantic import BaseSettings
+
+from .. import config
 
 # 更换 Chromium 下载地址为非 https 淘宝源
 os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
@@ -24,22 +23,10 @@ if not check_chromium():
     download_chromium()
 
 
-class Config(BaseSettings):
-
-    haruka_dir: str = None
-    haruka_to_me: bool = True
-
-    class Config:
-        extra = 'ignore'
-
-global_config = get_driver().config
-plugin_config = Config(**global_config.dict())
-
-
 def get_path(*other):
     """获取数据文件绝对路径"""
-    if plugin_config.haruka_dir:
-        dir_path = Path(plugin_config.haruka_dir).absolute()
+    if config.haruka_dir:
+        dir_path = Path(config.haruka_dir).absolute()
     else:
         dir_path = Path.cwd().joinpath('data')
         # dir_path = Path.cwd().joinpath('data', 'haruka_bot')
@@ -59,7 +46,7 @@ async def permission_check(bot: Bot, event: MessageEvent, state: dict):
 
 
 def to_me():
-    if plugin_config.haruka_to_me:
+    if config.haruka_to_me:
         from nonebot.rule import to_me
         return to_me()
     async def _to_me(bot: Bot, event: Event, state: dict):
