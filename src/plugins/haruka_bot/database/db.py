@@ -83,7 +83,7 @@ class Config():
         if r: # 当前账号没订阅，但是其他账号添加过这个 uid
             name = r['name']
         else: # 没有账号订阅过这个 uid
-            from .bilireq import BiliReq
+            from ..bilireq import BiliReq
             br = BiliReq()
             try: # 检测 uid 是否有效（逻辑需要修改）
                 user_info = await br.get_info(uid)
