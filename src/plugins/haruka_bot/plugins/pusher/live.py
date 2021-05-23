@@ -3,7 +3,7 @@ from nonebot.log import logger
 
 from ...database import DB as Config
 from ...utils import safe_send, scheduler
-from ...bilireq import BiliReq
+from ...libs.bilireq import BiliReq
 
 
 status = {}
