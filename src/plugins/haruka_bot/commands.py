@@ -3,7 +3,7 @@ from nonebot.adapters.cqhttp import Bot, Event, GroupDecreaseNoticeEvent
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 
-from .config import Config
+from .database import DB as Config
 from .utils import permission_check, to_me
 from .version import __version__
 

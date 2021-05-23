@@ -12,7 +12,7 @@ import qrcode
 from httpx import ConnectTimeout, ReadTimeout
 from nonebot.log import logger
 
-from .config import Config
+from .database import DB as Config
 
 
 class RequestError(Exception):

@@ -5,8 +5,8 @@ import nonebot
 from nonebot.adapters.cqhttp import MessageEvent
 from tinydb import TinyDB, Query
 
-from .utils import get_path
-from .version import __version__
+from ..utils import get_path
+from ..version import __version__
 from packaging.version import Version
 
 
