@@ -18,6 +18,9 @@ async def dy_sched():
         if not uid:
             return
         push_list = await db.get_push_list(uid, 'dynamic')
+        push_list = [{'bot_id': target.bot_id,
+                      'type': target.type,
+                      'type_id': target.type_id} for target in push_list]
         name = (await db.get_user(uid)).name
 
     logger.debug(f'爬取动态 {name}（{uid}）')
@@ -38,6 +41,7 @@ async def dy_sched():
         dynamic = Dynamic(dynamic)
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
             try:
+                # TODO 怎么好像一截图就会卡死的样子
                 await dynamic.get_screenshot()
             except AttributeError:
                 return
