@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.orm.query import Query
 
 from .models import Base, Group, Sub, User
+from ..utils import get_path
 
 # TODO 启动的时候初始化推送列表
 uid_list = {'live': {'list': [], 'index': 0},
@@ -14,7 +15,7 @@ uid_list = {'live': {'list': [], 'index': 0},
 class DB:
     """数据库交互类，与增删改查无关的部分不应该在这里面实现"""
 
-    engine = create_engine("sqlite:///test.db")
+    engine = create_engine(f"sqlite:///{get_path('data.db')}")
     Base.metadata.create_all(engine)
     Session= sessionmaker(bind=engine)
 
@@ -56,7 +57,7 @@ class DB:
                   at=at,
                   bot_id=bot_id)
         self.session.add(sub)
-        self.update_uid_list()
+        await self.update_uid_list()
         self.session.commit()
         return True
     
@@ -160,8 +161,9 @@ class DB:
         """获取指定的订阅数据"""
 
         kw = locals()
+        del kw['self']
         kw['type'] = kw.pop('type_')
-        filters = [getattr(Sub, key) == value for key, value in kw
+        filters = [getattr(Sub, key) == value for key, value in kw.items()
                    if value != None]
         return self.session.query(Sub).filter(*filters)
 
@@ -242,7 +244,3 @@ class DB:
     async def update_config(cls):
         """更新数据库"""
         pass
-
-
-if __name__ == "__main__":
-    print(type(Sub.type == 'haha'), type(User.name == 'a'))
