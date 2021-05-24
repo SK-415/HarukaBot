@@ -59,7 +59,7 @@ async def safe_send(bot_id, send_type, type_id, message):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
     
     try:
-        bot = nonebot.get_bots()[bot_id]
+        bot = nonebot.get_bots()[str(bot_id)]
     except KeyError:
         logger.error(f"推送失败，Bot ID：{bot_id} 未连接")
         return
