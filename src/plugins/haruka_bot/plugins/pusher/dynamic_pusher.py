@@ -17,10 +17,6 @@ async def dy_sched():
         uid = await db.next_uid('dynamic')
         if not uid:
             return
-        push_list = await db.get_push_list(uid, 'dynamic')
-        push_list = [{'bot_id': target.bot_id,
-                      'type': target.type,
-                      'type_id': target.type_id} for target in push_list]
         name = (await db.get_user(uid)).name
 
     logger.debug(f'爬取动态 {name}（{uid}）')
@@ -47,6 +43,9 @@ async def dy_sched():
                 return
             await dynamic.format()
 
-            for sets in push_list:
-                await safe_send(sets['bot_id'], sets['type'], sets['type_id'], dynamic.message)
+            async with DB() as db:
+                push_list = await db.get_push_list(uid, 'dynamic')
+                for sets in push_list:
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message)
+
             last_time[uid] = dynamic.time
