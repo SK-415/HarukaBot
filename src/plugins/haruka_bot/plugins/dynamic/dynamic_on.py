@@ -3,7 +3,7 @@ from nonebot.adapters.cqhttp import Bot
 from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
-from ...database import DB as Config
+from ...database import Config
 from ...utils import permission_check, to_me
 
 

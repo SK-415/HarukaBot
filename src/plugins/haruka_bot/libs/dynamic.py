@@ -7,7 +7,7 @@ from nonebot.exception import NoLogException
 from pyppeteer import launch
 from pyppeteer.errors import TimeoutError
 
-from ..database import DB as Config
+from ..database import Config
 
 
 class Dynamic():

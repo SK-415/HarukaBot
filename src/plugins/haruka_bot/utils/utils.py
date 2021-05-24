@@ -34,7 +34,7 @@ def get_path(*other):
 
 
 async def permission_check(bot: Bot, event: MessageEvent, state: dict):
-    from ..database import DB as Config
+    from ..database import Config
     if event.message_type == 'private':
         return
     group_id = str(event.group_id)

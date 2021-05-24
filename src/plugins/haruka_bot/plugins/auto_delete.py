@@ -2,7 +2,7 @@ from nonebot import on_notice
 from nonebot.adapters.cqhttp import Bot, GroupDecreaseNoticeEvent
 from nonebot.typing import T_State
 
-from ..database import DB as Config
+from ..database import Config
 from ..version import __version__
 
 

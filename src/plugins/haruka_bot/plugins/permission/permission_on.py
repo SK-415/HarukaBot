@@ -5,7 +5,7 @@ from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.typing import T_State
 
-from ...database import DB as Config
+from ...database import Config
 from ...utils import to_me
 
 

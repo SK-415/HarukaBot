@@ -156,7 +156,7 @@ class DB:
         return (await self.get_subs(type_=type_, type_id=type_id)).all()
 
     async def get_subs(self, uid=None, type_=None, type_id=None, live=None,
-                       dynamic=None, at=None, bot_id=None) -> Query[Sub]:
+                       dynamic=None, at=None, bot_id=None) -> Query:
         """获取指定的订阅数据"""
 
         kw = locals()
@@ -202,7 +202,7 @@ class DB:
         if subs.count() == 0:
             return False
         for sub in subs:
-            getattr(sub, conf) = switch
+            setattr(sub, conf, switch)
         self.session.commit()
         return True
 

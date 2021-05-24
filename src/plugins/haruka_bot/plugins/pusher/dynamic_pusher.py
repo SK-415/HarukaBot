@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from nonebot.log import logger
 
 from ...libs.bilireq import BiliReq
-from ...database import DB as Config
+from ...database import Config
 from ...libs.dynamic import Dynamic
 from ...utils import safe_send, scheduler
 

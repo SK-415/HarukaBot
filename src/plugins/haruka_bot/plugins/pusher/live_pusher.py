@@ -1,7 +1,7 @@
 import nonebot
 from nonebot.log import logger
 
-from ...database import DB as Config
+from ...database import Config
 from ...utils import safe_send, scheduler
 from ...libs.bilireq import BiliReq
 
