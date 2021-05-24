@@ -5,6 +5,7 @@ import json
 from logging import exception
 import time
 from hashlib import md5
+from typing import Dict
 from urllib.parse import urlencode
 
 import httpx
@@ -49,7 +50,7 @@ class BiliReq():
             try:
                 res = await client.request(method, url, **kw)
                 res.encoding = 'utf-8'
-                res = res.json()
+                res: Dict = res.json()
             except ConnectTimeout:
                 logger.error(f"连接超时（{url}）")
             except ReadTimeout:
@@ -62,7 +63,7 @@ class BiliReq():
             if res['code'] != 0:
                 raise RequestError(code=res['code'],
                                     message=res['message'],
-                                    data=res['data'])
+                                    data=res.get('data'))
             return res['data']
     
     async def get(self, url, **kw):
