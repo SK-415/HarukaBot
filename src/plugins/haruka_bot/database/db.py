@@ -143,7 +143,7 @@ class DB:
                    if value != None]
         return self.session.query(Sub).filter(*filters)
 
-    async def get_uid_list(self, func):
+    async def get_uid_list(self, func) -> List:
         """根据类型获取需要爬取的 UID 列表"""
         
         return uid_list[func]['list']
