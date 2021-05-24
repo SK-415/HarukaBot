@@ -125,17 +125,9 @@ class DB:
 
         return (await self.get_subs(uid, type_, type_id)).first()
 
-    async def get_sub_list(self, type_, type_id) -> List:
+    async def get_sub_list(self, type_, type_id) -> List[Sub]:
         """获取指定位置的推送列表"""
 
-        # TODO 把文本处理部分移到外面去
-        # for c in r:
-        #     message += (
-        #         f"【{c['name']}】" +
-        #         f"直播推送：{'开' if c['live'] else '关'}，" +
-        #         f"动态推送：{'开' if c['dynamic'] else '关'}" +
-        #         f"（{c['uid']}）\n"
-        #     )
         return (await self.get_subs(type_=type_, type_id=type_id)).all()
 
     async def get_subs(self, uid=None, type_=None, type_id=None, live=None,
