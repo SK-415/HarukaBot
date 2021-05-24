@@ -2,8 +2,8 @@ from nonebot import on_notice
 from nonebot.adapters.cqhttp import Bot, GroupDecreaseNoticeEvent
 from nonebot.typing import T_State
 
-from ...database import DB as Config
-from ...version import __version__
+from ..database import DB as Config
+from ..version import __version__
 
 
 group_decrease = on_notice(priority=5)

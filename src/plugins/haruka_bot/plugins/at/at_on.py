@@ -5,8 +5,8 @@ from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.typing import T_State
 
-from ....database import DB as Config
-from ....utils import to_me
+from ...database import DB as Config
+from ...utils import to_me
 
 
 at_on = on_command('开启全体', rule=to_me(), 

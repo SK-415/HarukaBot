@@ -3,8 +3,8 @@ from nonebot.adapters.cqhttp import Bot
 from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
-from ....database import DB as Config
-from ....utils import permission_check, to_me
+from ...database import DB as Config
+from ...utils import permission_check, to_me
 
 
 add_sub = on_command('关注', aliases={'添加主播',}, rule=to_me(), priority=5)

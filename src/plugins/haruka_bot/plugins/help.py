@@ -3,8 +3,8 @@ from nonebot.adapters.cqhttp import Bot
 from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
-from ...utils import to_me
-from ...version import __version__
+from ..utils import to_me
+from ..version import __version__
 
 
 # TODO 使用 doc 代替命令名列表

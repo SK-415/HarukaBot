@@ -5,16 +5,16 @@ from nonebot.permission import SUPERUSER
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.typing import T_State
 
-from ....database import DB as Config
-from ....utils import to_me
+from ...database import DB as Config
+from ...utils import to_me
 
 
-permission_off = on_command('关闭权限', rule=to_me(), 
+permission_on = on_command('开启权限', rule=to_me(), 
     permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
     priority=5)
 
-@permission_off.handle()
+@permission_on.handle()
 async def _(bot: Bot, event: MessageEvent, state: T_State):
     with Config(event) as config:
-        msg = await config.set_permission(False)
-    await permission_off.finish(msg.replace('name', '关闭权限'))
+        msg = await config.set_permission(True)
+    await permission_on.finish(msg.replace('name', '开启权限'))
