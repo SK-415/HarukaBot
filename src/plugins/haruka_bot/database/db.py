@@ -60,20 +60,6 @@ class DB:
         await self.update_uid_list()
         self.session.commit()
         return True
-    
-    def _get_type_id(self, event: MessageEvent):
-        return (event.group_id if isinstance(event, GroupMessageEvent)
-                                       else event.user_id)
-
-    def _handle_event(self, event: MessageEvent):
-        return {
-            'type_': event.message_type,
-            'type_id': self._get_type_id(event),
-            'bot_id': event.self_id
-        }
-
-    async def add_sub_by_event(self, uid, name, event: MessageEvent):
-        return await self.add_sub(uid, name=name, **self._handle_event(event))
 
     async def add_user(self, uid, name):
         """添加 UP 主信息"""
@@ -105,10 +91,6 @@ class DB:
         self.session.commit()
         await self.delete_user(uid)
         return True
-
-    async def delete_sub_by_event(self, uid, event: MessageEvent):
-        return await self.delete_sub(uid, event.message_type,
-                                     self._get_type_id(event))
 
     async def delete_sub_list(self, type_, type_id):
         "删除指定位置的推送列表"

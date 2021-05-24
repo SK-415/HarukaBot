@@ -4,7 +4,7 @@ from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
 from ...database import DB
-from ...utils import permission_check, to_me
+from ...utils import permission_check, to_me, get_type_id
 from ...libs.bilireq import BiliReq, RequestError
 
 
@@ -40,7 +40,8 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
                 await add_sub.finish(f"未知错误，请联系开发者反馈，错误内容：\n\
                                     {str(e)}")
     async with DB() as db:
-        result = await db.add_sub_by_event(uid, name, event)
+        result = await db.add_sub(uid, event.message_type,
+                                  get_type_id(event), event.self_id, name)
     if result:
         await add_sub.finish(f"已关注 {name}（{uid}）")
     await add_sub.finish(f"请勿重复关注 {name}（{uid}）")
