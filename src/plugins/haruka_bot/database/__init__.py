@@ -1,1 +1,1 @@
-from .db import Config as DB
+from .config import Config as DB

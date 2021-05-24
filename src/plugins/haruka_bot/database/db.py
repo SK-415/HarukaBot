@@ -1,312 +1,248 @@
-import json
-from datetime import datetime
+from typing import List
 
-import nonebot
-from nonebot.adapters.cqhttp import MessageEvent
-from tinydb import TinyDB, Query
+from nonebot.adapters.cqhttp.event import GroupMessageEvent, MessageEvent
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm.query import Query
 
-from ..utils import get_path
-from ..version import __version__
-from packaging.version import Version
+from .models import Base, Group, Sub, User
 
+# TODO 启动的时候初始化推送列表
+uid_list = {'live': {'list': [], 'index': 0},
+            'dynamic': {'list': [], 'index': 0}}
 
-class Config():
-    """操作 config.json 文件"""
+class DB:
+    """数据库交互类，与增删改查无关的部分不应该在这里面实现"""
 
-    def __init__(self, event:MessageEvent=None):
-        self._init(event)
-    
-    def __enter__(self, event:MessageEvent=None):
-        self._init(event)
+    engine = create_engine("sqlite:///test.db")
+    Base.metadata.create_all(engine)
+    Session= sessionmaker(bind=engine)
+
+    async def __aenter__(self):
+        self.session: Session = self.Session()
         return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.config.close()
-    
-    def _init(self, event=None):
-        self.config = TinyDB(get_path('config.json'), encoding='utf-8')
-        self.uids = self.config.table('uids')
-        self.groups = self.config.table('groups')
-        self.uid_lists = self.config.table('uid_lists')
-        self.login = self.config.table('login')
-        self.version = self.config.table('version')
 
-        if event:
-            self.bot_id = str(event.self_id)
-            self.type = event.message_type
-            self.type_id = str(event.group_id) if self.type == 'group' else str(event.user_id)
-    
-    def uid_exist(self, uid, type_id=False):
-        q = Query()
-        if type_id:
-            r = self.config.get((q.uid == uid) & (q.type == self.type) & (q.type_id == self.type_id))
-        else:
-            r = self.config.get((q.uid == uid))
-        return r
-    
-    def add_admin(self):
-        if self.type == 'private':
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        self.session.commit()
+        self.session.close()
+
+    async def add_group(self, group_id):
+        """创建群设置"""
+
+        if self.session.query(Group).filter(Group.id == group_id).first():
+            # 权限开关已经创建过了
             return
-        q = Query()
-        if not self.groups.contains(q.group_id == self.type_id):
-            self.groups.insert({'group_id': self.type_id, 'admin': True})
+        # TODO 自定义默认权限
+        group = Group(id=group_id, admin=True)
+        self.session.add(group)
+        self.session.commit()
 
-    def update_uid_lists(self):
-        if 'uid_lists' not in self.config.tables():
-            self.uid_lists.insert_multiple([
-                {
-                    'dynamic': [],
-                    'index': 0
-                },
-                {
-                    'live': [],
-                    'index': 0
-                }
-            ])
-        q = Query()
-        r = self.config.search(q.dynamic == True)
-        dynamic = list(set([c['uid'] for c in r]))
-        self.uid_lists.update({'dynamic': dynamic}, q.dynamic.exists())
-        r = self.config.search(q.live == True)
-        live = list(set([c['uid'] for c in r]))
-        self.uid_lists.update({'live': live}, q.live.exists())
+    async def add_sub(self, uid, type_, type_id, bot_id, name, live=True,
+                      dynamic=True, at=False) -> bool:
+        """添加订阅"""
 
-    async def add_uid(self, uid):
-        """添加主播"""
-        
-        r = self.uid_exist(uid, True)
-        if r: # 已经存在
-            return f"请勿重复添加 {r['name']}（{r['uid']}）"
-        
-        self.add_admin()
-        r = self.uid_exist(uid)
-        if r: # 当前账号没订阅，但是其他账号添加过这个 uid
-            name = r['name']
-        else: # 没有账号订阅过这个 uid
-            from ..libs.bilireq import BiliReq
-            br = BiliReq()
-            try: # 检测 uid 是否有效（逻辑需要修改）
-                user_info = await br.get_info(uid)
-                name = user_info["name"]
-            except:
-                return "请输入有效的uid"
-            
-        self.config.insert({
-            'uid': uid,
-            'name': name,
-            'type': self.type, 
-            'type_id': self.type_id,
-            'live': True,
-            'dynamic': True,
-            'at': False,
-            'bot_id': self.bot_id
-            })
-        self.update_uid_lists()
-        return f"已添加 {name}（{uid}）"
-    
-    async def delete_uid(self, uid):
-        """删除主播"""
-
-        r = self.uid_exist(uid, True)
-        if not r:
-            return "删除失败，uid 不存在"
-        q = Query()
-        self.config.remove(
-            (q.uid == uid) & 
-            (q.type == self.type) & 
-            (q.type_id == self.type_id))
-        self.update_uid_lists()
-        return f"已删除 {r['name']}（{uid}）"
-    
-    async def delete_push_list(self):
-        """删除指定对象的推送列表"""
-
-        q = Query()
-        self.config.remove(
-            (q.type == self.type) &
-            (q.type_id == self.type_id))
-        self.update_uid_lists()
-
-    async def uid_list(self):
-        """主播列表"""
-
-        q = Query()
-        r = self.config.search((q.type == self.type) & (q.type_id == self.type_id))
-        message = "以下为当前的订阅列表：\n\n"
-        for c in r:
-            message += (
-                f"【{c['name']}】" +
-                f"直播推送：{'开' if c['live'] else '关'}，" +
-                f"动态推送：{'开' if c['dynamic'] else '关'}" +
-                f"（{c['uid']}）\n"
-            )
-        return message
-
-    async def set(self, func, uid, status):
-        """开关各项功能"""
-
-        if func == 'at' and self.type == 'private':
-            return "只有群里才能name"
-
-        r = self.uid_exist(uid, True)
-        if not r:
-            return "name失败，uid 不存在"
-        
-        if r[func] == status:
-            return "请勿重复name"
-
-        q = Query()
-        self.config.update({func: status}, (q.uid == uid) & (q.type == self.type) & (q.type_id == self.type_id))
-        self.update_uid_lists()
-        return f"已name，{r['name']}（{r['uid']}）"
-
-    async def set_permission(self, status):
-        """设置权限"""
-
-        if self.type == 'private':
-            return "只有群里才能name"
-        
-        q = Query()
-        r = self.groups.get(q.group_id == self.type_id)
-        if (not r and status) or (r and r['admin'] == status):
-            return "请勿重复name"
-        if not self.groups.contains(q.group_id == self.type_id):
-            self.groups.insert({'group_id': self.type_id, 'admin': status})
-        else:
-            self.groups.update({'admin': status}, q.group_id == self.type_id)
-        return "已name，只有管理员才能使用" if status else "已name，所有人都能使用"
-
-    def next_uid(self, func):
-        """获取下一位爬取的 uid"""
-        
-        q = Query()
-        r = self.uid_lists.get(q[func].exists())
-        if not r: # 一次都没有添加过，uid_list 还没有创建
-            return None
-        index = r['index']
-        uid_list = r[func]
-
-        if not uid_list: # uid_list 为空
-            return None
-        
-        if index >= len(uid_list):
-            uid = uid_list[0]
-            index = 1
-        else:
-            uid = uid_list[index]
-            index += 1
-        self.uid_lists.update({'index': index}, q[func].exists())
-        return uid
-    
-    
-    def get_uid_list(self, name):
-        """获取需要爬取的 UID 列表"""
-
-        q = Query()
-        r = self.uid_lists.get(q[name].exists())
-        if not r:
-            return []
-        return r[name]
-
-
-    def get_push_list(self, uid, func):
-        """获取推送列表"""
-
-        q = Query()
-        return self.config.search((q.uid == uid) & (q[func] == True))
-
-    def get_admin(self, group_id):
-        q = Query()
-        if not self.groups.contains(q.group_id == group_id):
-            return True
-        return self.groups.get(q.group_id == group_id)['admin']
-
-    @classmethod
-    def get_name(cls, uid):
-        """获取 uid 对应的昵称"""
-
-        q = Query()
-        return (cls().config.get(q.uid == str(uid)))['name']
-    
-    def read(self):
-        """读取用户注册信息"""
-
-        with open(get_path('config.json'), encoding='utf-8-sig') as f:
-            text = f.read()
-        self.json = json.loads(text)
-        return self.json
-
-    def backup(self):
-        """备份当前配置文件"""
-
-        # FIXME 如果 config.json 不存在，不备份
-        self.read()
-        backup_name = f"config.{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json.bak"
-        with open(get_path(backup_name), 'w', encoding='utf-8') as f:
-            f.write(json.dumps(self.json, ensure_ascii=False, indent=4))
+        if await self.get_sub(uid, type_, type_id):
+            return False
+        if not await self.get_user(uid):
+            await self.add_user(uid, name)
+        if type_ == 'group':
+            await self.add_group(type_id)
+        sub = Sub(uid=uid,
+                  type=type_,
+                  type_id=type_id,
+                  # TODO 自定义默认动态直播全体开关
+                  live=live,
+                  dynamic=dynamic,
+                  at=at,
+                  bot_id=bot_id)
+        self.session.add(sub)
+        self.update_uid_list()
+        self.session.commit()
         return True
     
-    @classmethod
-    def get_login(cls):
-        """获取登录信息"""
+    def _get_type_id(self, event: MessageEvent):
+        return (event.group_id if isinstance(event, GroupMessageEvent)
+                                       else event.user_id)
 
-        if 'login' not in cls().config.tables():
-            tokens = {
-                'access_token': '',
-                'refresh_token': ''
-            }
-            cls().login.insert(tokens)
+    def _handle_event(self, event: MessageEvent):
+        return {
+            'type_': event.message_type,
+            'type_id': self._get_type_id(event),
+            'bot_id': event.self_id
+        }
+
+    async def add_sub_by_event(self, uid, name, event: MessageEvent):
+        return await self.add_sub(uid, name=name, **self._handle_event(event))
+
+    async def add_user(self, uid, name):
+        """添加 UP 主信息"""
+
+        user = User(uid=uid, name=name)
+        self.session.add(user)
+        self.session.commit()
+
+
+    async def delete_group(self, group_id) -> bool:
+        """删除群设置"""
+
+        if await self.get_sub(type_='group', type_id=group_id):
+            # 当前群还有订阅，不能删除
+            return False
+
+        query = self.session.query(Group).filter(Group.id == group_id)
+        query.delete()
+        self.session.commit()
+
+    async def delete_sub(self, uid, type_, type_id) -> bool:
+        """删除指定订阅"""
+
+        if not await self.get_sub(uid, type_, type_id):
+            # 订阅不存在
+            return False
+        query = await self.get_subs(uid, type_, type_id)
+        query.delete()
+        self.session.commit()
+        await self.delete_user(uid)
+        return True
+
+    async def delete_sub_by_event(self, uid, event: MessageEvent):
+        return await self.delete_sub(uid, event.message_type,
+                                     self._get_type_id(event))
+
+    async def delete_sub_list(self, type_, type_id):
+        "删除指定位置的推送列表"
+
+        subs = await self.get_subs(type_=type_, type_id=type_id)
+        uids = [sub.uid for sub in subs]
+        subs.delete()
+        self.session.commit()
+        for uid in uids:
+            await self.delete_user(uid)
+        if type_ == 'group':
+            await self.delete_group(type_id)
+
+    async def delete_user(self, uid) -> bool:
+        """删除 UP 主信息"""
+
+        if await self.get_sub(uid):
+            # 还存在该 UP 主订阅，不能删除
+            return False
+        query = self.session.query(User).filter(User.uid == uid)
+        query.delete()
+        self.session.commit()
+        return True
+
+    async def get_push_list(self, uid, func):
+        """根据类型和 UID 获取需要推送的 QQ 列表"""
+        
+        return (await self.get_subs(uid, **{func: True})).all()
+
+    async def get_sub(self, uid, type_=None, type_id=None):
+        """获取指定位置的订阅信息"""
+
+        return (await self.get_subs(uid, type_, type_id)).first()
+
+    async def get_sub_list(self, type_, type_id) -> List:
+        """获取指定位置的推送列表"""
+
+        # TODO 把文本处理部分移到外面去
+        # for c in r:
+        #     message += (
+        #         f"【{c['name']}】" +
+        #         f"直播推送：{'开' if c['live'] else '关'}，" +
+        #         f"动态推送：{'开' if c['dynamic'] else '关'}" +
+        #         f"（{c['uid']}）\n"
+        #     )
+        return (await self.get_subs(type_=type_, type_id=type_id)).all()
+
+    async def get_subs(self, uid=None, type_=None, type_id=None, live=None,
+                       dynamic=None, at=None, bot_id=None) -> Query[Sub]:
+        """获取指定的订阅数据"""
+
+        kw = locals()
+        kw['type'] = kw.pop('type_')
+        filters = [getattr(Sub, key) == value for key, value in kw
+                   if value != None]
+        return self.session.query(Sub).filter(*filters)
+
+    async def get_uid_list(self, func):
+        """根据类型获取需要爬取的 UID 列表"""
+        
+        return uid_list[func]['list']
+
+    async def get_user(self, uid: int):
+        """获取 UP 主信息，没有就返回 None"""
+
+        return self.session.query(User).filter(User.uid == uid).first()
+
+    async def next_uid(self, func):
+        """获取下一个要爬取的 UID"""
+        
+        func = uid_list[func]
+
+        if func['index'] >= len(func['list']):
+            func['index'] = 1
+            return func['list'][0]
         else:
-            tokens = cls().login.all()[0]
-        if tokens == {'access_token': '', 'refresh_token': ''}:
-            return None
-        return tokens
+            func['index'] += 1
+            return func['list'][func['index']]
+
+    async def set_permission(self, group_id, switch):
+        """设置指定位置权限"""
+
+        # TODO 重构为 set_group
+        group = self.session.query(Group).filter(Group.id == group_id).first()
+        group.admin = switch
+        self.session.commit()
+
+    async def set_sub(self, conf, switch, uid=None, type_=None, type_id=None):
+        """开关订阅设置"""
+
+        subs = await self.get_subs(uid, type_, type_id)
+        if subs.count() == 0:
+            return False
+        for sub in subs:
+            getattr(sub, conf) = switch
+        self.session.commit()
+        return True
+
+    async def update_uid_list(self):
+        """更新需要推送的 UP 主列表"""
+
+        subs = self.session.query(Sub).all()
+        uid_list['live']['list'] = list(set([sub.uid for sub in subs
+                                             if sub.live]))
+        uid_list['dynamic']['list'] = list(set([sub.uid for sub in subs
+                                                if sub.dynamic]))
 
     @classmethod
-    def update_login(cls, tokens):
+    async def get_name(cls, uid):
+        """根据 UID 获取缓存昵称"""
+        pass
+
+    @classmethod
+    async def get_login(cls):
+        """获取登录信息"""
+        pass
+
+    @classmethod
+    async def update_login(cls, tokens):
         """更新登录信息"""
+        pass
 
-        cls().login.update({
-            'access_token': tokens['access_token'],
-            'refresh_token': tokens['refresh_token']
-        })
+    async def new_version(self):
+        """检查是否为最新版本"""
+        pass
 
-    def new_version(self):
-        if 'version' not in self.config.tables():
-            self.version.insert({'version': __version__})
-            return True
-        current_version = Version(__version__)
-        old_version = Version(self.version.all()[0]['version'])
-        return current_version > old_version
-    
-    def update_version(self):
-        self.version.update({'version': __version__})
-                
+    async def update_version(self):
+        """更新版本号"""
+        pass
 
     @classmethod
     async def update_config(cls):
-        """升级为 TinyDB"""
-
-        with Config() as config:
-            if 'status' in config.config.tables():
-                config.backup()
-                config.config.drop_tables()
-                
-                for c_type, config_type in {'group': 'groups', 'private': 'users'}.items():
-                    config.type = c_type
-                    for type_id, type_config in config.json[config_type].items():
-                        config.type_id = type_id
-                        uids = type_config['uid']
-                        for uid, sets in uids.items():
-                            config.bot_id = config.json['uid'][uid][config_type][config.type_id]
-                            await config.add_uid(uid)
-                            for func, status in sets.items():
-                                await config.set(func, uid, status)
-                        if 'admin' in type_config and not type_config['admin']:
-                            await config.set_permission(False)
-            if config.new_version():
-                config.backup()
-                config.update_version()
+        """更新数据库"""
+        pass
 
 
-nonebot.get_driver().on_startup(Config.update_config)
+if __name__ == "__main__":
+    print(type(Sub.type == 'haha'), type(User.name == 'a'))
