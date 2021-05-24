@@ -117,7 +117,7 @@ class DB:
         self.session.commit()
         return True
 
-    async def get_push_list(self, uid, func):
+    async def get_push_list(self, uid, func) -> List[Sub]:
         """根据类型和 UID 获取需要推送的 QQ 列表"""
         
         return (await self.get_subs(uid, **{func: True})).all()
