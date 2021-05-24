@@ -10,8 +10,7 @@ repository = "https://github.com/SK-415/HarukaBot/tree/master/src/plugins/haruka
 documentation = "https://github.com/SK-415/HarukaBot#readme"
 keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
 packages = [
-    { include = "haruka_bot/*.py", from = "./src/plugins/"},
-    { include = "haruka_bot/cli/*.py", from = "./src/plugins/"}
+    { include = "haruka_bot", from = "./src/plugins/"}
 ]
 
 [tool.poetry.scripts]
