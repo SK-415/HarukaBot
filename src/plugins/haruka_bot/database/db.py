@@ -1,4 +1,5 @@
 from typing import List
+import nonebot
 
 from nonebot.adapters.cqhttp.event import GroupMessageEvent, MessageEvent
 from sqlalchemy import create_engine
@@ -8,7 +9,7 @@ from sqlalchemy.orm.query import Query
 from .models import Base, Group, Sub, User
 from ..utils import get_path
 
-# TODO 启动的时候初始化推送列表
+
 uid_list = {'live': {'list': [], 'index': 0},
             'dynamic': {'list': [], 'index': 0}}
 
@@ -88,8 +89,9 @@ class DB:
             return False
         query = await self.get_subs(uid, type_, type_id)
         query.delete()
-        self.session.commit()
         await self.delete_user(uid)
+        await self.update_uid_list()
+        self.session.commit()
         return True
 
     async def delete_sub_list(self, type_, type_id):
@@ -155,13 +157,16 @@ class DB:
         """获取下一个要爬取的 UID"""
         
         func = uid_list[func]
+        if func['list'] == []:
+            return None
 
         if func['index'] >= len(func['list']):
             func['index'] = 1
             return func['list'][0]
         else:
+            index = func['index']
             func['index'] += 1
-            return func['list'][func['index']]
+            return func['list'][index]
 
     async def set_permission(self, group_id, switch):
         """设置指定位置权限"""
@@ -218,3 +223,9 @@ class DB:
     async def update_config(cls):
         """更新数据库"""
         pass
+
+async def init_push_list():
+    async with DB() as db:
+        await db.update_uid_list()
+
+nonebot.get_driver().on_startup(init_push_list)
