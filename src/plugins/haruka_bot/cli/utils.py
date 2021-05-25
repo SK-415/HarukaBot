@@ -1,7 +1,7 @@
-from os import path
-import dotenv
+from pathlib import Path
+
 import click
-import re
+import dotenv
 
 env = {
     "HOST": "127.0.0.1",
@@ -15,7 +15,8 @@ env = {
 
 
 def create_env():
-    if path.exists('./.env.prod'):
+    file_path = Path('./.env.prod').resolve()
+    if file_path.exists():
         return
 
     while True:
@@ -31,7 +32,7 @@ def create_env():
         pass
     
     for key, value in env.items():
-        dotenv.set_key('./.env.prod', key, str(value).replace('\'', '\"').replace(' ', ''), quote_mode='never')
+        dotenv.set_key(file_path, key, str(value).replace('\'', '\"').replace(' ', ''), quote_mode='never')
 
 if __name__ == "__main__":
     create_env()
