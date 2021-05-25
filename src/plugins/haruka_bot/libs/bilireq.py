@@ -5,13 +5,15 @@ import json
 from logging import exception
 import time
 from hashlib import md5
-from typing import Dict
+from typing import Any, Dict
 from urllib.parse import urlencode
 
 import httpx
 import qrcode
 from httpx import ConnectTimeout, ReadTimeout
 from nonebot.log import logger
+from httpx._types import URLTypes
+from httpx._models import Response
 
 from ..database import Config
 
@@ -40,7 +42,7 @@ class BiliReq():
             'Referer': 'https://www.bilibili.com/'
         }
         self.login = Config.get_login()
-        self.proxies = {
+        self.proxies: Dict[URLTypes, Any] = {
             'http': None,
             'https': None
         }
@@ -48,11 +50,12 @@ class BiliReq():
     async def request(self, method, url, **kw):
         async with httpx.AsyncClient(proxies=self.proxies) as client:
             try:
-                res = await client.request(method, url, **kw)
-                res.encoding = 'utf-8'
-                res: Dict = res.json()
+                r = await client.request(method, url, **kw)
+                r.encoding = 'utf-8'
+                res: Dict = r.json()
             except ConnectTimeout:
                 logger.error(f"连接超时（{url}）")
+                raise
             except ReadTimeout:
                 logger.error(f"接收超时（{url}）")
                 raise

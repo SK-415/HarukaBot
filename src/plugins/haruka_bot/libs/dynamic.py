@@ -48,8 +48,8 @@ class Dynamic():
                 bar = await page.querySelector(".text-bar")
                 bar_bound = await bar.boundingBox()
                 clip['height'] = bar_bound['y'] - clip['y']
-                self.img = "base64://" +\
-                    await page.screenshot(clip=clip, encoding='base64')
+                b64_img = await page.screenshot(clip=clip, encoding='base64')
+                self.img = f"base64://{b64_img}"
                 break
             except TimeoutError as e:
                 logger.error(f"截图失败（连接超时） 已重试（{i}/{retry}）")
