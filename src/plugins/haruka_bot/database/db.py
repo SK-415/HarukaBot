@@ -105,6 +105,7 @@ class DB:
             await self.delete_user(uid)
         if type_ == 'group':
             await self.delete_group(type_id)
+        await self.update_uid_list()
 
     async def delete_user(self, uid) -> bool:
         """删除 UP 主信息"""
