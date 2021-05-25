@@ -118,8 +118,12 @@ class DB:
         return True
 
     async def get_admin(self, group_id) -> bool:
-        return (self.session.query(Group).
-                filter(Group.id==group_id).first().admin)
+        """获取指定群权限状态"""
+
+        group = self.session.query(Group).filter(Group.id==group_id).first()
+        if not group:
+            return True
+        return group.admin
 
     async def get_push_list(self, uid, func) -> List[Sub]:
         """根据类型和 UID 获取需要推送的 QQ 列表"""
