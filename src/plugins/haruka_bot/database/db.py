@@ -1,7 +1,6 @@
-from typing import List
+from typing import List, Optional
 import nonebot
 
-from nonebot.adapters.cqhttp.event import GroupMessageEvent, MessageEvent
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.orm.query import Query
@@ -80,6 +79,7 @@ class DB:
         query = self.session.query(Group).filter(Group.id == group_id)
         query.delete()
         self.session.commit()
+        return True
 
     async def delete_sub(self, uid, type_, type_id) -> bool:
         """删除指定订阅"""
@@ -117,12 +117,16 @@ class DB:
         self.session.commit()
         return True
 
+    async def get_admin(self, group_id) -> bool:
+        return (self.session.query(Group).
+                filter(Group.id==group_id).first().admin)
+
     async def get_push_list(self, uid, func) -> List[Sub]:
         """根据类型和 UID 获取需要推送的 QQ 列表"""
         
         return (await self.get_subs(uid, **{func: True})).all()
 
-    async def get_sub(self, uid, type_=None, type_id=None):
+    async def get_sub(self, uid=None, type_=None, type_id=None) -> Optional[Sub]:
         """获取指定位置的订阅信息"""
 
         return (await self.get_subs(uid, type_, type_id)).first()
@@ -133,7 +137,7 @@ class DB:
         return (await self.get_subs(type_=type_, type_id=type_id)).all()
 
     async def get_subs(self, uid=None, type_=None, type_id=None, live=None,
-                       dynamic=None, at=None, bot_id=None) -> Query:
+                       dynamic=None, at=None, bot_id=None) -> Query[Sub]:
         """获取指定的订阅数据"""
 
         kw = locals()

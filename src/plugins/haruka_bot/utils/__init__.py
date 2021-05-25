@@ -1,16 +1,19 @@
 import os
 from pathlib import Path
+from typing import Union
 
 import nonebot
 from nonebot import require
-from nonebot.adapters.cqhttp import Bot, Event, MessageEvent
-from nonebot.adapters.cqhttp.event import GroupMessageEvent
+from nonebot.adapters import Bot, Event
+from nonebot.adapters.cqhttp import MessageEvent
+from nonebot.adapters.cqhttp.event import GroupMessageEvent, PrivateMessageEvent
 from nonebot.adapters.cqhttp.exception import ActionFailed, NetworkError
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
 from nonebot.log import logger
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
+from nonebot.typing import T_State
 
 from .. import config
 
@@ -27,30 +30,31 @@ if not check_chromium():
 def get_path(*other):
     """获取数据文件绝对路径"""
     if config.haruka_dir:
-        dir_path = Path(config.haruka_dir).absolute()
+        dir_path = Path(config.haruka_dir).resolve()
     else:
         dir_path = Path.cwd().joinpath('data')
         # dir_path = Path.cwd().joinpath('data', 'haruka_bot')
     return str(dir_path.joinpath(*other))
 
 
-async def permission_check(bot: Bot, event: MessageEvent, state: dict):
-    from ..database import Config
-    if event.message_type == 'private':
+async def permission_check(bot: Bot,
+                           event: Union[GroupMessageEvent, PrivateMessageEvent],
+                           state: T_State):
+    from ..database import DB
+    if isinstance(event, PrivateMessageEvent):
         return
-    group_id = str(event.group_id)
-    with Config() as config:
-        if config.get_admin(group_id):
-            if not await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event):
-                await bot.send(event, '权限不足，目前只有管理员才能使用')
-                raise FinishedException
+    async with DB() as db:
+        if (await db.get_admin(event.group_id) and
+            not await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event)):
+            await bot.send(event, '权限不足，目前只有管理员才能使用')
+            raise FinishedException
 
 
 def to_me():
     if config.haruka_to_me:
         from nonebot.rule import to_me
         return to_me()
-    async def _to_me(bot: Bot, event: Event, state: dict):
+    async def _to_me(bot: Bot, event: Event, state: T_State) -> bool:
         return True
     return Rule(_to_me)
 
