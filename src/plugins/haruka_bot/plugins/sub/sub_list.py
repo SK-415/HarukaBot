@@ -19,10 +19,11 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
     async with DB() as db:
         subs = await db.get_sub_list(event.message_type, get_type_id(event))
         for sub in subs:
+            user = await db.get_user(sub.uid)
             message += (
-                f"【{(await db.get_user(sub.uid)).name}】" +
-                f"直播推送：{'开' if sub.live else '关'}，" +
-                f"动态推送：{'开' if sub.dynamic else '关'}" +
-                f"（{sub.uid}）\n"
+                f"{user.name}（{user.uid}）"
+                f"直播：{'开' if sub.live else '关'}，"
+                f"动态：{'开' if sub.dynamic else '关'}，"
+                f"全体：{'开' if sub.at else '关'}\n"
             )
     await sub_list.finish(message)
