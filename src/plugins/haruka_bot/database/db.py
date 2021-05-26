@@ -178,13 +178,19 @@ class DB:
             func['index'] += 1
             return func['list'][index]
 
-    async def set_permission(self, group_id, switch):
+    async def set_permission(self, group_id, switch) -> bool:
         """设置指定位置权限"""
 
         # TODO 重构为 set_group
         group = self.session.query(Group).filter(Group.id == group_id).first()
+        if not group:
+            group = Group(id=group_id, admin=switch)
+            self.session.add(group)
+            return True
+        if group.admin == switch:
+            return False
         group.admin = switch
-        # self.session.commit()
+        return True
 
     async def set_sub(self, conf, switch, uid=None, type_=None, type_id=None):
         """开关订阅设置"""
