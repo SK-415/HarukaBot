@@ -10,10 +10,9 @@ from urllib.parse import urlencode
 
 import httpx
 import qrcode
-from httpx import ConnectTimeout, ReadTimeout
+from httpx import ConnectTimeout, ReadTimeout, ConnectError
 from nonebot.log import logger
 from httpx._types import URLTypes
-from httpx._models import Response
 
 from ..database import Config
 
@@ -47,6 +46,7 @@ class BiliReq():
             'https': None
         }
 
+    # TODO 制作一个装饰器捕获请求时的异常并用更友好的方式打印出来
     async def request(self, method, url, **kw) -> Dict:
         async with httpx.AsyncClient(proxies=self.proxies) as client:
             try:
