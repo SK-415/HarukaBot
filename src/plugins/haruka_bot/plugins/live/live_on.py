@@ -26,6 +26,6 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
         if await db.set_sub('live', True, uid=state['uid'],
                             type_=event.message_type,
                             type_id=get_type_id(event)):
-            user = (await db.get_user(state['uid']))
+            user = await db.get_user(state['uid'])
             await live_on.finish(f"已开启 {user.name}（{user.uid}）的直播推送")
         await live_on.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")
