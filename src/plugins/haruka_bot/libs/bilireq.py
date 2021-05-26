@@ -47,7 +47,7 @@ class BiliReq():
             'https': None
         }
 
-    async def request(self, method, url, **kw):
+    async def request(self, method, url, **kw) -> Dict:
         async with httpx.AsyncClient(proxies=self.proxies) as client:
             try:
                 r = await client.request(method, url, **kw)
