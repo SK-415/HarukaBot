@@ -12,6 +12,7 @@ from ..utils import get_path
 uid_list = {'live': {'list': [], 'index': 0},
             'dynamic': {'list': [], 'index': 0}}
 
+# TODO 注释所有 session.commit() 同意在结束时提交
 class DB:
     """数据库交互类，与增删改查无关的部分不应该在这里面实现"""
 
@@ -36,7 +37,7 @@ class DB:
         # TODO 自定义默认权限
         group = Group(id=group_id, admin=True)
         self.session.add(group)
-        self.session.commit()
+        # self.session.commit()
 
     async def add_sub(self, uid, type_, type_id, bot_id, name, live=True,
                       dynamic=True, at=False) -> bool:
@@ -58,7 +59,7 @@ class DB:
                   bot_id=bot_id)
         self.session.add(sub)
         await self.update_uid_list()
-        self.session.commit()
+        # self.session.commit()
         return True
 
     async def add_user(self, uid, name):
@@ -66,7 +67,7 @@ class DB:
 
         user = User(uid=uid, name=name)
         self.session.add(user)
-        self.session.commit()
+        # self.session.commit()
 
 
     async def delete_group(self, group_id) -> bool:
@@ -78,7 +79,7 @@ class DB:
 
         query = self.session.query(Group).filter(Group.id == group_id)
         query.delete()
-        self.session.commit()
+        # self.session.commit()
         return True
 
     async def delete_sub(self, uid, type_, type_id) -> bool:
@@ -91,7 +92,7 @@ class DB:
         query.delete()
         await self.delete_user(uid)
         await self.update_uid_list()
-        self.session.commit()
+        # self.session.commit()
         return True
 
     async def delete_sub_list(self, type_, type_id):
@@ -100,7 +101,7 @@ class DB:
         subs = await self.get_subs(type_=type_, type_id=type_id)
         uids = [sub.uid for sub in subs]
         subs.delete()
-        self.session.commit()
+        # self.session.commit()
         for uid in uids:
             await self.delete_user(uid)
         if type_ == 'group':
@@ -115,7 +116,7 @@ class DB:
             return False
         query = self.session.query(User).filter(User.uid == uid)
         query.delete()
-        self.session.commit()
+        # self.session.commit()
         return True
 
     async def get_admin(self, group_id) -> bool:
@@ -183,7 +184,7 @@ class DB:
         # TODO 重构为 set_group
         group = self.session.query(Group).filter(Group.id == group_id).first()
         group.admin = switch
-        self.session.commit()
+        # self.session.commit()
 
     async def set_sub(self, conf, switch, uid=None, type_=None, type_id=None):
         """开关订阅设置"""
@@ -193,7 +194,7 @@ class DB:
             return False
         for sub in subs:
             setattr(sub, conf, switch)
-        self.session.commit()
+        # self.session.commit()
         return True
 
     async def update_uid_list(self):
