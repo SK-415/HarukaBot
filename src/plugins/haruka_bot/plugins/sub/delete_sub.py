@@ -33,4 +33,4 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
 
     if result:
         await delete_sub.finish(f"已取关 {name}（{uid}）")
-    await delete_sub.finish("UID未关注")
+    await delete_sub.finish(f"UID（{uid}）未关注")

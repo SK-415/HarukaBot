@@ -44,4 +44,4 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
                                   get_type_id(event), event.self_id, name)
     if result:
         await add_sub.finish(f"已关注 {name}（{uid}）")
-    await add_sub.finish(f"请勿重复关注 {name}（{uid}）")
+    await add_sub.finish(f"{name}（{uid}）已经关注了")
