@@ -13,7 +13,7 @@ sub_list.handle()(permission_check)
 
 @sub_list.handle()
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    """返回当前位置的订阅列表"""
+    """发送当前位置的订阅列表"""
 
     message = "以下为当前位置的订阅列表：\n\n"
     async with DB() as db:
