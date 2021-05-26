@@ -14,5 +14,5 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
     message = f"当前 HarukaBot 版本：{__version__}\n" +\
         "\n使用中遇到问题欢迎加群反馈，\n" +\
         "群号：629574472\n" +\
-        "\n常见问题：https://haruka-bot.live/usage/faq.html"
+        "\n常见问题：https://haruka-bot.sk415.icu/usage/faq.html"
     await get_version.finish(message)
