@@ -1,12 +1,16 @@
-from typing import List, Optional
+import json
+from typing import Dict, List, Optional
 import nonebot
+from packaging.version import Version
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.orm.query import Query
 
 from .models import Base, Group, Sub, User
+from .models import Version as DBVersion
 from ..utils import get_path
+from ..version import __version__
 
 
 uid_list = {'live': {'list': [], 'index': 0},
@@ -28,14 +32,14 @@ class DB:
         self.session.commit()
         self.session.close()
 
-    async def add_group(self, group_id):
+    async def add_group(self, group_id, admin=True):
         """创建群设置"""
 
         if self.session.query(Group).filter(Group.id == group_id).first():
             # 权限开关已经创建过了
             return
         # TODO 自定义默认权限
-        group = Group(id=group_id, admin=True)
+        group = Group(id=group_id, admin=admin)
         self.session.add(group)
         # self.session.commit()
 
@@ -212,9 +216,47 @@ class DB:
         uid_list['dynamic']['list'] = list(set([sub.uid for sub in subs
                                                 if sub.dynamic]))
 
-    @classmethod
-    async def get_name(cls, uid):
-        """根据 UID 获取缓存昵称"""
+    async def get_version(self):
+        """获取版本号"""
+
+        version = self.session.query(DBVersion).first()
+        if not version:
+            version = DBVersion(version = __version__)
+            self.session.add(version)
+        return version
+
+    async def _need_update(self):
+        """根据版本号检查是否需要更新"""
+        
+        haruka_version = Version(__version__)
+        db_version = Version((await self.get_version()).version)
+        return haruka_version > db_version
+    
+    async def update_version(self):
+        """更新版本号"""
+        
+        with open(get_path('config.json'), 'r', encoding='utf-8') as f:
+            old_db = json.loads(f.read())
+        subs: Dict[int, Dict] = old_db['_default']
+        groups: Dict[int, Dict] = old_db['groups']
+        for sub in subs.values():
+            await self.add_sub(
+                uid = sub['uid'],
+                type_ = sub['type'],
+                type_id = sub['type_id'],
+                bot_id = sub['bot_id'],
+                name = sub['name'],
+                live = sub['live'],
+                dynamic = sub['dynamic'],
+                at = sub['at']
+            )
+        for group in groups.values():
+            await self.set_permission(group['group_id'], group['admin'])
+        version = await self.get_version()
+        version.version = __version__ # type: ignore
+
+    async def backup(self):
+        """更新数据库"""
         pass
 
     @classmethod
@@ -227,21 +269,9 @@ class DB:
         """更新登录信息"""
         pass
 
-    async def new_version(self):
-        """检查是否为最新版本"""
-        pass
-
-    async def update_version(self):
-        """更新版本号"""
-        pass
-
-    @classmethod
-    async def update_config(cls):
-        """更新数据库"""
-        pass
-
 async def init_push_list():
     async with DB() as db:
+        await db.update_version()
         await db.update_uid_list()
 
 nonebot.get_driver().on_startup(init_push_list)
