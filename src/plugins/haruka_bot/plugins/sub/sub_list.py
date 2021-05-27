@@ -15,7 +15,7 @@ sub_list.handle()(permission_check)
 async def _(bot: Bot, event: MessageEvent, state: T_State):
     """发送当前位置的订阅列表"""
 
-    message = "以下为当前位置的关注列表：\n\n"
+    message = "关注列表（所有群/好友都是分开的）\n\n"
     async with DB() as db:
         subs = await db.get_sub_list(event.message_type, get_type_id(event))
         for sub in subs:
