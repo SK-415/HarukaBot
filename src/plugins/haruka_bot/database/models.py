@@ -28,3 +28,8 @@ class Group(Base):
 
     id = Column(Integer(), primary_key=True)
     admin = Column(Boolean())
+
+class Version(Base):
+    __tablename__ = "version"
+
+    version = Column(String(30), primary_key=True)

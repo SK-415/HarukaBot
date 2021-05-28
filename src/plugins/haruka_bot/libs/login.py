@@ -7,8 +7,9 @@ import httpx
 import qrcode
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot, Event
-from nonebot.permission import (GROUP_ADMIN, GROUP_OWNER, PRIVATE_FRIEND,
-                                SUPERUSER)
+from nonebot.adapters.cqhttp.permission import (GROUP_ADMIN, GROUP_OWNER,
+                                                PRIVATE_FRIEND)
+from nonebot.permission import SUPERUSER
 from nonebot.rule import to_me
 
 login = on_command('登录', rule=to_me(), permission=SUPERUSER, 
