@@ -14,8 +14,6 @@ from httpx import ConnectTimeout, ReadTimeout, ConnectError
 from nonebot.log import logger
 from httpx._types import URLTypes
 
-from ..database import Config
-
 
 class RequestError(Exception):
     def __init__(self, code, message=None, data=None):
@@ -40,7 +38,7 @@ class BiliReq():
               Safari/537.36 Edg/87.0.664.60',
             'Referer': 'https://www.bilibili.com/'
         }
-        self.login = Config.get_login()
+        # self.login = Config.get_login()
         self.proxies: Dict[URLTypes, Any] = {
             'http': None,
             'https': None
@@ -84,19 +82,19 @@ class BiliReq():
         url = f'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?host_uid={uid}&offset_dynamic_id=0&need_top=0'
         return await self.get(url, headers=self.default_headers)
     
-    async def get_new_dynamics(self):
-        url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new'
-        params = {'type_list': 268435455, 'access_key': self.login['access_token']}
+    # async def get_new_dynamics(self):
+    #     url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new'
+    #     params = {'type_list': 268435455, 'access_key': self.login['access_token']}
         return await self.get(url, params=params)
 
-    async def get_history_dynamics(self, offset_id):
-        url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_history'
-        params = {
-            'type_list': 268435455,
-            'access_key': self.login['access_token'],
-            'offset_dynamic_id': offset_id
-        }
-        return await self.get(url, params=params)
+    # async def get_history_dynamics(self, offset_id):
+    #     url = 'https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_history'
+    #     params = {
+    #         'type_list': 268435455,
+    #         'access_key': self.login['access_token'],
+    #         'offset_dynamic_id': offset_id
+    #     }
+    #     return await self.get(url, params=params)
     
     async def get_live_list(self, uids):
         """根据 UID 获取直播间信息列表"""
@@ -105,10 +103,10 @@ class BiliReq():
         data = {'uids': uids}
         return await self.post(url, headers=self.default_headers, data=json.dumps(data))
     
-    async def get_is_live_list(self):
-        url = 'https://api.live.bilibili.com/xlive/app-interface/v1/relation/liveAnchor'
-        params = {'access_key': self.login['access_token']}
-        return await self.get(url, params=params)
+    # async def get_is_live_list(self):
+    #     url = 'https://api.live.bilibili.com/xlive/app-interface/v1/relation/liveAnchor'
+    #     params = {'access_key': self.login['access_token']}
+    #     return await self.get(url, params=params)
     
     async def get_live_info(self, uid):
         url = f'https://api.live.bilibili.com/room/v1/Room/getRoomInfoOld?mid={uid}'
@@ -122,43 +120,43 @@ class BiliReq():
             f"{urlencode(items)}{self.appsec}".encode('utf-8')
             ).hexdigest()
 
-    async def get_qr(self):
-        """QR码 登录"""
+    # async def get_qr(self):
+    #     """QR码 登录"""
 
-        params = {
-            'appkey': self.appkey,
-            'local_id': 0,
-            'ts': int(time.time())
-        }
-        params['sign'] = self._sign(params)
-        url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
-        r = await self.post(url, params=params)
-        self.auth_code = r['auth_code']
+    #     params = {
+    #         'appkey': self.appkey,
+    #         'local_id': 0,
+    #         'ts': int(time.time())
+    #     }
+    #     params['sign'] = self._sign(params)
+    #     url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
+    #     r = await self.post(url, params=params)
+    #     self.auth_code = r['auth_code']
 
-        qr = qrcode.QRCode()
-        qr.add_data(r['url'])
-        img = qr.make_image()
-        buf = io.BytesIO()
-        img.save(buf, format='PNG')
-        heximage = base64.b64encode(buf.getvalue())
-        self.qr_img = heximage.decode()
-        return self.qr_img
+    #     qr = qrcode.QRCode()
+    #     qr.add_data(r['url'])
+    #     img = qr.make_image()
+    #     buf = io.BytesIO()
+    #     img.save(buf, format='PNG')
+    #     heximage = base64.b64encode(buf.getvalue())
+    #     self.qr_img = heximage.decode()
+    #     return self.qr_img
 
-    async def qr_login(self):
-        params = {
-            'appkey': self.appkey,
-            'local_id': 0,
-            'auth_code': self.auth_code,
-            'ts': int(time.time())
-        }
-        params['sign'] = self._sign(params)
-        url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/poll"
-        while True:
-            try:
-                tokens = await self.post(url, params=params)
-                Config.update_login(tokens)
-                return "登入成功"
-            except RequestError as e:
-                if e.code == 86038:
-                    return "二维码已失效，请重新登录"
-                await asyncio.sleep(1)
+    # async def qr_login(self):
+    #     params = {
+    #         'appkey': self.appkey,
+    #         'local_id': 0,
+    #         'auth_code': self.auth_code,
+    #         'ts': int(time.time())
+    #     }
+    #     params['sign'] = self._sign(params)
+    #     url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/poll"
+    #     while True:
+    #         try:
+    #             tokens = await self.post(url, params=params)
+    #             Config.update_login(tokens)
+    #             return "登入成功"
+    #         except RequestError as e:
+    #             if e.code == 86038:
+    #                 return "二维码已失效，请重新登录"
+    #             await asyncio.sleep(1)

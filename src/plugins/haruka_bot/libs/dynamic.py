@@ -3,11 +3,8 @@ import traceback
 
 from http.client import BadStatusLine
 from nonebot.log import logger
-from nonebot.exception import NoLogException
 from pyppeteer import launch
 from pyppeteer.errors import TimeoutError
-
-from ..database import Config
 
 
 class Dynamic():
@@ -22,7 +19,9 @@ class Dynamic():
         self.time = dynamic['desc']['timestamp']
         # self.origin_id = dynamic['desc']['orig_dy_id']
         self.uid = dynamic['desc']['user_profile']['info']['uid']
-        self.name = dynamic['desc']['user_profile']['info'].get('uname', Config.get_name(self.uid))
+        # TODO 考虑不再从数据库，而是通过card拿名字
+        self.name = dynamic['desc']['user_profile']['info']['uname']
+        # self.name = dynamic['desc']['user_profile']['info'].get('uname', Config.get_name(self.uid))
 
     async def format(self):
         type_msg = {
