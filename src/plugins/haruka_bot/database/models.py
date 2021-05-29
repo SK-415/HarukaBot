@@ -1,35 +1,26 @@
-from sqlalchemy import Boolean, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-
-Base = declarative_base()
+from tortoise.models import Model
+from tortoise.fields.data import CharField, IntField, BooleanField
 
 
-class Sub(Base):
-    __tablename__ = "subs"
-
-    type = Column(String(10), primary_key=True)
-    type_id = Column(Integer(), primary_key=True)
-    uid = Column(Integer(), primary_key=True)
-    live = Column(Boolean())
-    dynamic = Column(Boolean())
-    at = Column(Boolean())
-    bot_id = Column(Integer())
+class Sub(Model):
+    type = CharField(max_length=10)
+    type_id = IntField()
+    uid = IntField()
+    live = BooleanField()
+    dynamic = BooleanField()
+    at = BooleanField()
+    bot_id = IntField()
 
 
-class User(Base):
-    __tablename__ = "users"
-
-    uid = Column(Integer(), primary_key=True)
-    name = Column(String(20))
+class User(Model):
+    uid = IntField(pk=True)
+    name = CharField(max_length=20)
 
 
-class Group(Base):
-    __tablename__ = "groups"
+class Group(Model):
+    id = IntField(pk=True)
+    admin = BooleanField()
 
-    id = Column(Integer(), primary_key=True)
-    admin = Column(Boolean())
 
-class Version(Base):
-    __tablename__ = "version"
-
-    version = Column(String(30), primary_key=True)
+class Version(Model):
+    version = CharField(max_length=30)
