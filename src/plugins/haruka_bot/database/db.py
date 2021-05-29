@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 import nonebot
 from packaging.version import Version
 
-from tortoise import Tortoise, run_async
+from tortoise import Tortoise
 from tortoise.query_utils import Q
 from tortoise.queryset import QuerySet
 
@@ -12,7 +12,6 @@ from .models import Group, Sub, User
 from .models import Version as DBVersion
 from ..utils import get_path
 from ..version import __version__
-from pprint import pprint
 
 
 uid_list = {'live': {'list': [], 'index': 0},
