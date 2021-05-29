@@ -30,7 +30,7 @@ httpx = "^0.17.0"
 nonebot-adapter-cqhttp = "^2.0.0-alpha.13"
 nonebot2 = "^2.0.0a13.post1"
 pillow = "^8.2.0"
-sqlalchemy = "^1.4.15"
+tortoise-orm = {extras = ["asyncpg"], version = "^0.17.3"}
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
