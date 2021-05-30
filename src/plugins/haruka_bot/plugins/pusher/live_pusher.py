@@ -38,6 +38,11 @@ async def live_sched():
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'live')
                 for sets in push_list:
-                    at_msg = '[CQ:at,qq=all] ' if sets.at else ''
-                    await safe_send(sets.bot_id, sets.type, sets.type_id, at_msg + live_msg)
+                    await safe_send(
+                        bot_id = sets.bot_id,
+                        send_type = sets.type,
+                        type_id = sets.type_id,
+                        message = live_msg,
+                        at = sets.at
+                    )
         status[uid] = new_status
