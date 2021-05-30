@@ -59,7 +59,7 @@ def to_me():
     return Rule(_to_me)
 
 
-async def safe_send(bot_id, send_type, type_id, message):
+async def safe_send(bot_id, send_type, type_id, message, at):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
     
     try:
@@ -67,6 +67,9 @@ async def safe_send(bot_id, send_type, type_id, message):
     except KeyError:
         logger.error(f"推送失败，Bot ID：{bot_id} 未连接")
         return
+    
+    if at and (await bot.get_group_at_all_remain(group_id=type_id))['can_at_all']:
+        message = '[CQ:at,qq=all] ' + message
 
     try:
         return await bot.call_api('send_'+send_type+'_msg', **{
