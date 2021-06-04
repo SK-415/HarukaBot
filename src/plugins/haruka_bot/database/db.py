@@ -264,6 +264,7 @@ async def init_push_list():
         await db.update_uid_list()
 
 
+# TODO 检查更新日志
 nonebot.get_driver().on_startup(DB.init)
 nonebot.get_driver().on_shutdown(Tortoise.close_connections)
 nonebot.get_driver().on_startup(init_push_list)

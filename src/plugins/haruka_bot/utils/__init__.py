@@ -17,15 +17,6 @@ from nonebot.typing import T_State
 
 from .. import config
 
-# 更换 Chromium 下载地址为非 https 淘宝源
-os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://npm.taobao.org/mirrors'
-# os.environ['PYPPETEER_DOWNLOAD_HOST'] = 'http://storage.googleapis.com'
-from pyppeteer.chromium_downloader import check_chromium, download_chromium
-
-# 检查 Chromium 是否下载
-if not check_chromium():
-    download_chromium()
-
 
 def get_path(*other):
     """获取数据文件绝对路径"""
@@ -59,6 +50,7 @@ def to_me():
     return Rule(_to_me)
 
 
+# TODO 风控提示日志
 async def safe_send(bot_id, send_type, type_id, message, at=False):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
     
@@ -92,3 +84,6 @@ scheduler = require('nonebot_plugin_apscheduler').scheduler
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在
 if not Path(get_path()).is_dir():
     Path(get_path()).mkdir(parents=True)
+
+from . import patch
+from .browser import get_dynamic_screenshot

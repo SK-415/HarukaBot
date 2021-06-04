@@ -1,3 +1,5 @@
+import asyncio
+import traceback
 from datetime import datetime, timedelta
 
 from nonebot.log import logger
@@ -5,7 +7,7 @@ from nonebot.log import logger
 from ...libs.bilireq import BiliReq
 from ...database import DB
 from ...libs.dynamic import Dynamic
-from ...utils import safe_send, scheduler
+from ...utils import safe_send, scheduler, get_dynamic_screenshot
 
 last_time = {}
 
@@ -36,16 +38,22 @@ async def dy_sched():
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
         dynamic = Dynamic(dynamic)
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
-            try:
-                # TODO 怎么好像一截图就会卡死的样子
-                await dynamic.get_screenshot()
-            except AttributeError:
-                return
-            await dynamic.format()
+            image = None
+            for _ in range(3):
+                try:
+                    image = await get_dynamic_screenshot(dynamic.url)
+                    break
+                except Exception as e:
+                    logger.error("截图失败，以下为错误日志:")
+                    logger.error(traceback(e))
+                await asyncio.sleep(0.1)
+            if not image:
+                logger.error("已达到重试上限，将在下个轮询中重新尝试")
+            await dynamic.format(image)
 
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'dynamic')
                 for sets in push_list:
-                    await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message, False)
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message)
 
             last_time[uid] = dynamic.time
