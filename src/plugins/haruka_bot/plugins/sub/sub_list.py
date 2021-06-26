@@ -20,6 +20,7 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
         subs = await db.get_sub_list(event.message_type, get_type_id(event))
         for sub in subs:
             user = await db.get_user(sub.uid)
+            assert user is not None
             message += (
                 f"{user.name}（{user.uid}）"
                 f"直播：{'开' if sub.live else '关'}，"

@@ -27,5 +27,6 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
                             type_=event.message_type,
                             type_id=get_type_id(event)):
             user = await db.get_user(state['uid'])
+            assert user is not None
             await dynamic_on.finish(f"已开启 {user.name}（{user.uid}）的动态推送")
         await dynamic_on.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")

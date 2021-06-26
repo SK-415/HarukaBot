@@ -19,7 +19,9 @@ async def dy_sched():
         uid = await db.next_uid('dynamic')
         if not uid:
             return
-        name = (await db.get_user(uid)).name
+        user = await db.get_user(uid)
+        assert user is not None
+        name = user.name
 
     logger.debug(f'爬取动态 {name}（{uid}）')
     br = BiliReq()

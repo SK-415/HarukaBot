@@ -27,5 +27,6 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
                             type_=event.message_type,
                             type_id=get_type_id(event)):
             user = await db.get_user(state['uid'])
+            assert user is not None
             await live_off.finish(f"已关闭 {user.name}（{user.uid}）的直播推送")
         await live_off.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")

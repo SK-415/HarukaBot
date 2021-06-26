@@ -34,5 +34,6 @@ async def _(bot: Bot, event: Union[PrivateMessageEvent, GroupMessageEvent],
         if await db.set_sub('at', True, uid=state['uid'], type_='group',
                             type_id=event.group_id):
             user = await db.get_user(state['uid'])
+            assert user is not None
             await at_on.finish(f"已开启 {user.name}（{user.uid}）直播推送的@全体")
         await at_on.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")
