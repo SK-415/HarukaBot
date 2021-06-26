@@ -1,9 +1,9 @@
+from nonebot.adapters.cqhttp.message import Message, MessageSegment
 from nonebot.log import logger
 
 from ...database import DB
-from ...utils import safe_send, scheduler
 from ...libs.bilireq import BiliReq
-
+from ...utils import safe_send, scheduler
 
 status = {}
 
@@ -34,7 +34,8 @@ async def live_sched():
             title = info['title']
             cover = info['cover_from_user'] if info['cover_from_user'] else info['keyframe']
 
-            live_msg = f"{name} 开播啦！\n\n{title}\n传送门→{url}\n[CQ:image,file={cover}]\n"
+            live_msg = (Message(f"{name} 开播啦！\n\n{title}\n传送门→{url}\n") + 
+                        MessageSegment.image(cover))
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'live')
                 for sets in push_list:

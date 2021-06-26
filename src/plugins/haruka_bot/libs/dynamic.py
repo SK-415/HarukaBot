@@ -1,3 +1,6 @@
+from nonebot.adapters.cqhttp.message import MessageSegment
+
+
 class Dynamic():
     def __init__(self, dynamic):
         # self.origin = json.loads(self.card['origin'])
@@ -22,5 +25,6 @@ class Dynamic():
             64: "发布了新专栏",
             256: "发布了新音频"
         }
-        self.message = f"{self.name}{type_msg.get(self.type, type_msg[0])}：" +\
-            f"\n\n传送门→{self.url}[CQ:image,file=base64://{img}]\n"
+        self.message = (f"{self.name}{type_msg.get(self.type, type_msg[0])}：" +
+                        f"\n\n传送门→{self.url}" +
+                        MessageSegment.image(f"base64://{img}"))

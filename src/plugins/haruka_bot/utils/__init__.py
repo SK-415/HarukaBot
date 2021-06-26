@@ -1,12 +1,12 @@
-import os
 from pathlib import Path
 from typing import Union
 
 import nonebot
 from nonebot import require
 from nonebot.adapters import Bot, Event
-from nonebot.adapters.cqhttp import MessageEvent
-from nonebot.adapters.cqhttp.event import GroupMessageEvent, PrivateMessageEvent
+from nonebot.adapters.cqhttp import MessageEvent, MessageSegment
+from nonebot.adapters.cqhttp.event import (GroupMessageEvent,
+                                           PrivateMessageEvent)
 from nonebot.adapters.cqhttp.exception import ActionFailed, NetworkError
 from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
@@ -60,8 +60,9 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
         logger.error(f"推送失败，Bot ID：{bot_id} 未连接")
         return
     
-    if at and (await bot.get_group_at_all_remain(group_id=type_id))['can_at_all']:
-        message = '[CQ:at,qq=all] ' + message
+    if at and (await bot.get_group_at_all_remain(group_id=type_id)
+               )['can_at_all']:
+        message = MessageSegment.at('all') + message
 
     try:
         return await bot.call_api('send_'+send_type+'_msg', **{
