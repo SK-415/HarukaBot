@@ -25,6 +25,7 @@ class Dynamic():
             64: "发布了新专栏",
             256: "发布了新音频"
         }
-        self.message = (f"{self.name}{type_msg.get(self.type, type_msg[0])}：" +
-                        f"\n\n传送门→{self.url}" +
-                        MessageSegment.image(f"base64://{img}"))
+        self.message = (f"{self.name} " +
+                        f"{type_msg.get(self.type, type_msg[0])}：\n" +
+                        MessageSegment.image(f"base64://{img}") +
+                        f"\n{self.url}")

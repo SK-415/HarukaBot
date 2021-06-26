@@ -34,8 +34,8 @@ async def live_sched():
             title = info['title']
             cover = info['cover_from_user'] if info['cover_from_user'] else info['keyframe']
 
-            live_msg = (Message(f"{name} 开播啦！\n\n{title}\n传送门→{url}\n") + 
-                        MessageSegment.image(cover))
+            live_msg = (f"{name} 正在直播：\n{title}\n" + 
+                        MessageSegment.image(cover) + f"\n{url}")
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'live')
                 for sets in push_list:
