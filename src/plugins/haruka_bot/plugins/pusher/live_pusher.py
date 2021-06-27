@@ -32,7 +32,8 @@ async def live_sched():
             url = 'https://live.bilibili.com/' + str(room_id)
             name = info['uname']
             title = info['title']
-            cover = info['cover_from_user'] if info['cover_from_user'] else info['keyframe']
+            cover = (info['cover_from_user'] if info['cover_from_user']
+                                             else info['keyframe'])
 
             live_msg = (f"{name} 正在直播：\n{title}\n" + 
                         MessageSegment.image(cover) + f"\n{url}")
@@ -46,4 +47,5 @@ async def live_sched():
                         message = live_msg,
                         at = sets.at
                     )
+                await db.update_user(uid, name)
         status[uid] = new_status

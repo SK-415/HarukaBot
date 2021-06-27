@@ -122,6 +122,15 @@ class DB:
             return True
         return bool(group.admin)
 
+    @classmethod
+    async def get_name(cls, uid) -> Optional[str]:
+        """获取 UP 主昵称"""
+
+        user = await cls.get_user(uid)
+        if user:
+            return user.name
+        return None
+
     async def get_push_list(self, uid, func) -> List[Sub]:
         """根据类型和 UID 获取需要推送的 QQ 列表"""
         
@@ -155,10 +164,22 @@ class DB:
         
         return uid_list[func]['list']        
 
-    async def get_user(self, uid: int) -> Optional[User]:
+    @classmethod
+    async def get_user(cls, uid: int) -> Optional[User]:
         """获取 UP 主信息，没有就返回 None"""
         
         return await User.filter(Q(uid=uid)).first()
+
+    async def _need_update(self):
+        """根据版本号检查是否需要更新"""
+
+        haruka_version = Version(__version__)
+        db_version = await DBVersion.first()
+        if not db_version:
+            await DBVersion.create(version=__version__)
+            return True
+        db_version = Version(db_version.version)
+        return haruka_version > db_version
 
     async def next_uid(self, func):
         """获取下一个要爬取的 UID"""
@@ -206,17 +227,12 @@ class DB:
         uid_list['dynamic']['list'] = list(set([sub.uid async for sub in subs
                                                 if sub.dynamic]))
 
-    async def _need_update(self):
-        """根据版本号检查是否需要更新"""
+    @classmethod
+    async def update_user(cls, uid: int, name: str) -> bool:
+        """更新 UP 主信息"""
 
-        haruka_version = Version(__version__)
-        db_version = await DBVersion.first()
-        if not db_version:
-            await DBVersion.create(version=__version__)
-            return True
-        db_version = Version(db_version.version)
-        return haruka_version > db_version
-    
+        return bool(await User.filter(Q(uid=uid)).update(name=name))
+
     async def update_version(self):
         """更新版本号"""
 
@@ -244,7 +260,7 @@ class DB:
         DBVersion.all().update(version=__version__)
 
     async def backup(self):
-        """更新数据库"""
+        """备份数据库"""
         pass
 
     @classmethod
@@ -264,7 +280,7 @@ async def init_push_list():
         await db.update_uid_list()
 
 
-# TODO 检查更新日志
+# TODO 添加检查更新的日志
 nonebot.get_driver().on_startup(DB.init)
 nonebot.get_driver().on_shutdown(Tortoise.close_connections)
 nonebot.get_driver().on_startup(init_push_list)
