@@ -50,14 +50,13 @@ def to_me():
     return Rule(_to_me)
 
 
-# TODO 风控提示日志
 async def safe_send(bot_id, send_type, type_id, message, at=False):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
     
     try:
         bot = nonebot.get_bots()[str(bot_id)]
     except KeyError:
-        logger.error(f"推送失败，Bot ID：{bot_id} 未连接")
+        logger.error(f"推送失败，Bot（{bot_id}）未连接")
         return
     
     if at and (await bot.get_group_at_all_remain(group_id=type_id)
@@ -70,9 +69,10 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
         'user_id' if send_type == 'private' else 'group_id': type_id
         })
     except ActionFailed as e:
-        logger.error(f"推送失败（操作失败），错误信息：{e.info}")
+        url = "https://haruka-bot.sk415.icu/usage/faq.html#机器人不发消息也没反应"
+        logger.error(f"推送失败，账号可能被风控（{url}），错误信息：{e.info}")
     except NetworkError as e:
-        logger.error(f"推送失败（网络错误），错误信息：{e.msg}")
+        logger.error(f"推送失败，请检查网络连接，错误信息：{e.msg}")
 
 def get_type_id(event: MessageEvent):
     return (event.group_id if isinstance(event, GroupMessageEvent)

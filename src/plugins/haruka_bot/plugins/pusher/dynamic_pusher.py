@@ -40,6 +40,7 @@ async def dy_sched():
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
         dynamic = Dynamic(dynamic)
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
+            logger.info(f"检测到新动态（{dynamic.id}）：{name}（{uid}）")
             image = None
             for _ in range(3):
                 try:

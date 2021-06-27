@@ -45,7 +45,7 @@ async def get_dynamic_screenshot(url):
 
 
 def install():
-    logger.info("检查 Chromium 是否安装")
+    logger.info("正在检查 Chromium 更新")
     import sys
     from playwright.__main__ import main
     sys.argv = ['', 'install', 'chromium']

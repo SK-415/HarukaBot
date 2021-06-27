@@ -34,6 +34,7 @@ async def live_sched():
             title = info['title']
             cover = (info['cover_from_user'] if info['cover_from_user']
                                              else info['keyframe'])
+            logger.info(f"检测到开播：{name}（{uid}）")
 
             live_msg = (f"{name} 正在直播：\n{title}\n" + 
                         MessageSegment.image(cover) + f"\n{url}")

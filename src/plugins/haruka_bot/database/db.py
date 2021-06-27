@@ -239,14 +239,17 @@ class DB:
         if not await self._need_update():
             return
         
+        logger.info("正在更新数据库")        
         DBVersion.all().update(version=__version__)
-    
+        logger.info(f"数据库已更新至 v{__version__}")
+
     async def migrate_from_json(self):
         """从 TinyDB 的 config.json 迁移数据"""
 
         if not Path(get_path('config.json')).exists():
             return
         
+        logger.info("正在从 config.json 迁移数据库")
         with open(get_path('config.json'), 'r', encoding='utf-8') as f:
             old_db = json.loads(f.read())
         subs: Dict[int, Dict] = old_db['_default']
@@ -266,6 +269,7 @@ class DB:
             await self.set_permission(group['group_id'], group['admin'])
         
         Path(get_path('config.json')).rename(get_path('config.json.bak'))
+        logger.info("数据库迁移完成")
 
     async def backup(self):
         """备份数据库"""
@@ -290,6 +294,5 @@ async def init():
         await db.update_uid_list()
 
 
-# TODO 添加检查更新的日志
 get_driver().on_startup(init)
 get_driver().on_shutdown(Tortoise.close_connections)
