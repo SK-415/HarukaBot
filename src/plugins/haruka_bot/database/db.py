@@ -1,18 +1,18 @@
 import json
 from pathlib import Path
 from typing import Dict, List, Optional
-import nonebot
-from packaging.version import Version
 
+from nonebot import get_driver
+from nonebot.log import logger
+from packaging.version import Version
 from tortoise import Tortoise
 from tortoise.query_utils import Q
 from tortoise.queryset import QuerySet
 
-from .models import Group, Sub, User
-from .models import Version as DBVersion
 from ..utils import get_path
 from ..version import __version__
-
+from .models import Group, Sub, User
+from .models import Version as DBVersion
 
 uid_list = {'live': {'list': [], 'index': 0},
             'dynamic': {'list': [], 'index': 0}}
@@ -177,7 +177,7 @@ class DB:
         db_version = await DBVersion.first()
         if not db_version:
             await DBVersion.create(version=__version__)
-            return True
+            return False
         db_version = Version(db_version.version)
         return haruka_version > db_version
 
@@ -238,8 +238,15 @@ class DB:
 
         if not await self._need_update():
             return
+        
+        DBVersion.all().update(version=__version__)
+    
+    async def migrate_from_json(self):
+        """从 TinyDB 的 config.json 迁移数据"""
+
         if not Path(get_path('config.json')).exists():
             return
+        
         with open(get_path('config.json'), 'r', encoding='utf-8') as f:
             old_db = json.loads(f.read())
         subs: Dict[int, Dict] = old_db['_default']
@@ -257,7 +264,8 @@ class DB:
             )
         for group in groups.values():
             await self.set_permission(group['group_id'], group['admin'])
-        DBVersion.all().update(version=__version__)
+        
+        Path(get_path('config.json')).rename(get_path('config.json.bak'))
 
     async def backup(self):
         """备份数据库"""
@@ -274,13 +282,14 @@ class DB:
         pass
 
 
-async def init_push_list():
+async def init():
     async with DB() as db:
+        await db.init()
         await db.update_version()
+        await db.migrate_from_json()
         await db.update_uid_list()
 
 
 # TODO 添加检查更新的日志
-nonebot.get_driver().on_startup(DB.init)
-nonebot.get_driver().on_shutdown(Tortoise.close_connections)
-nonebot.get_driver().on_startup(init_push_list)
+get_driver().on_startup(init)
+get_driver().on_shutdown(Tortoise.close_connections)
