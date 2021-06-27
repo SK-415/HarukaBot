@@ -6,9 +6,10 @@ from urllib.parse import urlsplit
 import httpx
 import qrcode
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot, Event
-from nonebot.permission import (GROUP_ADMIN, GROUP_OWNER, PRIVATE_FRIEND,
-                                SUPERUSER)
+from nonebot.adapters.cqhttp import Bot, Event, MessageSegment
+from nonebot.adapters.cqhttp.permission import (GROUP_ADMIN, GROUP_OWNER,
+                                                PRIVATE_FRIEND)
+from nonebot.permission import SUPERUSER
 from nonebot.rule import to_me
 
 login = on_command('登录', rule=to_me(), permission=SUPERUSER, 
@@ -60,7 +61,7 @@ class User():
         buf = io.BytesIO()
         img.save(buf, format='PNG')
         heximage = base64.b64encode(buf.getvalue())
-        self.qrb64 = f'[CQ:image,file=base64://{heximage.decode()}]'
+        self.qrb64 = MessageSegment.image(f"base64://{heximage.decode()}")
         return self.qrb64
 
     async def login_check(self):

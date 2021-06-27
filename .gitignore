@@ -10,6 +10,7 @@ sk_bot/
 _sk_bot/
 out/
 dist/
+_demo/
 
 .env
 .env.dev

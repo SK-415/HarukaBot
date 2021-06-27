@@ -194,7 +194,7 @@
   示例版本：v1.2.3
   <Messenger :messages="[
       { position: 'right', msg: '<a>@HarukaBot</a> 版本信息' },
-      { position: 'left', msg: '当前 HarukaBot 版本：1.2.3\n\n使用中遇到问题欢迎加群反馈，\n群号：629574472\n\n常见问题：https://www.haruka-bot.live/usage/faq.html' }
+      { position: 'left', msg: '当前 HarukaBot 版本：1.2.3\n\n使用中遇到问题欢迎加群反馈，\n群号：629574472\n\n常见问题：https://haruka-bot.live/usage/faq.html' }
       ]"/>
   :::
 </ClientOnly>

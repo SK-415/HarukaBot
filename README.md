@@ -9,7 +9,7 @@ logo 画师：[@秦无](https://space.bilibili.com/4668826 )
 [![VERSION](https://img.shields.io/pypi/v/haruka-bot)](https://haruka-bot.live/about/CHANGELOG.html)
 [![time tracker](https://wakatime.com/badge/github/SK-415/HarukaBot.svg )](https://wakatime.com/badge/github/SK-415/HarukaBot)
 [![qq group](https://img.shields.io/badge/QQ%E7%BE%A4-629574472-orange )](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)
-[![docs](https://img.shields.io/badge/%E6%96%87%E6%A1%A3-%E7%82%B9%E5%87%BB%E6%9F%A5%E7%9C%8B-green)](https://haruka-bot.live/)
+[![docs](https://img.shields.io/badge/%E6%96%87%E6%A1%A3-%E7%82%B9%E5%87%BB%E6%9F%A5%E7%9C%8B-green)](https://haruka-bot.sk415.icu)
 
 ## 简介
 

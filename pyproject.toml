@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.2.3"
+version = "1.3.0"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "AGPL-3.0-or-later"
@@ -10,8 +10,7 @@ repository = "https://github.com/SK-415/HarukaBot/tree/master/src/plugins/haruka
 documentation = "https://github.com/SK-415/HarukaBot#readme"
 keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
 packages = [
-    { include = "haruka_bot/*.py", from = "./src/plugins/"},
-    { include = "haruka_bot/cli/*.py", from = "./src/plugins/"}
+    { include = "haruka_bot", from = "./src/plugins/"}
 ]
 
 [tool.poetry.scripts]
@@ -19,26 +18,28 @@ hb = 'haruka_bot.cli.__main__:main'
 
 [tool.poetry.dependencies]
 python = "^3.8"
-qrcode = {extras = ["pil"], version = "^6.1"}
-pyppeteer = "^0.2.5"
-tinydb = "^4.3.0"
+qrcode = "^6.1"
 packaging = "^20.9"
 nonebot-plugin-apscheduler = "^0.1.2"
-pydantic = "^1.8.1"
-rsa = "^4.7"
+pydantic = "^1.8.2"
+rsa = "^4.7.2"
 click = "^7.1.2"
-python-dotenv = "^0.15.0"
+python-dotenv = "^0.17.1"
 httpx = "^0.17.0"
-nonebot-adapter-cqhttp = "^2.0.0-alpha.11"
-nonebot2 = "^2.0.0-alpha.11"
+nonebot-adapter-cqhttp = "^2.0.0-alpha.13"
+nonebot2 = "^2.0.0a13.post1"
+pillow = "^8.2.0"
+tortoise-orm = {extras = ["asyncpg"], version = "^0.17.3"}
+playwright = "^1.11.2"
+appdirs = "^1.4.4"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
 nb-cli = "^0.4.0"
 
 [[tool.poetry.source]]
-name = "aliyun"
-url = "https://mirrors.aliyun.com/pypi/simple/"
+name = "tsinghua"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 default = true
 
 [build-system]
