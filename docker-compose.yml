@@ -1,0 +1,19 @@
+version: "2"
+services:
+  # 其他配置参考 https://hub.docker.com/r/tiangolo/uvicorn-gunicorn-fastapi/
+  nonebot:
+    build: .
+    volumes:
+      - "/etc/localtime:/etc/localtime"
+      - "./:/app/"
+    ports:
+      - "8080:8080" # 映射端口到宿主机 宿主机端口:容器端口
+    env_file:
+      - ".env.prod" # fastapi 使用的环境变量文件
+    environment:
+      - ENVIRONMENT=prod # 配置 nonebot 运行环境，此项会被 .env 文件覆盖
+      - APP_MODULE=bot:app # 配置 asgi 入口
+      - SECRET # 通过 SECRET=xxx nb up -d 传递密钥
+      - ACCESS_TOKEN # 通过 ACCESS_TOKEN=xxx nb up -d 传递密钥
+      - MAX_WORKERS=1 # 如果你有多个QQ，且存在 self_id 指定，多个 worker 会导致无法找到其他 websocket 连接
+    network_mode: bridge
