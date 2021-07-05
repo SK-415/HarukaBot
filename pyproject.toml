@@ -35,7 +35,7 @@ appdirs = "^1.4.4"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
-nb-cli = "^0.4.0"
+nb-cli = {extras = ["deploy"], version = "^0.4.2"}
 
 [[tool.poetry.source]]
 name = "tsinghua"
