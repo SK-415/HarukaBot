@@ -747,7 +747,7 @@ reference = "tsinghua"
 
 [[package]]
 name = "playwright"
-version = "1.11.2"
+version = "1.13.0"
 description = "A high-level API to automate web browsers"
 category = "main"
 optional = false
@@ -1264,7 +1264,7 @@ reference = "tsinghua"
 
 [[package]]
 name = "tortoise-orm"
-version = "0.17.4"
+version = "0.17.5"
 description = "Easy async ORM for python, built with relations in mind"
 category = "main"
 optional = false
@@ -1455,7 +1455,7 @@ reference = "tsinghua"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "f08ba83bafaac85789760a2269d1d212ae61d42397b5a615878b2f1d708ead63"
+content-hash = "2e7ff96e0d1ce47e03144b0b2699897d8c60994cd6447ef441ed334f122fb764"
 
 [metadata.files]
 aiosqlite = [
@@ -1813,11 +1813,11 @@ pillow = [
     {file = "Pillow-8.2.0.tar.gz", hash = "sha256:a787ab10d7bb5494e5f76536ac460741788f1fbce851068d73a87ca7c35fc3e1"},
 ]
 playwright = [
-    {file = "playwright-1.11.2-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:5243fa5c7418aa16d678c65001e46404f0ffc06441b97ab3dc33a6e03ec478ad"},
-    {file = "playwright-1.11.2-py3-none-macosx_11_0_universal2.whl", hash = "sha256:04068e6bbba4979acef6f760f89cb81bff755dbdebcda1701a6d1ae0d9a0b269"},
-    {file = "playwright-1.11.2-py3-none-manylinux1_x86_64.whl", hash = "sha256:bb34780cfce8aa1a52be867e4b099735bf0cd7fbb35df879ddd64678374913fa"},
-    {file = "playwright-1.11.2-py3-none-win32.whl", hash = "sha256:6fb472570a746c5478736d60a973b87e54a4f9333b639c6065d297c9028e9187"},
-    {file = "playwright-1.11.2-py3-none-win_amd64.whl", hash = "sha256:1f6d4ae12b9f3bc05b0b03421fe502978c13413167a15cc91ff029d7ba74b7b7"},
+    {file = "playwright-1.13.0-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:919e1f6446839fb7763fbea19a23ddce3fb108ff13e9a3ef288cdf5a221ef9f6"},
+    {file = "playwright-1.13.0-py3-none-macosx_11_0_universal2.whl", hash = "sha256:e4f9d90d5f95cdd4db1968b84d73ce6c89dba793a18b7c4ca823dde27c28f899"},
+    {file = "playwright-1.13.0-py3-none-manylinux1_x86_64.whl", hash = "sha256:05a599c6f9f695f99214b088e116cbe91b8cf3ab4d19614f69be886fa91393fc"},
+    {file = "playwright-1.13.0-py3-none-win32.whl", hash = "sha256:f819cb4f3f7f1edd34ec7eba58ed02923b87171c2217cfd1bbbabc7225c8d4e8"},
+    {file = "playwright-1.13.0-py3-none-win_amd64.whl", hash = "sha256:c0172389160956518e76a43750b7b14504d4dd62b96f239ec517fa77a6c5d992"},
 ]
 poyo = [
     {file = "poyo-0.5.0-py2.py3-none-any.whl", hash = "sha256:3e2ca8e33fdc3c411cd101ca395668395dd5dc7ac775b8e809e3def9f9fe041a"},
@@ -2082,8 +2082,8 @@ tomlkit = [
     {file = "tomlkit-0.7.0.tar.gz", hash = "sha256:ac57f29693fab3e309ea789252fcce3061e19110085aa31af5446ca749325618"},
 ]
 tortoise-orm = [
-    {file = "tortoise-orm-0.17.4.tar.gz", hash = "sha256:8314a9ae63d3f009bac5da3e7d1f7e3f2de8f9bad43ce1efcd3e059209cd3f9d"},
-    {file = "tortoise_orm-0.17.4-py3-none-any.whl", hash = "sha256:f052b6089e30748afec88669f1a1cf01a3662cdac81cf5427dfb338839ad6027"},
+    {file = "tortoise-orm-0.17.5.tar.gz", hash = "sha256:65a930e6e6050866dc18a7d251a77a6dd2616e814da3ede8bda990147fa6b7d5"},
+    {file = "tortoise_orm-0.17.5-py3-none-any.whl", hash = "sha256:978ec824837b44373fb1b3669d443d823c71b080e39db37db72355fde6cadc24"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.0-py2-none-any.whl", hash = "sha256:0ac0f89795dd19de6b97debb0c6af1c70987fd80a2d62d1958f7e56fcc31b497"},

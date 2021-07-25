@@ -30,7 +30,7 @@ nonebot-adapter-cqhttp = "^2.0.0-alpha.13"
 nonebot2 = "^2.0.0a13.post1"
 pillow = "^8.2.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.17.3"}
-playwright = "^1.11.2"
+playwright = "^1.13.0"
 appdirs = "^1.4.4"
 
 [tool.poetry.dev-dependencies]
