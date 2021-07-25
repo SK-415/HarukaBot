@@ -56,7 +56,10 @@ def install():
     import sys
     from playwright.__main__ import main
     sys.argv = ['', 'install', 'chromium']
-    main()
+    try:
+        main()
+    except SystemExit:
+        pass
 
 
 def delete_pyppeteer():
