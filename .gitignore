@@ -14,8 +14,6 @@ _demo/
 
 .env
 .env.dev
-docker-compose.yml
-Dockerfile
 
 src/plugins/copyman.py
 src/plugins/test.py

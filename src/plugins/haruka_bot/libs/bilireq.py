@@ -1,15 +1,10 @@
-import asyncio
-import base64
-import io
 import json
 from logging import exception
-import time
 from hashlib import md5
 from typing import Any, Dict
 from urllib.parse import urlencode
 
 import httpx
-import qrcode
 from httpx import ConnectTimeout, ReadTimeout, ConnectError
 from nonebot.log import logger
 from httpx._types import URLTypes
@@ -119,44 +114,3 @@ class BiliReq():
         return md5(
             f"{urlencode(items)}{self.appsec}".encode('utf-8')
             ).hexdigest()
-
-    # async def get_qr(self):
-    #     """QR码 登录"""
-
-    #     params = {
-    #         'appkey': self.appkey,
-    #         'local_id': 0,
-    #         'ts': int(time.time())
-    #     }
-    #     params['sign'] = self._sign(params)
-    #     url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/auth_code"
-    #     r = await self.post(url, params=params)
-    #     self.auth_code = r['auth_code']
-
-    #     qr = qrcode.QRCode()
-    #     qr.add_data(r['url'])
-    #     img = qr.make_image()
-    #     buf = io.BytesIO()
-    #     img.save(buf, format='PNG')
-    #     heximage = base64.b64encode(buf.getvalue())
-    #     self.qr_img = heximage.decode()
-    #     return self.qr_img
-
-    # async def qr_login(self):
-    #     params = {
-    #         'appkey': self.appkey,
-    #         'local_id': 0,
-    #         'auth_code': self.auth_code,
-    #         'ts': int(time.time())
-    #     }
-    #     params['sign'] = self._sign(params)
-    #     url = "http://passport.bilibili.com/x/passport-tv-login/qrcode/poll"
-    #     while True:
-    #         try:
-    #             tokens = await self.post(url, params=params)
-    #             Config.update_login(tokens)
-    #             return "登入成功"
-    #         except RequestError as e:
-    #             if e.code == 86038:
-    #                 return "二维码已失效，请重新登录"
-    #             await asyncio.sleep(1)
