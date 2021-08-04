@@ -34,7 +34,10 @@ class BiliReq():
             'Referer': 'https://www.bilibili.com/'
         }
         # self.login = Config.get_login()
-        self.proxies: Dict[URLTypes, Any] = {'all://': None}
+        self.proxies: Dict[URLTypes, Any] = {
+            'http': None,
+            'https': None
+        }
 
     # TODO 制作一个装饰器捕获请求时的异常并用更友好的方式打印出来
     async def request(self, method, url, **kw) -> Dict:
