@@ -22,19 +22,19 @@ packaging = "^20.9"
 nonebot-plugin-apscheduler = "^0.1.2"
 pydantic = "^1.8.2"
 rsa = "^4.7.2"
-click = "^7.1.2"
+click = "^8.0.1"
 python-dotenv = "^0.17.1"
-httpx = "^0.17.0"
-nonebot-adapter-cqhttp = "^2.0.0-alpha.13"
-nonebot2 = "^2.0.0a13.post1"
+httpx = "^0.18.2"
+nonebot-adapter-cqhttp = "^2.0.0-alpha.14"
+nonebot2 = "^2.0.0-alpha.14"
 pillow = "^8.2.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.17.3"}
-playwright = "^1.13.0"
+playwright = "^1.13.1"
 appdirs = "^1.4.4"
 
 [tool.poetry.dev-dependencies]
 autopep8 = "^1.5.4"
-nb-cli = {extras = ["deploy"], version = "^0.4.2"}
+nb-cli = "^0.5.0"
 
 [[tool.poetry.source]]
 name = "tsinghua"
