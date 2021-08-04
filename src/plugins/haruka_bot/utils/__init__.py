@@ -79,7 +79,7 @@ def get_type_id(event: MessageEvent):
                            else event.user_id)
 
 
-scheduler = require('nonebot_plugin_apscheduler').scheduler
+scheduler = require('nonebot_plugin_apscheduler').scheduler  # type: ignore
 
 
 # bot 启动时检查 src\data\haruka_bot\ 目录是否存在
