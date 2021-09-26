@@ -1,5 +1,5 @@
 {
-  "name": "HarukaBot",
+  "name": "docs",
   "version": "1.0.0",
   "description": "A bilibili messages notification bot.",
   "main": "index.js",
@@ -7,9 +7,10 @@
   "author": "SK-415 <2967923486@qq.com>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@vuepress/plugin-back-to-top": "^1.7.1",
-    "vuepress": "^1.7.1",
-    "vuetify": "^2.3.19"
+    "@vuepress/plugin-docsearch": "^2.0.0-beta.26",
+    "@vuepress/plugin-pwa": "^2.0.0-beta.26",
+    "@vuepress/plugin-shiki": "^2.0.0-beta.26",
+    "vuepress-vite": "^2.0.0-beta.26"
   },
   "scripts": {
     "docs:dev": "vuepress dev docs",
