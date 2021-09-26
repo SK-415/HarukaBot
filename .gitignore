@@ -19,3 +19,5 @@ src/plugins/copyman.py
 src/plugins/test.py
 src/plugins/_copyman.py
 node_modules
+.temp
+.cache

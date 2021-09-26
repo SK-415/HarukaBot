@@ -21,21 +21,21 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 
 2. 在终端内输入以下命令安装脚手架。
 
-    <code-group>
-    <code-block title="pip">
+    :::: code-group
+    ::: code-group-item pip
 
     ```sh
     pip install haruka-bot
     ```
-    </code-block>
+    :::
 
-    <code-block title="poetry">
+    ::: code-group-item poetry
 
     ```sh
     poetry add haruka-bot
     ```
-    </code-block>
-    </code-group>
+    :::
+    ::::
 
 3. 启动 HarukaBot。
 
@@ -65,8 +65,8 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 
 安装
 
-<code-group>
-<code-block title="pip">
+:::: code-group
+::: code-group-item pip
 
 ```sh
 #master
@@ -74,9 +74,9 @@ pip install --upgrade git+https://github.com/SK-415/HarukaBot.git#master
 #dev
 pip install --upgrade git+https://github.com/SK-415/HarukaBot.git#dev
 ```
-</code-block>
+:::
 
-<code-block title="poetry">
+::: code-group-item poetry
 
 ```sh
 #master
@@ -84,8 +84,8 @@ poetry add git+https://github.com/SK-415/HarukaBot.git#master
 #dev
 poetry add git+https://github.com/SK-415/HarukaBot.git#dev
 ```
-</code-block>
-</code-group>
+:::
+::::
 
 运行
 

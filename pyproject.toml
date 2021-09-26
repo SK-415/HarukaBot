@@ -26,7 +26,7 @@ click = "^8.0.1"
 python-dotenv = "^0.17.1"
 httpx = "^0.18.2"
 nonebot-adapter-cqhttp = "^2.0.0-alpha.14"
-nonebot2 = "^2.0.0-alpha.14"
+nonebot2 = "^2.0.0-alpha.15"
 pillow = "^8.2.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.17.3"}
 playwright = "^1.13.1"

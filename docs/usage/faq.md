@@ -4,39 +4,39 @@
 
 更新至最新稳定版（推荐）
 
-<code-group>
-<code-block title="pip">
+:::: code-group
+::: code-group-item pip
 
 ```sh
 pip install --upgrade haruka-bot
 ```
-</code-block>
+:::
 
-<code-block title="poetry">
+::: code-group-item poetry
 
 ```sh
 poetry add haruka-bot@latest
 ```
-</code-block>
-</code-group>
+:::
+::::
 
 更新至最新测试版
 
-<code-group>
-<code-block title="pip">
+:::: code-group
+::: code-group-item pip
 
 ```sh
 pip install --upgrade --pre haruka-bot
 ```
-</code-block>
+:::
 
-<code-block title="poetry">
+::: code-group-item poetry
 
 ```sh
 poetry add --allow-prereleases haruka-bot@latest
 ```
-</code-block>
-</code-group>
+:::
+::::
 
 ## 如何查看别人的 UID？
 

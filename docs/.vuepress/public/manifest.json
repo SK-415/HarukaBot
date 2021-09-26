@@ -1,0 +1,16 @@
+{
+    "name": "HarukaBot",
+    "short_name": "HarukaBot",
+    "description": "哔哩哔哩消息推送机器人",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#f5827e",
+    "icons": [
+      {
+        "src": "/logo.png",
+        "sizes": "384x384",
+        "type": "image/png"
+      }
+    ]
+  }
