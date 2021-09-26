@@ -4,7 +4,7 @@ pip自3.4Python 3和2.7.9Python 2 版本以来一直包含在Python安装程序�
 
 如果你足够细心，你将会在安装python是看到以下选项，我们以window 10 操作系统为例。
 
-![python install](pthoninstall.png)
+![python install](/pythoninstall.png)
 
 ## 我如何知道我是否有安装pip？
 这一点也不困惑，如果你是上述版本之上的，你就有可能安装了pip。
