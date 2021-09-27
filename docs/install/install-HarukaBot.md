@@ -46,7 +46,7 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 > 以后启动只需在**相同文件夹**内执行最后一步即可
 
 ::: tip 怎么更新 HarukaBot？
-详见 [常见问题](../usage/faq.md#怎么更新-harukabot)
+详见 [常见问题](/faq.md#怎么更新-harukabot)
 :::
 
 ## 从 NoneBot2 插件商店安装（适用于 NoneBot2 用户）

@@ -25,8 +25,8 @@ module.exports = {
       // { text: '主页', link: '/' },
       { text: '安装', link: '/install/' },
       { text: '小小白白话文', link: '/level-0/'},
-      { text: '使用帮助', link: '/usage/' },
-      { text: '常见问题', link: '/usage/faq/' },
+      { text: '功能列表', link: '/usage/' },
+      { text: '常见问题', link: '/faq/' },
       { text: '关于', link: '/about/' },
     ],
     sidebar: {
@@ -47,7 +47,6 @@ module.exports = {
           children: [
             '/usage/',
             '/usage/settings',
-            '/usage/faq'
           ]
         }
       ],
@@ -62,7 +61,7 @@ module.exports = {
             '/level-0/ch04'
           ]
         }
-      ]
+      ],
     },
   },
   plugins: [
