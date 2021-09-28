@@ -28,6 +28,17 @@ def get_path(*other):
     return str(dir_path.joinpath(*other))
 
 
+async def handle_uid(bot: Bot, event: MessageEvent, state: T_State):
+    uid = event.get_plaintext().strip()
+    if not uid:
+        return
+    if uid.isdecimal():
+        state['uid'] = uid
+    else:
+        await bot.send(event, "UID 必须为纯数字")
+        raise FinishedException
+
+
 async def permission_check(bot: Bot,
                            event: Union[GroupMessageEvent, PrivateMessageEvent],
                            state: T_State):
@@ -37,7 +48,7 @@ async def permission_check(bot: Bot,
     async with DB() as db:
         if (await db.get_admin(event.group_id) and
             not await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event)):
-            await bot.send(event, '权限不足，目前只有管理员才能使用')
+            await bot.send(event, "权限不足，目前只有管理员才能使用")
             raise FinishedException
 
 

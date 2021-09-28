@@ -4,7 +4,7 @@ from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
 from ...database import DB
-from ...utils import permission_check, to_me, get_type_id
+from ...utils import permission_check, to_me, get_type_id, handle_uid
 from ...libs.bilireq import BiliReq, RequestError
 
 
@@ -13,11 +13,7 @@ add_sub.__doc__ = """关注 UID"""
 
 add_sub.handle()(permission_check)
 
-@add_sub.handle()
-async def get_args(bot: Bot, event: MessageEvent, state: T_State):
-    args = str(event.message).strip()
-    if args:
-        state['uid'] = args
+add_sub.handle()(handle_uid)
 
 @add_sub.got('uid', prompt='请输入要关注的UID')
 async def _(bot: Bot, event: MessageEvent, state: T_State):

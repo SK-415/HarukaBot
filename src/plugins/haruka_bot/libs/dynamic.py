@@ -27,5 +27,6 @@ class Dynamic():
         }
         self.message = (f"{self.name} " +
                         f"{type_msg.get(self.type, type_msg[0])}：\n" +
-                        MessageSegment.image(f"base64://{img}") +
-                        f"\n{self.url}")
+                        f"{self.url}\n" +
+                        MessageSegment.image(f"base64://{img}")
+                        )

@@ -4,7 +4,7 @@ from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
 from ...database import DB
-from ...utils import get_type_id, permission_check, to_me
+from ...utils import get_type_id, permission_check, to_me, handle_uid
 
 
 dynamic_off = on_command('关闭动态', rule=to_me(), priority=5)
@@ -12,11 +12,7 @@ dynamic_off.__doc__ = """关闭动态 UID"""
 
 dynamic_off.handle()(permission_check)
 
-@dynamic_off.handle()
-async def handle_first_recive(bot: Bot, event: MessageEvent, state: T_State):
-    args = str(event.message).strip()
-    if args:
-        state['uid'] = args
+dynamic_off.handle()(handle_uid)
 
 @dynamic_off.got('uid', prompt='请输入要关闭动态的UID')
 async def _(bot: Bot, event: MessageEvent, state: T_State):
