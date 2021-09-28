@@ -4,7 +4,7 @@ from nonebot.adapters.cqhttp.event import MessageEvent
 from nonebot.typing import T_State
 
 from ...database import DB
-from ...utils import get_type_id, permission_check, to_me
+from ...utils import get_type_id, permission_check, to_me, handle_uid
 
 
 dynamic_on = on_command('开启动态', rule=to_me(), priority=5)
@@ -12,11 +12,7 @@ dynamic_on.__doc__ = """开启动态 UID"""
 
 dynamic_on.handle()(permission_check)
 
-@dynamic_on.handle()
-async def handle_first_recive(bot: Bot, event: MessageEvent, state: T_State):
-    args = str(event.message).strip()
-    if args:
-        state['uid'] = args
+dynamic_on.handle()(handle_uid)
 
 @dynamic_on.got('uid', prompt='请输入要开启动态的UID')
 async def _(bot: Bot, event: MessageEvent, state: T_State):

@@ -8,7 +8,7 @@ from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.typing import T_State
 
 from ...database import DB
-from ...utils import to_me
+from ...utils import to_me, handle_uid
 
 
 at_off = on_command('关闭全体', rule=to_me(), 
@@ -16,11 +16,7 @@ at_off = on_command('关闭全体', rule=to_me(),
     priority=5)
 at_off.__doc__ = """关闭全体 UID"""
 
-@at_off.handle()
-async def handle_first_recive(bot: Bot, event: MessageEvent, state: T_State):
-    args = str(event.message).strip()
-    if args:
-        state['uid'] = args
+at_off.handle()(handle_uid)
 
 @at_off.got('uid', prompt='请输入要关闭全体的UID')
 async def _(bot: Bot, event: Union[PrivateMessageEvent, GroupMessageEvent],
