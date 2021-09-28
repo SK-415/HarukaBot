@@ -36,6 +36,7 @@ async def handle_uid(bot: Bot, event: MessageEvent, state: T_State):
         state['uid'] = uid
     else:
         await bot.send(event, "UID 必须为纯数字")
+        raise FinishedException
 
 
 async def permission_check(bot: Bot,
