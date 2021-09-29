@@ -33,12 +33,12 @@ async def dy_sched():
         return
 
     if uid not in last_time: # 没有爬取过这位主播就把最新一条动态时间为 last_time
-        dynamic = Dynamic(dynamics[0])
+        dynamic = Dynamic(**dynamics[0])
         last_time[uid] = dynamic.time
         return
     
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
-        dynamic = Dynamic(dynamic)
+        dynamic = Dynamic(**dynamic)
         if dynamic.time > last_time[uid] and dynamic.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
             logger.info(f"检测到新动态（{dynamic.id}）：{name}（{uid}）")
             image = None
