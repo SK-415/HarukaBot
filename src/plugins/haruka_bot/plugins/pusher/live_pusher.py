@@ -2,7 +2,7 @@ from nonebot.adapters.cqhttp.message import Message, MessageSegment
 from nonebot.log import logger
 
 from ...database import DB
-from ...libs.bilireq import BiliReq
+from bilireq.live import get_rooms_info_by_uids
 from ...utils import safe_send, scheduler
 
 status = {}
@@ -17,8 +17,7 @@ async def live_sched():
     if not uids:
         return
     logger.debug(f'爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人')
-    br = BiliReq()
-    res = await br.get_live_list(uids)
+    res = await get_rooms_info_by_uids(uids, reqtype="web")
     if not res:
         return
     for uid, info in res.items():
@@ -48,5 +47,5 @@ async def live_sched():
                         message = live_msg,
                         at = sets.at
                     )
-                await db.update_user(uid, name)
+                await db.update_user(int(uid), name)
         status[uid] = new_status

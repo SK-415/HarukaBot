@@ -5,7 +5,8 @@ from nonebot.typing import T_State
 
 from ...database import DB
 from ...utils import permission_check, to_me, get_type_id, handle_uid
-from ...libs.bilireq import BiliReq, RequestError
+from bilireq.user import get_user_info
+from bilireq.exceptions import ResponseCodeError
 
 
 add_sub = on_command('关注', aliases={'添加主播',}, rule=to_me(), priority=5)
@@ -24,10 +25,9 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
         user = await db.get_user(uid)
         name = user and user.name
     if not name:
-        br = BiliReq()
         try:
-            name = (await br.get_info(uid))['name']
-        except RequestError as e:
+            name = (await get_user_info(uid, reqtype="web"))['name']
+        except ResponseCodeError as e:
             if e.code == -400 or e.code == -404:
                 await add_sub.finish("UID不存在，注意UID不是房间号")
             elif e.code == -412:
