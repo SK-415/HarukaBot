@@ -18,7 +18,7 @@ class User(Model):
     uid = IntField(pk=True)
     name = CharField(max_length=20)
 
-    weibo_id = IntField()
+    weibo_id = IntField(null=True)
 
 
 class Group(Model):
