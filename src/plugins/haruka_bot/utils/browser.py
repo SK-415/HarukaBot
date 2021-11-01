@@ -56,7 +56,7 @@ async def get_weibo_screenshot(url, cookie):
         page = await browser.new_page(device_scale_factor=2,
                                       user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36 Edg/95.0.1020.30',
                                       viewport={"width": 2560, "height": 1080})
-        await page.add_cookies(cookie)
+        await page.context.add_cookies(cookie)
         await page.goto(url, wait_until='networkidle', timeout=30000)
         card = await page.query_selector("article")
         assert card
