@@ -11,8 +11,5 @@ echo = on_command('还能说话吗', rule=to_me(), priority=5)
 
 @echo.handle()
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    logger.info(event)
-    logger.info(event.user_id)
     message = MessageSegment.at(event.user_id) + "还能说话吗"
-    logger.info(message)
     await echo.finish(message)
