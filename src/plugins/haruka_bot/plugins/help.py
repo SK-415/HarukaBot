@@ -19,4 +19,7 @@ async def test(bot: Bot, event: MessageEvent, state: T_State):
                     matcher.plugin_name.startswith("haruka_bot") and
                     matcher.__doc__):
                 message += matcher.__doc__ + '\n'
-    await help.finish(message.strip())
+                message += (f"\n当前版本：v{__version__}\n"
+                            "反馈&帮助群：629574472\n"
+                            "详细帮助：https://haruka-bot.sk415.icu/usage/")
+    await help.finish(message)
