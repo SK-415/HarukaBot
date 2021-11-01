@@ -7,7 +7,7 @@ from ...utils import safe_send, scheduler
 
 status = {}
 
-@scheduler.scheduled_job('interval', seconds=10, id='live_sched')
+@scheduler.scheduled_job('interval', seconds=3, id='live_sched')
 async def live_sched():
     """直播推送"""
 

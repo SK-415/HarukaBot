@@ -11,7 +11,7 @@ from ...utils import safe_send, scheduler, get_dynamic_screenshot
 
 last_time = {}
 
-@scheduler.scheduled_job('interval', seconds=10, id='dynamic_sched')
+@scheduler.scheduled_job('interval', seconds=3, id='dynamic_sched')
 async def dy_sched():
     """直播推送"""
 

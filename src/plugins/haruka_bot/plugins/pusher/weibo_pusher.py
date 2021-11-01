@@ -33,7 +33,7 @@ else:
     logger.error('未发现微博 Cookie: ./weibo.cookie')
 
 
-@scheduler.scheduled_job('interval', seconds=10, id='weibo_sched')
+@scheduler.scheduled_job('interval', seconds=3, id='weibo_sched')
 async def wb_sched():
     """微博推送"""
 
