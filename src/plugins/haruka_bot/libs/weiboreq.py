@@ -30,12 +30,10 @@ class WeiboReq():
             'Cookie': cookie,
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
         }
-        # self.login = Config.get_login()
-        self.proxies: Dict[URLTypes, Any] = {'all://': None}
 
     # TODO 制作一个装饰器捕获请求时的异常并用更友好的方式打印出来
     async def request(self, method, url, **kw) -> Dict:
-        async with httpx.AsyncClient(proxies=self.proxies, timeout=3.0) as client:
+        async with httpx.AsyncClient(timeout=5.0) as client:
             try:
                 r = await client.request(method, url, **kw)
                 r.encoding = 'utf-8'
