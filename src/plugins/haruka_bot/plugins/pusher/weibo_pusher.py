@@ -12,10 +12,21 @@ from ...utils import safe_send, scheduler, get_weibo_screenshot
 
 last_time = {}
 
+
+def convert_cookie(cookie):
+    ret = []
+    for c in cookie.split(';'):
+        cp = c.split('=')
+        ret.append({'name': cp[0].strip(), 'value': cp[1].strip(), 'domain': 'weibo.com', 'path': '/'})
+    return ret
+
+
 cookie = None
+cookie_browser = None
 cookie_path = Path('./weibo.cookie')
 if cookie_path.exists():
     cookie = cookie_path.read_text('utf-8').strip()
+    cookie_browser = convert_cookie(cookie)
     logger.info('加载微博 Cookie')
     logger.debug(cookie)
 else:
@@ -58,7 +69,7 @@ async def wb_sched():
             image = None
             for _ in range(3):
                 try:
-                    image = await get_weibo_screenshot(weibo.url)
+                    image = await get_weibo_screenshot(weibo.url, cookie_browser)
                     break
                 except Exception as e:
                     logger.error("截图失败，以下为错误日志:")
