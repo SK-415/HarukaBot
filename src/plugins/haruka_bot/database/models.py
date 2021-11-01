@@ -12,12 +12,13 @@ class Sub(Model):
     bot_id = IntField()
 
     weibo = BooleanField()
-    weibo_id = IntField()
 
 
 class User(Model):
     uid = IntField(pk=True)
     name = CharField(max_length=20)
+
+    weibo_id = IntField()
 
 
 class Group(Model):

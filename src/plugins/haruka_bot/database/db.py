@@ -238,15 +238,19 @@ class DB:
                                              if sub.live]))
         uid_list['dynamic']['list'] = list(set([sub.uid async for sub in subs
                                                 if sub.dynamic]))
-        uid_list['weibo']['list'] = list(set([{'uid': sub.uid, 'weibo_id': sub.weibo_id} async for sub in subs
+        uid_list['weibo']['list'] = list(set([sub.uid async for sub in subs
                                               if sub.weibo]))
 
-    @classmethod
-    async def update_user(cls, uid: int, name: str) -> bool:
+    async def update_user(self, uid: int, name: str) -> bool:
         """更新 UP 主信息"""
 
         return bool(await User.filter(Q(uid=uid)).update(name=name))
 
+    async def update_user_weibo(self, uid: int, weibo_id: int) -> bool:
+        """更新 UP 主信息"""
+        ret = bool(await User.filter(Q(uid=uid)).update(weibo_id=weibo_id))
+        await self.update_uid_list()
+        return bool()
 
     async def update_version(self):
         """更新版本号"""

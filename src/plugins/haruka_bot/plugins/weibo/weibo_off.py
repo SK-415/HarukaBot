@@ -24,8 +24,6 @@ async def _(bot: Bot, event: MessageEvent, state: T_State):
                             type_id=get_type_id(event)):
             user = await db.get_user(state['uid'])
             assert user is not None
-            await db.set_weibo_id(0, uid=state['uid'],
-                                  type_=event.message_type,
-                                  type_id=get_type_id(event))
+            await db.update_user_weibo(state['uid'], 0)
             await live_off.finish(f"已关闭 {user.name}（{user.uid}）的微博推送")
         await live_off.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")

@@ -31,14 +31,11 @@ async def wb_sched():
         return
 
     async with DB() as db:
-        uid_weibo = await db.next_uid('weibo')
-        if not uid_weibo:
-            return
-        uid = uid_weibo['uid']
-        weibo_id = uid_weibo['weibo_id']
+        uid = await db.next_uid('weibo')
         user = await db.get_user(uid)
         assert user is not None
         name = user.name
+        weibo_id = user.weibo_id
 
     logger.debug(f'爬取微博 {name}（{weibo_id}, {uid}）')
     wr = WeiboReq(cookie)

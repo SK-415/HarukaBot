@@ -60,4 +60,4 @@ async def dy_sched():
                     await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message)
 
             last_time[uid] = dynamic.time
-    await DB.update_user(uid, dynamic.name) # type: ignore
+    await db.update_user(uid, dynamic.name) # type: ignore
