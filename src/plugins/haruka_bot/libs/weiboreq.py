@@ -35,7 +35,7 @@ class WeiboReq():
 
     # TODO 制作一个装饰器捕获请求时的异常并用更友好的方式打印出来
     async def request(self, method, url, **kw) -> Dict:
-        async with httpx.AsyncClient(proxies=self.proxies) as client:
+        async with httpx.AsyncClient(proxies=self.proxies, timeout=3.0) as client:
             try:
                 r = await client.request(method, url, **kw)
                 r.encoding = 'utf-8'
