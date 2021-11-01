@@ -15,7 +15,7 @@ last_time = {}
 cookie = None
 cookie_path = Path('./weibo.cookie')
 if cookie_path.exists():
-    cookie = cookie_path.read_text('utf-8')
+    cookie = cookie_path.read_text('utf-8').decode('utf-8')
     logger.info('加载微博 Cookie')
     logger.debug(cookie)
 else:
