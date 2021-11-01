@@ -15,7 +15,8 @@ from .models import Group, Sub, User
 from .models import Version as DBVersion
 
 uid_list = {'live': {'list': [], 'index': 0},
-            'dynamic': {'list': [], 'index': 0}}
+            'dynamic': {'list': [], 'index': 0},
+            'weibo': {'list': [], 'index': 0}}
 
 
 class DB:
@@ -38,7 +39,7 @@ class DB:
 
     async def add_group(self, group_id, admin=True):
         """创建群设置"""
-        
+
         if Group.filter(Q(id=group_id)).exists():
             # 权限开关已经创建过了
             return
@@ -48,7 +49,7 @@ class DB:
     async def add_sub(self, uid, type_, type_id, bot_id, name, live=True,
                       dynamic=True, at=False) -> bool:
         """添加订阅"""
-        
+
         if await self.get_sub(uid, type_, type_id):
             return False
         if not await self.get_user(uid):
@@ -63,7 +64,8 @@ class DB:
             live=live,
             dynamic=dynamic,
             at=at,
-            bot_id=bot_id
+            bot_id=bot_id,
+            weibo=0
         )
         await self.update_uid_list()
         return True
@@ -75,7 +77,7 @@ class DB:
 
     async def delete_group(self, group_id) -> bool:
         """删除群设置"""
-        
+
         if await self.get_sub(type_='group', type_id=group_id):
             # 当前群还有订阅，不能删除
             return False
@@ -84,7 +86,7 @@ class DB:
 
     async def delete_sub(self, uid, type_, type_id) -> bool:
         """删除指定订阅"""
-        
+
         if not await self.get_sub(uid, type_, type_id):
             # 订阅不存在
             return False
@@ -95,7 +97,7 @@ class DB:
 
     async def delete_sub_list(self, type_, type_id):
         "删除指定位置的推送列表"
-        
+
         subs = self._get_subs(type_=type_, type_id=type_id)
         uids = [sub.uid async for sub in subs]
         await subs.delete()
@@ -107,7 +109,7 @@ class DB:
 
     async def delete_user(self, uid) -> bool:
         """删除 UP 主信息"""
-        
+
         if await self.get_sub(uid):
             # 还存在该 UP 主订阅，不能删除
             return False
@@ -116,7 +118,7 @@ class DB:
 
     async def get_admin(self, group_id) -> bool:
         """获取指定群权限状态"""
-        
+
         group = await Group.filter(Q(id=group_id)).first()
         if not group:
             return True
@@ -133,41 +135,39 @@ class DB:
 
     async def get_push_list(self, uid, func) -> List[Sub]:
         """根据类型和 UID 获取需要推送的 QQ 列表"""
-        
+
         return await self._get_subs(uid, **{func: True}).all()
 
     async def get_sub(self, uid=None, type_=None, type_id=None) -> Optional[Sub]:
         """获取指定位置的订阅信息"""
-        
+
         return await self._get_subs(uid, type_, type_id).first()
 
     async def get_sub_list(self, type_, type_id) -> List[Sub]:
         """获取指定位置的推送列表"""
-        
+
         return await self._get_subs(type_=type_, type_id=type_id).all()
-        
 
     def _get_subs(self, uid=None, type_=None, type_id=None, live=None,
-                       dynamic=None, at=None, bot_id=None) -> QuerySet[Sub]:
+                  dynamic=None, at=None, bot_id=None) -> QuerySet[Sub]:
         """获取指定的订阅数据"""
-        
+
         kw = locals()
         del kw['self']
         kw['type'] = kw.pop('type_')
         filters = [Q(**{key: value}) for key, value in kw.items()
-                                     if value != None]
+                   if value != None]
         return Sub.filter(Q(*filters, join_type='AND'))
-        
 
     async def get_uid_list(self, func) -> List:
         """根据类型获取需要爬取的 UID 列表"""
-        
-        return uid_list[func]['list']        
+
+        return uid_list[func]['list']
 
     @classmethod
     async def get_user(cls, uid: int) -> Optional[User]:
         """获取 UP 主信息，没有就返回 None"""
-        
+
         return await User.filter(Q(uid=uid)).first()
 
     async def _need_update(self):
@@ -183,7 +183,7 @@ class DB:
 
     async def next_uid(self, func):
         """获取下一个要爬取的 UID"""
-        
+
         func = uid_list[func]
         if func['list'] == []:
             return None
@@ -198,7 +198,7 @@ class DB:
 
     async def set_permission(self, group_id, switch) -> bool:
         """设置指定位置权限"""
-        
+
         query = Group.filter(Q(id=group_id))
         group = await query.first()
         if not group:
@@ -226,6 +226,8 @@ class DB:
                                              if sub.live]))
         uid_list['dynamic']['list'] = list(set([sub.uid async for sub in subs
                                                 if sub.dynamic]))
+        uid_list['weibo']['list'] = list(set([sub.uid async for sub in subs
+                                              if sub.weibo]))
 
     @classmethod
     async def update_user(cls, uid: int, name: str) -> bool:
@@ -233,13 +235,19 @@ class DB:
 
         return bool(await User.filter(Q(uid=uid)).update(name=name))
 
+    @classmethod
+    async def update_user_weibo(cls, uid: int, weibo: int) -> bool:
+        """更新 UP 主信息"""
+
+        return bool(await User.filter(Q(uid=uid)).update(weibo_id=weibo))
+
     async def update_version(self):
         """更新版本号"""
 
         if not await self._need_update():
             return
-        
-        logger.info("正在更新数据库")        
+
+        logger.info("正在更新数据库")
         DBVersion.all().update(version=__version__)
         logger.info(f"数据库已更新至 v{__version__}")
 
@@ -248,7 +256,7 @@ class DB:
 
         if not Path(get_path('config.json')).exists():
             return
-        
+
         logger.info("正在从 config.json 迁移数据库")
         with open(get_path('config.json'), 'r', encoding='utf-8') as f:
             old_db = json.loads(f.read())
@@ -256,18 +264,18 @@ class DB:
         groups: Dict[int, Dict] = old_db['groups']
         for sub in subs.values():
             await self.add_sub(
-                uid = sub['uid'],
-                type_ = sub['type'],
-                type_id = sub['type_id'],
-                bot_id = sub['bot_id'],
-                name = sub['name'],
-                live = sub['live'],
-                dynamic = sub['dynamic'],
-                at = sub['at']
+                uid=sub['uid'],
+                type_=sub['type'],
+                type_id=sub['type_id'],
+                bot_id=sub['bot_id'],
+                name=sub['name'],
+                live=sub['live'],
+                dynamic=sub['dynamic'],
+                at=sub['at']
             )
         for group in groups.values():
             await self.set_permission(group['group_id'], group['admin'])
-        
+
         Path(get_path('config.json')).rename(get_path('config.json.bak'))
         logger.info("数据库迁移完成")
 

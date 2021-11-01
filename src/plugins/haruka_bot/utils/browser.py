@@ -49,6 +49,26 @@ async def get_dynamic_screenshot(url):
         raise
 
 
+async def get_weibo_screenshot(url):
+    browser = await get_browser()
+    page = None
+    try:
+        page = await browser.new_page(device_scale_factor=2)
+        await page.goto(url, wait_until='networkidle', timeout=10000)
+        await page.set_viewport_size({"width": 2560, "height": 1080})
+        card = await page.query_selector(".article")
+        assert card
+        clip = await card.bounding_box()
+        assert clip
+        image = await page.screenshot(clip=clip, full_page=True)
+        await page.close()
+        return base64.b64encode(image).decode()
+    except Exception:
+        if page:
+            await page.close()
+        raise
+
+
 def install():
     """自动安装、更新 Chromium"""
 

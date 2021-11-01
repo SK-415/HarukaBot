@@ -11,6 +11,9 @@ class Sub(Model):
     at = BooleanField()
     bot_id = IntField()
 
+    weibo = BooleanField()
+    weibo_id = IntField()
+
 
 class User(Model):
     uid = IntField(pk=True)
