@@ -1,3 +1,6 @@
+## What's more
+增加了微博功能，在Working Directory创建`weibo.cookie`即可，操作见`帮助`
+
 [![HarukaBot](https://socialify.git.ci/SK-415/HarukaBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSK-415%2FHarukaBot%2Fmaster%2Fdocs%2F.vuepress%2Fpublic%2Flogo.png&owner=1&pattern=Charlie%20Brown&stargazers=1&theme=Dark)](https://haruka-bot.sk415.icu/)
 
 # [HarukaBot](https://haruka-bot.sk415.icu)——优雅的 B 站推送 QQ 机器人
