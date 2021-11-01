@@ -33,7 +33,7 @@ else:
     logger.error('未发现微博 Cookie: ./weibo.cookie')
 
 
-@scheduler.scheduled_job('interval', seconds=3, id='weibo_sched')
+@scheduler.scheduled_job('interval', seconds=5, id='weibo_sched')
 async def wb_sched():
     """微博推送"""
 
@@ -50,7 +50,7 @@ async def wb_sched():
         name = user.name
         weibo_id = user.weibo_id
 
-    logger.debug(f'爬取微博 {name}（{weibo_id}, {uid}）')
+    logger.info(f'爬取微博 {name}（{weibo_id}, {uid}）')
     wr = WeiboReq(cookie)
     weibos = (await wr.get_user_weibo(weibo_id)).get('list', [])
 

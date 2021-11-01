@@ -7,7 +7,7 @@ from ...utils import safe_send, scheduler
 
 status = {}
 
-@scheduler.scheduled_job('interval', seconds=3, id='live_sched')
+@scheduler.scheduled_job('interval', seconds=5, id='live_sched')
 async def live_sched():
     """直播推送"""
 
@@ -16,7 +16,7 @@ async def live_sched():
 
     if not uids:
         return
-    logger.debug(f'爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人')
+    logger.info(f'爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人')
     br = BiliReq()
     res = await br.get_live_list(uids)
     if not res:

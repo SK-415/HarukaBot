@@ -11,7 +11,7 @@ from ...utils import safe_send, scheduler, get_dynamic_screenshot
 
 last_time = {}
 
-@scheduler.scheduled_job('interval', seconds=3, id='dynamic_sched')
+@scheduler.scheduled_job('interval', seconds=5, id='dynamic_sched')
 async def dy_sched():
     """直播推送"""
 
@@ -23,7 +23,7 @@ async def dy_sched():
         assert user is not None
         name = user.name
 
-    logger.debug(f'爬取动态 {name}（{uid}）')
+    logger.info(f'爬取动态 {name}（{uid}）')
     br = BiliReq()
     dynamics = (await br.get_user_dynamics(uid)).get('cards', []) # 获取最近十二条动态
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
