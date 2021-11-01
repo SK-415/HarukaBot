@@ -32,6 +32,8 @@ async def wb_sched():
 
     async with DB() as db:
         uid = await db.next_uid('weibo')
+        if not uid:
+            return
         user = await db.get_user(uid)
         assert user is not None
         name = user.name
