@@ -149,7 +149,7 @@ class DB:
         return await self._get_subs(type_=type_, type_id=type_id).all()
 
     def _get_subs(self, uid=None, type_=None, type_id=None, live=None,
-                  dynamic=None, at=None, bot_id=None) -> QuerySet[Sub]:
+                  dynamic=None, at=None, bot_id=None, weibo=None) -> QuerySet[Sub]:
         """获取指定的订阅数据"""
 
         kw = locals()
