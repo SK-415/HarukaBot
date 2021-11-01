@@ -50,9 +50,9 @@ class WeiboReq():
                 logger.error(f"未知错误（{url}）")
                 raise
 
-            if res['code'] != 0:
-                raise RequestError(code=res['code'],
-                                   message=res['message'],
+            if res['ok'] != 1:
+                raise RequestError(code=res['ok'],
+                                   message=r.text,
                                    data=res.get('data'))
             return res['data']
 

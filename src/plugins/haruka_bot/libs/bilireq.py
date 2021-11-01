@@ -50,12 +50,12 @@ class BiliReq():
                 logger.error(f"接收超时（{url}）")
                 raise
             except exception as e:
-                logger.error(f"未知错误（{url}）{e}")
+                logger.error(f"未知错误（{url}）")
                 raise 
             
-            if res['ok'] != 1:
-                raise RequestError(code=res['ok'],
-                                    message=r.text,
+            if res['code'] != 0:
+                raise RequestError(code=res['code'],
+                                    message=res['message'],
                                     data=res.get('data'))
             return res['data']
     
