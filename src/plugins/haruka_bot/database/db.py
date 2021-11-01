@@ -65,8 +65,7 @@ class DB:
             dynamic=dynamic,
             at=at,
             bot_id=bot_id,
-            weibo=False,
-            weibo_id=0
+            weibo=False
         )
         await self.update_uid_list()
         return True
