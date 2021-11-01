@@ -219,6 +219,17 @@ class DB:
         await subs.update(**{conf: switch})
         return True
 
+    async def set_weibo_id(self, weibo_id, uid=None, type_=None, type_id=None):
+        """开关订阅设置"""
+
+        subs = self._get_subs(uid, type_, type_id)
+        if not await subs.exists():
+            return False
+        await subs.update(weibo_id=weibo_id)
+        await self.update_uid_list()
+        return True
+
+
     async def update_uid_list(self):
         """更新需要推送的 UP 主列表"""
 
@@ -236,11 +247,6 @@ class DB:
 
         return bool(await User.filter(Q(uid=uid)).update(name=name))
 
-    @classmethod
-    async def update_user_weibo(cls, uid: int, weibo: int) -> bool:
-        """更新 UP 主信息"""
-
-        return bool(await User.filter(Q(uid=uid)).update(weibo_id=weibo))
 
     async def update_version(self):
         """更新版本号"""
