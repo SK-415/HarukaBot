@@ -238,7 +238,7 @@ class DB:
                                              if sub.live]))
         uid_list['dynamic']['list'] = list(set([sub.uid async for sub in subs
                                                 if sub.dynamic]))
-        uid_list['weibo']['list'] = list(set([sub.uid async for sub in subs
+        uid_list['weibo']['list'] = list(set([{'uid': sub.uid, 'weibo_id': sub.weibo_id} async for sub in subs
                                               if sub.weibo]))
 
     @classmethod
