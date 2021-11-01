@@ -19,7 +19,7 @@ if cookie_path.exists():
     logger.info('加载微博 Cookie')
     logger.debug(cookie)
 else:
-    logger.error('未发现微博 Cookie')
+    logger.error('未发现微博 Cookie: ./weibo.cookie')
 
 
 @scheduler.scheduled_job('interval', seconds=10, id='weibo_sched')
