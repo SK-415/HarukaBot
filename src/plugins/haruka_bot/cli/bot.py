@@ -4,7 +4,7 @@ from os import path
 import nonebot
 from nonebot.adapters.cqhttp import Bot
 from nonebot.log import default_format, logger
-
+from .utils import env
 
 nonebot.init()
 driver = nonebot.get_driver()
@@ -24,7 +24,7 @@ logger.add(path.join('log', "error.log"),
            rotation="00:00",
            retention='1 week',
            diagnose=False,
-           level="ERROR",
+           level="DEBUG",
            format=default_format,
            encoding='utf-8'
            )

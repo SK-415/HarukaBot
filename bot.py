@@ -8,7 +8,7 @@ logger.add(
     rotation="00:00",
     retention="1 week",
     diagnose=False,
-    level="ERROR",
+    level="DEBUG",
     format=default_format,
     encoding="utf-8",
 )

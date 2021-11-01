@@ -10,7 +10,8 @@ env = {
     "ACCESS_TOKEN": '',
     "SUPERUSERS": [],
     "COMMAND_START": [""],
-    "HARUKA_DIR": "./data/"
+    "HARUKA_DIR": "./data/",
+    "LOG_LEVEL": "DEBUG"
 }
 
 
