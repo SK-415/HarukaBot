@@ -157,7 +157,10 @@ class DB:
         filters = [Q(**{key: value}) for key, value in kw.items()
                                      if value != None]
         return Sub.filter(Q(*filters, join_type='AND'))
-        
+
+    async def get_all_group(self) -> List:
+        """获取所有有订阅的群"""
+        return await Group.all()
 
     async def get_uid_list(self, func) -> List:
         """根据类型获取需要爬取的 UID 列表"""
