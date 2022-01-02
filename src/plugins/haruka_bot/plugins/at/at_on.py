@@ -14,14 +14,14 @@ from ...utils import to_me, handle_uid
 at_on = on_command('开启全体', rule=to_me(), 
     permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, 
     priority=5)
-at_on.__doc__ = """开启全体 UID"""
+at_on.__doc__ = """开启全体 UID或UP名称"""
 
 at_on.handle()(handle_uid)
 
-@at_on.got('uid', prompt='请输入要开启全体的UID')
+@at_on.got('uid', prompt='请输入要开启全体的UID或UP名称')
 async def _(bot: Bot, event: Union[PrivateMessageEvent, GroupMessageEvent],
             state: T_State):
-    """根据 UID 开启全体"""
+    """根据 UID或UP名称 开启全体"""
 
     if isinstance(event, PrivateMessageEvent):
         await at_on.finish("只有群里才能开启全体")

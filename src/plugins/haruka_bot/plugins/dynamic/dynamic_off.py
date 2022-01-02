@@ -8,15 +8,15 @@ from ...utils import get_type_id, permission_check, to_me, handle_uid
 
 
 dynamic_off = on_command('关闭动态', rule=to_me(), priority=5)
-dynamic_off.__doc__ = """关闭动态 UID"""
+dynamic_off.__doc__ = """关闭动态 UID或UP名称"""
 
 dynamic_off.handle()(permission_check)
 
 dynamic_off.handle()(handle_uid)
 
-@dynamic_off.got('uid', prompt='请输入要关闭动态的UID')
+@dynamic_off.got('uid', prompt='请输入要关闭动态的UID或UP名称')
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    """根据 UID 关闭动态"""
+    """根据 UID或UP名称 关闭动态"""
 
     async with DB() as db:
         if await db.set_sub('dynamic', False, uid=state['uid'],

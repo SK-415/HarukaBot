@@ -8,15 +8,15 @@ from ...utils import get_type_id, permission_check, to_me, handle_uid
 
 
 dynamic_on = on_command('开启动态', rule=to_me(), priority=5)
-dynamic_on.__doc__ = """开启动态 UID"""
+dynamic_on.__doc__ = """开启动态 UID或UP名称"""
 
 dynamic_on.handle()(permission_check)
 
 dynamic_on.handle()(handle_uid)
 
-@dynamic_on.got('uid', prompt='请输入要开启动态的UID')
+@dynamic_on.got('uid', prompt='请输入要开启动态的UID或UP名称')
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    """根据 UID 开启动态"""
+    """根据 UID或UP名称 开启动态"""
 
     async with DB() as db:
         if await db.set_sub('dynamic', True, uid=state['uid'],

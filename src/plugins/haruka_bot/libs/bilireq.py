@@ -111,3 +111,14 @@ class BiliReq():
         return md5(
             f"{urlencode(items)}{self.appsec}".encode('utf-8')
             ).hexdigest()
+
+
+    async def get_uid_through_name(self,name):
+        """根据 UP名称 获取搜索到的第一个用户的uid"""
+
+        url = 'https://api.bilibili.com/x/web-interface/search/type'
+        params = {
+            'keyword':name,
+            'search_type':'bili_user'
+        }
+        return await self.get(url, params=params)

@@ -8,15 +8,15 @@ from ...utils import get_type_id, permission_check, to_me, handle_uid
 
 
 live_off = on_command('关闭直播', rule=to_me(), priority=5)
-live_off.__doc__ = """关闭直播 UID"""
+live_off.__doc__ = """关闭直播 UID或UP名称"""
 
 live_off.handle()(permission_check)
 
 live_off.handle()(handle_uid)
 
-@live_off.got('uid', prompt='请输入要关闭直播的UID')
+@live_off.got('uid', prompt='请输入要关闭直播的UID或UP名称')
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    """根据 UID 关闭直播"""
+    """根据 UID或UP名称 关闭直播"""
 
     async with DB() as db:
         if await db.set_sub('live', False, uid=state['uid'],

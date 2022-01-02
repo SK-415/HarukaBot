@@ -9,15 +9,15 @@ from ...libs.bilireq import BiliReq, RequestError
 
 
 add_sub = on_command('关注', aliases={'添加主播',}, rule=to_me(), priority=5)
-add_sub.__doc__ = """关注 UID"""
+add_sub.__doc__ = """关注 UID或UP名称"""
 
 add_sub.handle()(permission_check)
 
 add_sub.handle()(handle_uid)
 
-@add_sub.got('uid', prompt='请输入要关注的UID')
+@add_sub.got('uid', prompt='请输入要关注的UID或UP名称')
 async def _(bot: Bot, event: MessageEvent, state: T_State):
-    """根据 UID 订阅 UP 主"""
+    """根据 UID或UP名称 订阅 UP 主"""
 
     uid = state['uid']
     async with DB() as db:

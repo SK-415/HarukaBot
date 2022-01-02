@@ -16,6 +16,7 @@ from nonebot.rule import Rule
 from nonebot.typing import T_State
 
 from .. import config
+from ..libs.bilireq import BiliReq
 
 
 def get_path(*other):
@@ -35,8 +36,16 @@ async def handle_uid(bot: Bot, event: MessageEvent, state: T_State):
     if uid.isdecimal():
         state['uid'] = uid
     else:
-        await bot.send(event, "UID 必须为纯数字")
-        raise FinishedException
+        if uid[0:4].lower()=='uid:'or uid[0:4].lower()=='uid：':
+            state['uid'] = uid[4:]
+        else:
+            br = BiliReq()
+            try:
+                uid = (await br.get_uid_through_name(uid))['result'][0]['mid']
+                state['uid'] = uid
+            except:
+                await bot.send(event, "根据UP名称搜索失败，请检查拼写或使用UID搜索")
+                raise FinishedException
 
 
 async def permission_check(bot: Bot,
