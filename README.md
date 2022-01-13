@@ -1,5 +1,9 @@
 [![HarukaBot](https://socialify.git.ci/SK-415/HarukaBot/image?description=1&font=Source%20Code%20Pro&forks=1&issues=1&language=1&logo=https%3A%2F%2Fraw.githubusercontent.com%2FSK-415%2FHarukaBot%2Fmaster%2Fdocs%2F.vuepress%2Fpublic%2Flogo.png&owner=1&pattern=Charlie%20Brown&stargazers=1&theme=Dark)](https://haruka-bot.sk415.icu/)
 
+# ⚠ 暂未适配 NoneBot2 v2.0.0-beta.1 ⚠
+
+已锁定 NoneBot2 版本为 v2.0.0-alpha.16，其他版本将安装失败。
+
 # [HarukaBot](https://haruka-bot.sk415.icu)——优雅的 B 站推送 QQ 机器人
 
 名称来源：[@白神遥Haruka](https://space.bilibili.com/477332594)
