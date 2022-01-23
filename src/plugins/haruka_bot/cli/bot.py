@@ -2,7 +2,7 @@ import sys
 from os import path
 
 import nonebot
-from nonebot.adapters.cqhttp import Bot
+from nonebot.adapters.onebot.v11 import Bot
 from nonebot.log import default_format, logger
 
 

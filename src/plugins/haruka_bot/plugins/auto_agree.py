@@ -1,5 +1,5 @@
 from nonebot import on_request
-from nonebot.adapters.cqhttp import Bot, FriendRequestEvent, GroupRequestEvent
+from nonebot.adapters.onebot.v11 import Bot, FriendRequestEvent, GroupRequestEvent
 from nonebot.typing import T_State
 
 

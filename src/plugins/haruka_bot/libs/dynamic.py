@@ -1,4 +1,4 @@
-from nonebot.adapters.cqhttp.message import MessageSegment
+from nonebot.adapters.onebot.v11.message import MessageSegment
 
 
 class Dynamic():

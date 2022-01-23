@@ -1,6 +1,6 @@
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot
-from nonebot.adapters.cqhttp.event import MessageEvent
+from nonebot.adapters.onebot.v11 import Bot
+from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.typing import T_State
 from nonebot.matcher import matchers
 

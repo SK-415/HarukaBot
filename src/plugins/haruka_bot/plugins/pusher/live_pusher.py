@@ -1,4 +1,4 @@
-from nonebot.adapters.cqhttp.message import Message, MessageSegment
+from nonebot.adapters.onebot.v11.message import Message, MessageSegment
 from nonebot.log import logger
 
 from ...database import DB

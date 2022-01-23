@@ -1,10 +1,10 @@
 from typing import Union
 from nonebot import on_command
-from nonebot.adapters.cqhttp import Bot
-from nonebot.adapters.cqhttp.event import (GroupMessageEvent, MessageEvent,
+from nonebot.adapters.onebot.v11 import Bot
+from nonebot.adapters.onebot.v11.event import (GroupMessageEvent, MessageEvent,
                                            PrivateMessageEvent)
 from nonebot.permission import SUPERUSER
-from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
+from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.typing import T_State
 
 from ...database import DB

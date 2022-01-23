@@ -1,5 +1,5 @@
 from nonebot import on_notice
-from nonebot.adapters.cqhttp import Bot, GroupDecreaseNoticeEvent
+from nonebot.adapters.onebot.v11 import Bot, GroupDecreaseNoticeEvent
 from nonebot.typing import T_State
 
 from ..database import DB

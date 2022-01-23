@@ -4,11 +4,11 @@ from typing import Union
 import nonebot
 from nonebot import require
 from nonebot.adapters import Bot, Event
-from nonebot.adapters.cqhttp import MessageEvent, MessageSegment
-from nonebot.adapters.cqhttp.event import (GroupMessageEvent,
+from nonebot.adapters.onebot.v11 import MessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11.event import (GroupMessageEvent,
                                            PrivateMessageEvent)
-from nonebot.adapters.cqhttp.exception import ActionFailed, NetworkError
-from nonebot.adapters.cqhttp.permission import GROUP_ADMIN, GROUP_OWNER
+from nonebot.adapters.onebot.v11.exception import ActionFailed, NetworkError
+from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
 from nonebot.log import logger
 from nonebot.permission import SUPERUSER
