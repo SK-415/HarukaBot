@@ -1,5 +1,5 @@
 import nonebot
-from nonebot.adapters.cqhttp import Bot
+from nonebot.adapters.onebot.v11 import Adapter as OneBotV11Adapter
 from nonebot.log import default_format, logger
 
 
@@ -17,7 +17,7 @@ nonebot.init()
 app = nonebot.get_asgi()
 
 driver = nonebot.get_driver()
-driver.register_adapter("cqhttp", Bot)
+driver.register_adapter(OneBotV11Adapter)
 
 nonebot.load_from_toml("pyproject.toml")
 
