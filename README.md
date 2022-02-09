@@ -9,6 +9,7 @@ Logo 画师：[@Ratto](https://space.bilibili.com/23242907)
 [![VERSION](https://img.shields.io/pypi/v/haruka-bot)](https://haruka-bot.sk415.icu/about/CHANGELOG.html)
 [![qq group](https://img.shields.io/badge/QQ%E7%BE%A4-629574472-orange)](https://jq.qq.com/?_wv=1027&k=sHPbCRAd)
 [![time tracker](https://wakatime.com/badge/github/SK-415/HarukaBot.svg)](https://wakatime.com/badge/github/SK-415/HarukaBot)
+[![black](https://img.shields.io/badge/code%20style-black-black.svg)](https://github.com/psf/black)
 
 ## 简介
 

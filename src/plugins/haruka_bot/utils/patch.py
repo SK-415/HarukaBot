@@ -17,5 +17,5 @@ def should_reload(self):
 
 if platform.system() == "Windows":
     _asyncio.asyncio_setup = asyncio_setup
-    config.Config.should_reload = should_reload # type: ignore
+    config.Config.should_reload = should_reload  # type: ignore
     logger.warning("检测到当前为 Windows 系统，已自动注入猴子补丁")

@@ -1,10 +1,11 @@
 from nonebot import on_notice
-from nonebot.adapters.onebot.v11 import Bot, GroupDecreaseNoticeEvent
+from nonebot.adapters.onebot.v11 import GroupDecreaseNoticeEvent
 
 from ..database import DB
 
 
 group_decrease = on_notice(priority=5)
+
 
 @group_decrease.handle()
 async def _(event: GroupDecreaseNoticeEvent):
@@ -12,4 +13,4 @@ async def _(event: GroupDecreaseNoticeEvent):
 
     if event.self_id == event.user_id:
         async with DB() as db:
-            await db.delete_sub_list('group', event.group_id)
+            await db.delete_sub_list("group", event.group_id)
