@@ -64,7 +64,7 @@ def install():
 
 
 def delete_pyppeteer():
-    """删除 Pyppeteer 遗留的 FireFox"""
+    """删除 Pyppeteer 遗留的 Chromium"""
 
     dir = Path(AppDirs("pyppeteer").user_data_dir)
     if not dir.exists():
