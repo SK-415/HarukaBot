@@ -16,7 +16,7 @@ _browser: Optional[Browser] = None
 async def init(**kwargs) -> Browser:
     global _browser
     browser = await async_playwright().start()
-    _browser = await browser.firefox.launch(**kwargs)
+    _browser = await browser.chromium.launch(**kwargs)
     return _browser
 
 
@@ -50,13 +50,13 @@ async def get_dynamic_screenshot(url):
 
 
 def install():
-    """自动安装、更新 FireFox"""
+    """自动安装、更新 Chromium"""
 
-    logger.info("正在检查 FireFox 更新")
+    logger.info("正在检查 Chromium 更新")
     import sys
     from playwright.__main__ import main
 
-    sys.argv = ["", "install", "firefox"]
+    sys.argv = ["", "install", "chromium"]
     try:
         main()
     except SystemExit:
