@@ -111,5 +111,4 @@ scheduler = scheduler.scheduler
 if not Path(get_path()).is_dir():
     Path(get_path()).mkdir(parents=True)
 
-from . import patch  # noqa
 from .browser import get_dynamic_screenshot  # noqa
