@@ -52,7 +52,7 @@ async def dy_sched():
                     break
                 except Exception as e:
                     logger.error("截图失败，以下为错误日志:")
-                    logger.error(traceback(e))
+                    logger.error(traceback.format_exc())
                 await asyncio.sleep(0.1)
             if not image:
                 logger.error("已达到重试上限，将在下个轮询中重新尝试")
