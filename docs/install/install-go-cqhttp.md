@@ -32,7 +32,7 @@ account:
 
 servers:
   - ws-reverse:
-      universal: ws://127.0.0.1:8080/cqhttp/ws
+      universal: ws://127.0.0.1:8080/onebot/v11/ws
 ```
 
 5. 在终端中重新运行 `go-cqhttp`，跟随提示完成扫码登录和安全验证。
