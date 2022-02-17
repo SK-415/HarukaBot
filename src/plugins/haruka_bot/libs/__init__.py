@@ -1,1 +1,1 @@
-from . import dynamic
+from . import dynamic  # noqa

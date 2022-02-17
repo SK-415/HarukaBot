@@ -1,0 +1,13 @@
+[flake8]
+exclude = 
+    docs/,
+    .github/,
+    venv/,
+    */_test/,
+    */test/,
+    data/,
+max-line-length = 90
+statistics = True
+; ignore =
+;     W503,
+;     E203

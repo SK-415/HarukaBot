@@ -11,6 +11,8 @@ def main():
 def run():
     create_env()
     from .bot import run
+
     run()
+
 
 main.add_command(run)
