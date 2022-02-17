@@ -50,7 +50,7 @@ async def dy_sched():
                 try:
                     image = await get_dynamic_screenshot(dynamic.url)
                     break
-                except Exception as e:
+                except Exception:
                     logger.error("截图失败，以下为错误日志:")
                     logger.error(traceback.format_exc())
                 await asyncio.sleep(0.1)

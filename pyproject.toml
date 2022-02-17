@@ -35,6 +35,7 @@ tortoise-orm = {extras = ["asyncpg"], version = "^0.17.3"}
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.4"
 black = "^21.9b0"
+flake8 = "^4.0.1"
 
 [nonebot.plugins]
 plugins = []
