@@ -14,7 +14,7 @@ packages = [
 ]
 
 [tool.poetry.scripts]
-hb = 'haruka_bot.cli.__main__:main'
+hb = 'haruka_bot.__main__:main'
 
 [tool.poetry.dependencies]
 python = "^3.8"
