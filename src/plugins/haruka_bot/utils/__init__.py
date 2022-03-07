@@ -50,6 +50,8 @@ async def permission_check(
     from ..database import DB
 
     if isinstance(event, PrivateMessageEvent):
+        if event.sub_type == "group":  # 不处理群临时会话
+            raise FinishedException
         return
     async with DB() as db:
         if await db.get_admin(event.group_id) and not await (
