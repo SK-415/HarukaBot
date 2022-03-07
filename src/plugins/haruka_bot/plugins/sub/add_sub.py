@@ -1,6 +1,5 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
-from nonebot.params import State
 from nonebot.typing import T_State
 
 from ...database import DB
@@ -18,7 +17,7 @@ add_sub.handle()(handle_uid)
 
 
 @add_sub.got("uid", prompt="请输入要关注的UID")
-async def _(event: MessageEvent, state: T_State = State()):
+async def _(event: MessageEvent, state: T_State):
     """根据 UID 订阅 UP 主"""
 
     uid = state["uid"]
