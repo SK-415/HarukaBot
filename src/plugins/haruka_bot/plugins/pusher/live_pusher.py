@@ -48,7 +48,7 @@ async def live_sched():
                         send_type=sets.type,
                         type_id=sets.type_id,
                         message=live_msg,
-                        at=sets.at,
+                        at=bool(sets.at),
                     )
                 await db.update_user(int(uid), name)
         status[uid] = new_status
