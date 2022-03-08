@@ -1,8 +1,9 @@
+from bilireq.live import get_rooms_info_by_uids
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
+from ... import config
 from ...database import DB
-from bilireq.live import get_rooms_info_by_uids
 from ...utils import safe_send, scheduler
 
 status = {}
@@ -11,11 +12,10 @@ status = {}
 @scheduler.scheduled_job("interval", seconds=10, id="live_sched")
 async def live_sched():
     """直播推送"""
-
     async with DB() as db:
         uids = await db.get_uid_list("live")
 
-    if not uids:
+    if not uids:  # 订阅为空
         return
     logger.debug(f"爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人")
     res = await get_rooms_info_by_uids(uids, reqtype="web")
@@ -27,10 +27,14 @@ async def live_sched():
             status[uid] = new_status
             continue
         old_status = status[uid]
-        if new_status != old_status and new_status:  # 判断是否推送过
+        if new_status == old_status:  # 直播间状态无变化
+            continue
+        status[uid] = new_status
+
+        name = info["uname"]
+        if new_status:  # 开播
             room_id = info["short_id"] if info["short_id"] else info["room_id"]
             url = "https://live.bilibili.com/" + str(room_id)
-            name = info["uname"]
             title = info["title"]
             cover = (
                 info["cover_from_user"] if info["cover_from_user"] else info["keyframe"]
@@ -40,15 +44,20 @@ async def live_sched():
             live_msg = (
                 f"{name} 正在直播：\n{title}\n" + MessageSegment.image(cover) + f"\n{url}"
             )
-            async with DB() as db:
-                push_list = await db.get_push_list(uid, "live")
-                for sets in push_list:
-                    await safe_send(
-                        bot_id=sets.bot_id,
-                        send_type=sets.type,
-                        type_id=sets.type_id,
-                        message=live_msg,
-                        at=bool(sets.at),
-                    )
-                await db.update_user(int(uid), name)
-        status[uid] = new_status
+        else:  # 下播
+            logger.info(f"检测到下播：{name}（{uid}）")
+            if not config.haruka_live_off_notify:  # 没开下播推送
+                continue
+            live_msg = f"{name} 下播了"
+
+        async with DB() as db:  # 推送
+            push_list = await db.get_push_list(uid, "live")
+            for sets in push_list:
+                await safe_send(
+                    bot_id=sets.bot_id,
+                    send_type=sets.type,
+                    type_id=sets.type_id,
+                    message=live_msg,
+                    at=bool(sets.at),
+                )
+            await db.update_user(int(uid), name)

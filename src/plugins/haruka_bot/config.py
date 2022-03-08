@@ -8,6 +8,7 @@ class Config(BaseSettings):
     haruka_dir: Optional[str] = None
     haruka_to_me: bool = True
     haruka_delete_pyppeteer: bool = False
+    haruka_live_off_notify: bool = False
 
     class Config:
         extra = "ignore"

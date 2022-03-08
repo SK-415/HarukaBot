@@ -35,11 +35,19 @@ HARUKA_DIR="./data/"
 
 ## HARUKA_TO_ME
 
-默认值: true
+默认值：True
 
-在群里使用命令前是否需要 @机器人。设置为 `false` 则可以直接触发指令。
+在群里使用命令前是否需要 @机器人。设置为 `False` 则可以直接触发指令。
 
 ```json
-Haruka_TO_ME=false
+Haruka_TO_ME=False
 ```
 
+## HARUKA_LIVE_OFF_NOTIFY
+
+默认值：False
+
+下播提醒
+```json
+HARUKA_LIVE_OFF_NOTIFY=True
+```
