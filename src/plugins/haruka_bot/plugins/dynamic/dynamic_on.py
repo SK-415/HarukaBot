@@ -1,6 +1,5 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
-from nonebot.params import State
 from nonebot.typing import T_State
 
 from ...database import DB
@@ -16,7 +15,7 @@ dynamic_on.handle()(handle_uid)
 
 
 @dynamic_on.got("uid", prompt="请输入要开启动态的UID")
-async def _(event: MessageEvent, state: T_State = State()):
+async def _(event: MessageEvent, state: T_State):
     """根据 UID 开启动态"""
 
     async with DB() as db:

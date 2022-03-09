@@ -1,6 +1,5 @@
 from typing import Union
 from nonebot import on_command
-from nonebot.params import State
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
 from nonebot.permission import SUPERUSER
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
@@ -23,7 +22,7 @@ at_on.handle()(handle_uid)
 
 @at_on.got("uid", prompt="请输入要开启全体的UID")
 async def _(
-    event: Union[PrivateMessageEvent, GroupMessageEvent], state: T_State = State()
+    event: Union[PrivateMessageEvent, GroupMessageEvent], state: T_State
 ):
     """根据 UID 开启全体"""
 

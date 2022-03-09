@@ -37,6 +37,23 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
     :::
     ::::
 
+    ::: tip 下载慢可以尝试清华源
+    <CodeGroup>
+    <CodeGroupItem title="pip">
+
+    ```sh
+    pip install haruka-bot -i https://pypi.tuna.tsinghua.edu.cn/simple/
+    ```
+    </CodeGroupItem>
+    <CodeGroupItem title="poetry">
+
+    ```sh
+    请参考：https://python-poetry.org/docs/repositories/#install-dependencies-from-a-private-repository
+    ```
+    </CodeGroupItem>
+    </CodeGroup>
+    :::
+
 3. 启动 HarukaBot。
 
     ```sh

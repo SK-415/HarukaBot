@@ -49,23 +49,8 @@ async def get_dynamic_screenshot(url):
         raise
 
 
-def install():
-    """自动安装、更新 Chromium"""
-
-    logger.info("正在检查 Chromium 更新")
-    import sys
-    from playwright.__main__ import main
-
-    sys.argv = ["", "install", "chromium"]
-    try:
-        main()
-    except SystemExit:
-        pass
-
-
 def delete_pyppeteer():
     """删除 Pyppeteer 遗留的 Chromium"""
-
     dir = Path(AppDirs("pyppeteer").user_data_dir)
     if not dir.exists():
         return
@@ -82,5 +67,25 @@ def delete_pyppeteer():
         logger.info("已清理 Pyppeteer 依赖残留")
 
 
+def install():
+    """自动安装、更新 Chromium"""
+    logger.info("正在检查 Chromium 更新")
+    import sys
+    from playwright.__main__ import main
+
+    sys.argv = ["", "install", "chromium"]
+    try:
+        main()
+    except SystemExit:
+        pass
+
+
+async def check_playwright_dependencies():
+    """检查 Playwright 依赖"""
+    logger.info("检查 Playwright 依赖，不完整将自动退出")
+    await init()
+
+
 get_driver().on_startup(delete_pyppeteer)
 get_driver().on_startup(install)
+get_driver().on_startup(check_playwright_dependencies)

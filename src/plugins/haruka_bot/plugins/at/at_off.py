@@ -4,7 +4,6 @@ from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import (GroupMessageEvent,
                                                PrivateMessageEvent)
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
-from nonebot.params import State
 from nonebot.permission import SUPERUSER
 from nonebot.typing import T_State
 
@@ -21,7 +20,7 @@ at_off.handle()(handle_uid)
 
 @at_off.got("uid", prompt="请输入要关闭全体的UID")
 async def _(
-    event: Union[PrivateMessageEvent, GroupMessageEvent], state: T_State = State()
+    event: Union[PrivateMessageEvent, GroupMessageEvent], state: T_State
 ):
     """根据 UID 关闭全体"""
 
