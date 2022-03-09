@@ -10,6 +10,7 @@ body:
         ## 请补全标题并认真填写下方内容
 
   - type: input
+    id: hb_version
     attributes:
       label: HarukaBot 版本
       description: 可发送「帮助」或使用 pip show haruka-bot 查看
@@ -17,6 +18,7 @@ body:
       required: true
 
   - type: textarea
+    id: feature_description
     attributes:
       label: 功能建议
       description: 想要改进或者添加的功能
@@ -24,6 +26,7 @@ body:
       required: true
 
   - type: textarea
+    id: extra_info
     attributes:
       label: 额外信息（可选）
       description: 如：为什么需要这个功能？在什么场景下适用？
