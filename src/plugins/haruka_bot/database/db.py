@@ -6,7 +6,7 @@ from nonebot import get_driver
 from nonebot.log import logger
 from packaging.version import Version
 from tortoise import Tortoise
-from tortoise.query_utils import Q
+from tortoise.expressions import Q
 from tortoise.queryset import QuerySet
 
 from ..utils import get_path

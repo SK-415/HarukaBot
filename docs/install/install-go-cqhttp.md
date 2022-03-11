@@ -23,7 +23,7 @@ HarukaBot 本身只负责处理 B 站信息，需要借助 go-cqhttp 与 QQ 进�
 Windows 自带记事本可能导致文本乱码，请使用第三方文本编辑器，如 [NotePad3](https://www.rizonesoft.com/downloads/notepad3/)，[VS Code](https://code.visualstudio.com/Download)，[Sublime Text](http://www.sublimetext.com/3)。
 :::
 
-**示例版本：v1.0.0-beta6**
+**示例版本：v1.0.0-beta8-fix2**
 
 
 ```yml

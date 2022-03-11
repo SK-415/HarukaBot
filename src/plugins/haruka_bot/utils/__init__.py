@@ -10,7 +10,7 @@ from nonebot.adapters.onebot.v11.exception import ActionFailed, NetworkError
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
 from nonebot.log import logger
-from nonebot.params import CommandArg, State
+from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
 from nonebot.typing import T_State
@@ -31,7 +31,7 @@ def get_path(*other):
 async def handle_uid(
     bot: Bot,
     event: MessageEvent,
-    state: T_State = State(),
+    state: T_State,
     command_arg: Message = CommandArg(),
 ):
     uid = command_arg.extract_plain_text().strip()
@@ -50,6 +50,8 @@ async def permission_check(
     from ..database import DB
 
     if isinstance(event, PrivateMessageEvent):
+        if event.sub_type == "group":  # 不处理群临时会话
+            raise FinishedException
         return
     async with DB() as db:
         if await db.get_admin(event.group_id) and not await (
@@ -111,5 +113,4 @@ scheduler = scheduler.scheduler
 if not Path(get_path()).is_dir():
     Path(get_path()).mkdir(parents=True)
 
-from . import patch  # noqa
 from .browser import get_dynamic_screenshot  # noqa

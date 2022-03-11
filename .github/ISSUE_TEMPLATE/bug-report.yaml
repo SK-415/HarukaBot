@@ -1,0 +1,48 @@
+name: 错误回报
+description: 在使用 HarukaBot 的过程中遇到了错误
+title: '【错误回报】'
+labels: [ "bug?" ]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 请补全标题并认真填写下方内容
+
+  - type: input
+    id: system_version
+    attributes:
+      label: 运行环境
+      description: 如 Windows Server 2012、CentOS 8.2 等
+    validations:
+      required: true
+
+  - type: input
+    id: hb_version
+    attributes:
+      label: HarukaBot 版本
+      description: 可发送「帮助」或使用 pip show haruka-bot 查看
+    validations:
+      required: true
+
+  - type: input
+    id: gocq_version
+    attributes:
+      label: go-cqhttp 版本
+      description: 启动时显示
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug_info
+    attributes:
+      label: 错误描述
+      description: 描述你遇到的问题，需要怎么复现？期望的结果是什么？
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: 报错日志（如果有）
+      description: 运行 hb run 的目录中的 log\error.log 文件
