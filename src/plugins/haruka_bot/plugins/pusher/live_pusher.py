@@ -58,6 +58,6 @@ async def live_sched():
                     send_type=sets.type,
                     type_id=sets.type_id,
                     message=live_msg,
-                    at=bool(sets.at),
+                    at=bool(sets.at) if new_status else False,  # 下播不 @
                 )
             await db.update_user(int(uid), name)
