@@ -37,8 +37,8 @@ async def dy_sched():
         last_time[uid] = dynamic.time
         return
 
-    for dynamic in dynamics[4::-1]:  # 从旧到新取最近5条动态
-        dynamic = Dynamic(**dynamic)
+    for card in dynamics[4::-1]:  # 从旧到新取最近5条动态
+        dynamic = Dynamic(**card)
         if (
             dynamic.time > last_time[uid]
             and dynamic.time
@@ -48,7 +48,7 @@ async def dy_sched():
             image = None
             for _ in range(3):
                 try:
-                    image = await get_dynamic_screenshot(dynamic.url)
+                    image = await get_dynamic_screenshot(card)
                     break
                 except Exception:
                     logger.error("截图失败，以下为错误日志:")

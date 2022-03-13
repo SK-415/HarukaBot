@@ -1,0 +1,1477 @@
+
+/* 为了让图片缩放后不变糊设置了这么歌样式 */
+img {
+
+    image-rendering: -moz-crisp-edges;
+    /* Firefox */
+    image-rendering: -o-crisp-edges;
+    /* Opera */
+    image-rendering: -webkit-optimize-contrast;
+    /*Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    
+    -ms-interpolation-mode: nearest-neighbor;
+    /* IE (non-standard property) */
+}
+
+/* 12号的字体 */
+.tw-font{
+    font-size: 12px;
+}
+
+/* 16号的字体 */
+.st-font{
+    font-size: 16px;
+}
+
+/* 14号字体 */
+.ft-font{
+    font-size: 14px;
+}
+
+/* #AAAAAA色号字体 */
+.gray-color{
+    color: #AAAAAA;
+}
+
+.gray-color-1{
+    color: #99a2aa;
+}
+
+.main-card{
+    height: auto;
+    width: 554px;
+    margin:auto;
+    /* background-color:wheat; */
+    overflow:hidden;
+    font-size: 14px;
+    border-radius: 5px;
+    font-family: Helvetica Neue, Helvetica, Arial, Microsoft Yahei, Hiragino Sans GB, Heiti SC, WenQuanYi Micro Hei, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji,sans-serif;
+}
+
+.outter{
+    width: 534px;
+    height: auto;
+    display: block;
+    margin-left: 10px;
+    
+}
+
+.symbol{
+    width: 76.8px;
+    height:34.95px;
+    margin-top: 30px;
+    margin-left: 40%;
+    background-image: url(pic/bilibili.png);
+    background-size:cover;
+}
+
+
+.user-info{
+    width: 534;
+    height: auto;
+    position: relative;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    
+}
+
+.face{
+    width: 48px;
+    height: 48px;
+    overflow: hidden;
+    margin-left: 10px;
+    border-radius: 24px;
+    display: inline-block;
+    background-size:cover;
+    border: #99a2aa 1px solid;
+}
+
+.user-name{
+    display: inline-block;
+    position: absolute;
+    margin: 5px 0 0 15px;
+}
+
+.pendant{
+    width: 81.6px;
+    height: 81.6px;
+    position: absolute;
+    margin: -15px 0 0 -7px ;
+    background-size:cover;
+}
+.time{
+    display: inline-block;
+    position: absolute;
+    margin: 35px 0 0 15px;
+}
+
+.verify{
+    height: 16px;
+    width: 16px;
+    z-index: 1;
+    position: absolute;
+    background-size:cover;
+    margin: 35px 0 0 45px;
+    border-radius: 8px;
+}
+
+.dynamic-content{
+    width: 534px;
+    height: auto;
+}
+
+.dynamic-text{
+    width: 524px;
+    height: auto;
+    margin:10px 0 10px 0;
+}
+
+/* 链接图标 */
+.web-link{
+    height: 15px;
+    width: 15px;
+    margin: 0 0 -2px 2px;
+
+}
+
+/*预约*/
+.reserve{
+    width: 520px;
+    height: 59.4px;
+    display: none;
+    margin-top: 10px;
+    border-radius: 3px;
+    background-color: #f4f5f7;
+    position: relative;
+    padding-right: 10px;
+    border: 1px solid #e5e9ef;
+}
+
+/*预约标题*/
+.reserve-title{
+    width: 420px;
+    height: 18.4px;
+    line-height: 19px;
+    position: absolute;
+    margin: 10px 0 0 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+/*预约描述*/
+.reserve-desc{
+    width: 396px;
+    height: 16px;
+    color: #aaa;
+    position: absolute;
+    margin: 35px 0 0 15px;
+}
+.reserve-desc-first{
+    width: auto;
+    height: 16px;
+    display: inline-block;
+}
+.reserve-desc-second{
+    width: auto;
+    height: 16px;
+    margin-left: 10px;
+    display: inline-block;
+
+}
+
+.reserve-button{
+    display: inline-block;
+    background-color: #00a1d6;
+    margin: 15px 0 0 450px;
+    position: absolute;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    line-height: 31px;
+    width: 64px;
+    height: 31px;
+}
+
+.game{
+    width: 510px;
+    height: 64px;
+    display: none;
+    margin-top: 10px;
+    border-radius: 3px;
+    position: relative;
+    background-color: #f4f5f7;
+    border: 1px solid #e5e9ef;
+    padding: 8px 12px 8px 12px;
+}
+
+.game-cover{
+    height:64px;
+    width:64px;
+    border-radius:3px;
+    background-color: white;
+    display:inline-block;
+    background-size:cover;
+}
+
+.game-title{
+    width: 344px;
+    height: 18.4px;
+    margin-left: 10px;
+    position: absolute;
+    display: inline-block;
+}
+
+.game-desc-fist{
+    width: 320px;
+    height: 16px;
+    position:absolute;
+    margin: 25px 0 0 10px;
+    display: inline-block;
+}
+
+.game-desc-second{
+    width: 320px;
+    height: 16px;
+    position:absolute;
+    margin: 45px 0 0 10px;
+    display: inline-block;
+
+}
+
+.game-button{
+    width: 64px;
+    height: 28px;
+    color: white;
+    line-height: 28px;
+    text-align: center;
+    position:absolute;
+    border-radius: 3px;
+    display: inline-block;
+    margin:15px 0px 0px 365px;
+    background-color:#00a1d6;  
+}
+
+.pic-mini{
+    border-radius: 4px;
+    display:inline-block;
+    vertical-align: top;
+    background-size:cover;
+    margin: 5px 0 0 5px;
+    background-repeat:no-repeat;
+}
+
+.decorate{
+    display: none;
+    width: 520px;
+    height: 80px;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.decorate-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+.decorate-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.decorate-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.playlist{
+    display: none;
+    width: 520px;
+    height: 80px;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.playlist-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+.playlist-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.playlist-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.playlist-button{
+    width: 24px;
+    height: 20px;
+    padding: 0 6px 0 6px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    display:inline-block;
+    position: absolute;
+    margin: 15px 0 0 460px;
+    background-color: rgb(125, 117, 242);
+    
+}
+
+.primp{
+    display: none;
+    width: 520px;
+    height: 80px;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.primp-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+
+.primp-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.primp-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.primp-button{
+    width: 24px;
+    height: 20px;
+    padding: 0 6px 0 6px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    display:inline-block;
+    position: absolute;
+    margin: 15px 0 0 460px;
+    background-color: rgb(125, 117, 242);
+}
+
+.music{
+    display: none;
+    width: 520px;
+    height: 80px;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.music-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+
+.music-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.music-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.music-button{
+    width: 24px;
+    height: 20px;
+    padding: 0 6px 0 6px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    display:inline-block;
+    position: absolute;
+    margin: 15px 0 0 460px;
+    background-color: rgb(125, 117, 242);
+}
+
+.music-play{
+    width: 44px;
+    height: 44px;
+    z-index: 2;
+    margin: 18px 0 0 18px;
+    position: absolute;
+    background-size: cover;
+    background-image: url(pic/play2.png);
+}
+
+
+.comic{
+    display: none;
+    width: 520px;
+    height: 160px;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.comic-cover{
+    height: 160px;
+    width: 120px;
+    position: absolute;
+    background-size: cover;
+    display: inline-block;
+}
+
+.comic-title{
+    width: 370px;
+    height: 20px;
+    position: absolute;
+    margin: 16px 0 0 135px;
+    
+}
+
+.comic-desc-fist{
+    width: 370px;
+    height: 16px;
+    position: absolute;
+    display: inline-block;
+    margin:45px 0 0 135px;
+}
+
+.comic-desc-second{
+    width: 370px;
+    height: 16px;
+    position: absolute;
+    display: inline-block;
+    margin: 70px 0 0 135px;
+}
+
+.comic-button{
+    z-index: 3;
+    width: 32px;
+    height: 18px;
+    color: white;
+    position:absolute;
+    line-height: 18px;
+    border-radius: 3px;
+    text-align: center;
+    padding: 0 5px 0 5px;
+    margin: 5px 0 0 70px;
+    display: inline-block;
+    background-color: rgb(251, 114, 153);
+}
+
+.video-info{
+    width: 520px;
+    height: 127px;
+    display: none;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.video-cover{
+    width: 203px;
+    height: 127px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    position: absolute;
+}
+
+.video-title{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 16px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+
+.video-desc{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 60px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+
+}
+
+.video-button{
+    width: 48px;
+    height: 18px;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    position: absolute;
+    line-height: 18px;
+    border-radius: 3px;
+    margin: 10px 0 0 140px;
+    padding: 0 4px 0 4px;
+    background-color: #fb7299;
+}
+
+.article{
+    display: none;
+    width: 520px;
+    height: 208.8px;
+    border: 1px solid ;
+    border-radius: 3px;
+    overflow: hidden;
+    border: 1px solid #e5e9ef;
+}
+
+.article-cover{
+    width: 520px;
+    height: 120px;
+    background-size: cover;
+}
+
+.article-title{
+    width: 480px;
+    height: 22px;
+    margin: 10px 0 0 20px;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    overflow: hidden; 
+}
+
+.article-desc{
+    width: 480px;
+    height: 36.8px;
+    overflow: hidden;
+    line-height: 19px;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    margin: 6px 0 0 20px;
+    -webkit-box-orient: vertical;
+}
+
+.vote-info{
+    display: none;
+    width: 520px;
+    height: 80px;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+
+}
+
+.vote-cover-out{
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.vote-cover{
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    background-image: url(pic/icon-vote.svg);
+    
+}
+
+.vote-title{
+    width: 335px;
+    height: 19.2px;
+    overflow: hidden; 
+    position: absolute;
+    white-space: nowrap;
+    margin:-65px 0px 0px 95px;
+    display: inline-block;
+    text-overflow: ellipsis; 
+}
+
+.vote-desc{
+    width: 335px;
+    height: 16px; 
+    position: absolute;
+    margin:-34px 0px 0px 95px;
+    display: inline-block;
+}
+
+.vote-button{
+    width: 54px;
+    height: 28px;
+    color: white;
+    line-height: 28px;
+    text-align: center;
+    position: absolute;
+    border-radius: 5px;
+    display: inline-block;
+    margin: -55px 0 0 450px ;
+    background-color: #00a1d6;
+}
+
+.repost{
+    height: auto;
+    width: 534px;
+    display: none;
+    border-radius: 3px;
+    /* padding: 0 12px 0 12px; */
+    background-color: #f4f5f7;
+}
+
+.repost-outter{
+    height: auto;
+    width: 523px;
+    margin-left: 3px;
+}
+
+.oringin-userinfo{
+    width: 522px;
+    height: 30.4px;
+    position: relative;
+}
+
+.oringin-face{
+    width: 24px;
+    height: 24px;
+    overflow: hidden;
+    position: absolute;
+    border-radius: 12px;
+    margin: 5px 0 0 5px;
+    display: inline-block;
+    background-size: cover;
+}
+
+.oringin-uname{
+    width: auto;
+    height: 24x;
+    line-height: 24px;
+    color: #00a1d6;
+    margin: 5px 0 0 35px;
+    display: inline-block;
+}
+
+.repost-text{
+    width: 512px;
+    height: auto;
+    line-height: 22px;
+    margin-top: 5px;
+    margin-left: 5px;
+    letter-spacing: 0.5px;
+    word-break: break-word;
+}
+
+.repost-pic{
+    width: 528px;
+    height: auto;
+}
+
+.repost-reserve{
+    width: 496px;
+    height: 39.4px;
+    display: none;
+    position: relative;
+    margin: 10px 0 0 5px;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+    padding: 10px 12px 10px 12px;
+}
+
+.repost-reserve-title{
+    width: 420px;
+    height: 18.4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: absolute;
+}
+
+.repost-reserve-desc-first{
+    width: auto;
+    height: 16px;
+    display: inline-block;
+    margin: 25px 0 0 0;
+}
+
+.repost-reserve-desc-second{
+    width: auto;
+    height: 16px;
+    display: inline-block;
+    margin: 0 0 0 10px;
+}
+
+.repost-reserve-button{
+    width: 64px;
+    height: 28px;
+    color: white;
+    position: absolute;
+    border-radius: 3px;
+    text-align: center;
+    line-height: 28px;
+    margin: -35px 0 0 425px;
+    background-color: #00a1d6;
+
+}
+
+.repost-game{
+    display: none;
+    width: 496px;
+    height: 64px;
+    border-radius: 3px;
+    position: relative;
+    margin: 10px 0 0 3px;
+    background-color: white;
+    padding: 8px 12px 8px 12px;
+}
+
+.repost-game-cover{
+    
+    width: 64px;
+    height: 64px;
+    display: inline-block;
+    background-size: cover;
+    
+}
+
+.repost-game-title{
+    width: 344px;
+    height: 18.4px;
+    margin: 0 0 0 16px;
+    position: absolute;
+    display: inline-block;
+}
+
+.repost-game-desc-fist{
+    position: absolute;
+    margin: 22px 0 0 16px;
+    display: inline-block;
+    
+
+}
+
+.repost-game-desc-second{
+    margin:42px 0 0 16px ;
+    display: inline-block;
+    position: absolute;
+
+}
+
+.repost-game-button{
+    width: 64px;
+    height: 28px;
+    color: white;
+    line-height: 28px;
+    text-align: center;
+    position: absolute;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 20px 0 0 365px ;
+    background-color: #00a1d6;
+}
+
+.repost-video{
+    width: 520px;
+    height: 127px;
+    display: none;
+    margin-left: 3px;
+    border: 1px solid ;
+    position: relative;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-video-cover{
+    width: 203px;
+    height: 127px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    position: absolute;
+}
+
+.repost-video-title{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 16px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+
+.repost-video-desc{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 60px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+
+}
+
+.repost-video-button{
+    width: 48px;
+    height: 18px;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    position: absolute;
+    line-height: 18px;
+    border-radius: 3px;
+    margin: 10px 0 0 140px;
+    padding: 0 4px 0 4px;
+    background-color: #fb7299;
+}
+
+.repost-primp{
+    display: none;
+    width: 520px;
+    height: 80px;
+    border: 1px solid ;
+    position: relative;
+    margin-left: 3px;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-primp-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+
+.repost-primp-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-primp-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-primp-button{
+    width: 24px;
+    height: 20px;
+    padding: 0 6px 0 6px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    display:inline-block;
+    position: absolute;
+    margin: 15px 0 0 460px;
+    background-color: rgb(125, 117, 242);
+}
+
+.repost-decorate{
+    display: none;
+    width: 520px;
+    height: 80px;
+    margin: 5px 0 0 3px;
+    border: 1px solid ;
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-decorate-cover{
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+.repost-decorate-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-decorate-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-playlist{
+    display: none;
+    width: 520px;
+    height: 80px;
+    margin-left: 3px;
+    background-color: white;
+    border: 1px solid ;
+    position: relative;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-playlist-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+.repost-playlist-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-playlist-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-playlist-button{
+    width: 24px;
+    height: 20px;
+    padding: 0 6px 0 6px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    display:inline-block;
+    position: absolute;
+    margin: 15px 0 0 460px;
+    background-color: rgb(125, 117, 242);
+    
+}
+
+.repost-music{
+    display: none;
+    width: 520px;
+    height: 80px;
+    margin:5px 0 0 3px ;
+    position: relative;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-music-cover{
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    display: inline-block;
+    position: absolute;
+}
+
+
+.repost-music-title{
+    width: 410px;
+    height: 20px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 15px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-music-desc{
+    width: 410px;
+    height: 16px;
+    position: absolute;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    margin: 45px 0 0px 90px;
+    text-overflow: ellipsis;
+}
+
+.repost-music-button{
+    width: 24px;
+    height: 20px;
+    padding: 0 6px 0 6px;
+    color: white;
+    text-align: center;
+    line-height: 20px;
+    display:inline-block;
+    position: absolute;
+    margin: 15px 0 0 460px;
+    background-color: rgb(125, 117, 242);
+}
+
+.repost-vote-info{
+    display: none;
+    width: 520px;
+    height: 80px;
+    margin-left: 3px;
+    border: 1px solid ;
+    position: relative;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+
+}
+
+.repost-vote-cover-out{
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.repost-vote-cover{
+    width: 35px;
+    height: 35px;
+    background-size: cover;
+    background-image: url(pic/icon-vote.svg);
+    
+}
+
+.repost-vote-title{
+    width: 335px;
+    height: 19.2px;
+    overflow: hidden; 
+    position: absolute;
+    white-space: nowrap;
+    margin:-65px 0px 0px 95px;
+    display: inline-block;
+    text-overflow: ellipsis; 
+}
+
+.repost-vote-desc{
+    width: 335px;
+    height: 16px; 
+    position: absolute;
+    margin:-34px 0px 0px 95px;
+    display: inline-block;
+}
+
+.repost-vote-button{
+    width: 54px;
+    height: 28px;
+    color: white;
+    line-height: 28px;
+    text-align: center;
+    position: absolute;
+    border-radius: 5px;
+    display: inline-block;
+    margin: -55px 0 0 450px ;
+    background-color: #00a1d6;
+}
+
+.repost-article{
+    display: none;
+    width: 520px;
+    height: 208.8px;
+    border: 1px solid ;
+    margin-left: 3px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-article-cover{
+    width: 520px;
+    height: 120px;
+    background-size: cover;
+}
+
+.repost-article-title{
+    width: 480px;
+    height: 22px;
+    margin: 10px 0 0 20px;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    overflow: hidden; 
+}
+
+.repost-article-desc{
+    width: 480px;
+    height: 36.8px;
+    overflow: hidden;
+    line-height: 19px;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    margin: 6px 0 0 20px;
+    -webkit-box-orient: vertical;
+}
+
+.repost-comic{
+    display: none;
+    width: 520px;
+    height: 160px;
+    margin-left: 3px;
+    border: 1px solid ;
+    position: relative;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-comic-cover{
+    height: 160px;
+    width: 120px;
+    position: absolute;
+    background-size: cover;
+    display: inline-block;
+}
+
+.repost-comic-title{
+    width: 370px;
+    height: 20px;
+    position: absolute;
+    margin: 16px 0 0 135px;
+    
+}
+
+.repost-comic-desc-fist{
+    width: 370px;
+    height: 16px;
+    position: absolute;
+    display: inline-block;
+    margin:45px 0 0 135px;
+}
+
+.repost-comic-desc-second{
+    width: 370px;
+    height: 16px;
+    position: absolute;
+    display: inline-block;
+    margin: 70px 0 0 135px;
+}
+
+.repost-comic-button{
+    z-index: 3;
+    width: 32px;
+    height: 18px;
+    color: white;
+    position:absolute;
+    line-height: 18px;
+    border-radius: 3px;
+    text-align: center;
+    padding: 0 5px 0 5px;
+    margin: 5px 0 0 70px;
+    display: inline-block;
+    background-color: rgb(251, 114, 153);
+}
+
+.movie{
+    width: 520px;
+    height: 127px;
+    display: none;
+    margin-left: 3px;
+    border: 1px solid ;
+    position: relative;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-movie-cover{
+    width: 203px;
+    height: 127px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    position: absolute;
+}
+
+.repost-movie-title{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 16px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+
+.repost-movie-button{
+    width: 48px;
+    height: 18px;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    position: absolute;
+    line-height: 18px;
+    border-radius: 3px;
+    margin: 10px 0 0 140px;
+    padding: 0 4px 0 4px;
+    background-color: #fb7299;
+}
+
+.repost-live{
+    width: 520px;
+    height: 127px;
+    display: none;
+    margin-left: 3px;
+    border: 1px solid ;
+    position: relative;
+    background-color: white;
+    border: 1px solid #e5e9ef;
+}
+
+.repost-live-cover{
+    width: 203px;
+    height: 127px;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    position: absolute;
+}
+
+.repost-live-title{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 16px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+}
+
+.repost-live-desc{
+    width: 289px;
+    height: 38px;
+    overflow: hidden;
+    line-height: 19px;
+    position: absolute;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 2;
+    margin: 90px 0 0 220px ;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+
+}
+
+.repost-live-button{
+    width: 48px;
+    height: 18px;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    position: absolute;
+    line-height: 18px;
+    border-radius: 3px;
+    margin: 10px 0 0 140px;
+    padding: 0 4px 0 4px;
+    background-color: #fb7299;
+}
+
+
+.music-play{
+    width: 44px;
+    height: 44px;
+    z-index: 2;
+    margin: 18px 0 0 18px;
+    position: absolute;
+    background-size: cover;
+    background-image: url(pic/play2.png);
+}
+
+
+.vote{
+    height: 13px;
+    width: 12px;
+    margin: 0 2px 0 2px;
+}
+
+/*抽奖的图标*/
+.lottery{
+    height: 18px;
+    width: 19px;
+    margin: 0 2px -3px 2px;
+}
+
+.taobao{
+    width: 15px;
+    height: 15px;
+     margin: 0 0 -2px 0;
+}
+/*富文本图标*/
+.rich-text-img{
+    width:20px;
+    height:20px;
+    vertical-align:top;
+    position:relative;
+    top:1px;
+}
+
+.foot{
+    width: 534px;
+    height: 105px;
+    margin-top: 15px;
+    position: relative;
+    padding-bottom:10px ;
+}
+
+.qrcode{
+    width: 60px;
+    height: 60px;
+    z-index: 3;
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 35px 0 0 470px;
+    position: absolute;
+}
+
+.notice{
+    font-size: 12px;
+    color: brown;
+    position: absolute;
+    margin: 80px 0 0 0;
+}
+
+.bilibili{
+    position: absolute;
+    margin-top: 35px;
+    height: 23.3px;
+    width: 51.2px;
+    background-size: cover;
+    background-image: url(pic/bilibili.png);
+}
+
+/* 2233的图片 */
+.mid-pic{
+    position: absolute;
+    height: 70px;
+    width: 150px;
+    z-index: 1;
+    margin: 30px 0 0 335px ;
+    background-image: url(pic/2233.jpg);
+    background-size:contain;
+}
+
+/* emoji表情图片的样式 */
+.emoji{
+    height: 20px;
+    width: 20px;
+    margin:0 1px -5px 1px;
+}
+

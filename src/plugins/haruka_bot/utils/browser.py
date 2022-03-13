@@ -2,7 +2,6 @@ import base64
 import shutil
 from pathlib import Path
 from typing import Optional
-
 from appdirs import AppDirs
 from nonebot import get_driver
 from nonebot.log import logger
@@ -24,23 +23,65 @@ async def get_browser(**kwargs) -> Browser:
     return _browser or await init(**kwargs)
 
 
-async def get_dynamic_screenshot(url):
+async def get_dynamic_screenshot(dynamic):
     browser = await get_browser()
     page = None
     try:
         page = await browser.new_page(device_scale_factor=2)
-        await page.goto(url, wait_until="networkidle", timeout=10000)
-        await page.set_viewport_size({"width": 2560, "height": 1080})
-        card = await page.query_selector(".card")
-        assert card
-        clip = await card.bounding_box()
-        assert clip
-        bar = await page.query_selector(".text-bar")
-        assert bar
-        bar_bound = await bar.bounding_box()
-        assert bar_bound
-        clip["height"] = bar_bound["y"] - clip["y"]
-        image = await page.screenshot(clip=clip, full_page=True)
+        await page.goto("file://" + str(Path.cwd()/"dynamic_analysis"/"dynamic_card.html"))
+        await page.evaluate("""
+                    (card_dic)=>{
+                    window.card = card_dic
+                     //先设置一下头像,昵称,时间,二维码,认证图标
+            user_info_process(card);
+            //对文字内容进行处理
+            dynamic_text_process(card.desc.type, JSON.parse(card.card), 0, ".dynamic-text");
+            add_on_card_info(card, 0);
+            //找出转发内容所在的div,因为这个div背景颜色和其他的div不太一样
+            //这个div的默认display为none,当动态类型为转发的时候将其display改为block
+            var repost = $(".repost");
+            switch (card.desc.type) {
+                //转发的动态
+                case 1:
+                    //对转发部分进行处理
+                    //先让转发内容所在的div显示出来
+                    repost.css("display", "block")
+                    repost_process()
+                    break;
+                //发送了一条带图片的动态
+                case 2:
+                    //对图片进行处理
+                    pic_process(JSON.parse(card.card).item.pictures, ".dynamic-pic");
+                    break
+                //发送了一条纯文字动态
+                case 4:
+                    //可能有投票,也可能有其他东西,但是只见过投票所以其他的以后有时间再加
+                    vote_process(card.desc.type, JSON.parse(card.card), 0)
+                    break
+                //发送了新投稿视频
+                case 8:
+                    video_process(card, 0);
+                    break;
+                //发送了专栏
+                case 64:
+                    //对专栏进行处理
+                    article_process(JSON.parse(card.card), 0);
+                    break;
+                //音乐
+                case 256:
+                    music_process(JSON.parse(card.card), 0)
+                    break;
+                //挂件
+                case 2048:
+                //漫画
+                case 2049:
+                    other_process(JSON.parse(card.card), 0);
+                    break;
+            }
+                    }
+                    """, dynamic)
+        await page.wait_for_load_state(state="networkidle", timeout=1000)
+        image = await page.locator(".main-card").screenshot(type="jpeg", quality=100)
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:

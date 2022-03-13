@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <link rel="stylesheet" href="dynamic.css">
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer">
+    <title>dynamic</title>
+</head>
+
+<body>
+    <!-- 所有内容所在的div -->
+    <div class="main-card" id="main-card">
+        <!-- 在所有信息外面包一个div以便于调整所有信息在main-card中的位置 -->
+        <div class="outter">
+            <!-- bilibili标志所在的div -->
+            <div class="symbol" id="symbol">
+
+            </div>
+            <!-- 发布动态的人的头像、昵称以及发布动态的时间所在的div -->
+            <div class="user-info" id="user-info">
+                <!-- 认证小闪电所在的div -->
+                <div class="verify" id="verify"></div>
+                <!-- 头像挂件所在的div -->
+                <div class="pendant" id="pendant"></div>
+                <!-- 头像所在的div -->
+                <div class="face" id="face"></div>
+                <!-- 用户名所在的div -->
+                <div class="user-name st-font" id="user-name"></div>
+                <!-- 发布动态的时间所在的div -->
+                <div class="time tw-font gray-color" id="time"></div>
+            </div>
+            <!-- 动态主体所在的div -->
+            <div class="dynamic-content" id="dynamic-content">
+                <!-- 动态的文字内容所在的div -->
+                <div class="dynamic-text" id="dynamic-text"></div>
+                <!-- 动态的图片所在的div -->
+                <div class="dynamic-pic" id="dynamic-pic"></div>
+                <!-- 投稿视频信息所在的div -->
+                <div class="video-info" id="video-info">
+                    <div class="video-cover"></div>
+                    <div class="video-title"></div>
+                    <div class="video-desc tw-font gray-color-1"></div>
+                    <div class="video-button tw-font">投稿视频</div>
+
+                </div>
+                <!-- 投票信息所在的div -->
+                <div class="vote-info">
+                    <div class="vote-cover-out">
+                        <div class="vote-cover"></div>
+                    </div>
+                    <div class="vote-title ft-font"></div>
+                    <div class="vote-desc tw-font gray-color-1"></div>
+                    <div class="vote-button">投票</div>
+
+                </div>
+                <!-- 预约信息所在的div -->
+                <div class="reserve" id="reserve">
+                    <div class="reserve-title">
+                    </div>
+                    <div class="reserve-desc tw-font">
+                        <div class="reserve-desc-first"></div>
+                        <div class="reserve-desc-second"></div>
+
+                    </div>
+                    <div class="reserve-button">预约</div>
+                </div>
+                <!-- 游戏信息所在的div -->
+                <div class="game" id="game">
+                    <div class="game-cover"></div>
+                    <div class="game-title"></div>
+                    <div class="game-desc-fist tw-font gray-color-1"></div>
+                    <div class="game-desc-second tw-font gray-color-1"></div>
+                    <div class="game-button">进入</div>
+                </div>
+                <!-- 装扮信息所在的div -->
+                <div class="decorate" id="decorate">
+                    <div class="decorate-cover"></div>
+                    <div class="decorate-title"></div>
+                    <div class="decorate-desc tw-font gray-color-1"></div>
+                </div>
+                <!-- 挂件所在的div -->
+                <div class="primp">
+                    <div class="primp-cover"></div>
+                    <div class="primp-title"></div>
+                    <div class="primp-desc tw-font gray-color-1"></div>
+                    <div class="primp-button tw-font gray-color-1">装扮</div>
+                </div>
+                <!-- 歌单所在的div -->
+                <div class="playlist" id="playlist">
+                    <div class="playlist-button tw-font">歌单</div>
+                    <div class="playlist-cover"></div>
+                    <div class="playlist-title"></div>
+                    <div class="playlist-desc tw-font gray-color-1"></div>
+
+                </div>
+                <!-- 音乐所在的div -->
+                <div class="music">
+                    <div class="music-play"></div>
+                    <div class="music-button tw-font">音乐</div>
+                    <div class="music-cover"></div>
+                    <div class="music-title"></div>
+                    <div class="music-desc tw-font gray-color-1"></div>
+
+                </div>
+                <!-- 漫画所在的div -->
+                <div class="comic" id="comic">
+                    <div class="comic-button tw-font">漫画</div>
+                    <div class="comic-cover"></div>
+                    <div class="comic-title"></div>
+                    <div class="comic-desc-fist tw-font gray-color-1"></div>
+                    <div class="comic-desc-second tw-font gray-color-1"></div>
+
+
+
+                </div>
+
+                <!-- 专栏所在的div -->
+                <div class="article">
+                    <div class="article-cover"></div>
+                    <div class="article-title st-font"></div>
+                    <div class="article-desc tw-font"></div>
+                </div>
+                <!-- 转发信息所在的div -->
+                <div class="repost" id="repost">
+                    <div class="repost-outter">
+                        <!-- 源动态作者的信息 -->
+                        <div class="oringin-userinfo">
+                            <div class="oringin-face"></div>
+                            <div class="oringin-uname"></div>
+                        </div>
+                        <!-- 转发动态文字所在的div -->
+                        <div class="repost-text ft-font"></div>
+                        <!-- 转发图片所在的div -->
+                        <div class="repost-pic"></div>
+                        <!-- 转发投票 -->
+                        <div class="repost-vote-info">
+                            <div class="repost-vote-cover-out">
+                                <div class="repost-vote-cover"></div>
+                            </div>
+                            <div class="repost-vote-title ft-font"></div>
+                            <div class="repost-vote-desc tw-font gray-color-1"></div>
+                            <div class="repost-vote-button">投票</div>
+
+                        </div>
+                        <!-- 转发专栏 -->
+                        <div class="repost-article">
+                            <div class="repost-article-cover"></div>
+                            <div class="repost-article-title st-font"></div>
+                            <div class="repost-article-desc tw-font gray-color-1"></div>
+                        </div>
+                        <!-- 转发视频 -->
+                        <div class="repost-video">
+                            <div class="repost-video-cover"></div>
+                            <div class="repost-video-title"></div>
+                            <div class="repost-video-desc tw-font gray-color-1"></div>
+                            <div class="repost-video-button tw-font">投稿视频</div>
+                        </div>
+                        <!-- 转发直播所在的div -->
+                        <div class="repost-live" id="repost-live">
+                            <div class="repost-live-cover"></div>
+                            <div class="repost-live-title"></div>
+                            <div class="repost-live-desc tw-font gray-color-1"></div>
+                            <div class="repost-live-button tw-font">直播中</div>
+                        </div>
+                        <!-- 转发漫画 -->
+                        <div class="repost-comic" id="comic">
+                            <div class="repost-comic-button tw-font">漫画</div>
+                            <div class="repost-comic-cover"></div>
+                            <div class="repost-comic-title"></div>
+                            <div class="repost-comic-desc-fist tw-font gray-color-1"></div>
+                            <div class="repost-comic-desc-second tw-font gray-color-1"></div>
+                        </div>
+                        <!-- 转发影视 -->
+                        <div class="movie">
+                            <div class="repost-movie-cover"></div>
+                            <div class="repost-movie-title"></div>
+                            <div class="repost-movie-button tw-font"></div>
+                        </div>
+                        <!-- 转发音乐所在的div -->
+                        <div class="repost-music">
+                            <div class="repost-music-play"></div>
+                            <div class="repost-music-button tw-font">音乐</div>
+                            <div class="repost-music-cover"></div>
+                            <div class="repost-music-title"></div>
+                            <div class="repost-music-desc tw-font gray-color-1"></div>
+                        </div>
+                        <!-- 转发挂件 -->
+                        <div class="repost-primp">
+                            <div class="repost-primp-cover"></div>
+                            <div class="repost-primp-title"></div>
+                            <div class="repost-primp-desc tw-font gray-color-1"></div>
+                            <div class="repost-primp-button tw-font gray-color-1">装扮</div>
+                        </div>
+                        <!-- 转发装扮 -->
+                        <div class="repost-decorate" id="decorate">
+                            <div class="repost-decorate-cover"></div>
+                            <div class="repost-decorate-title"></div>
+                            <div class="repost-decorate-desc tw-font gray-color-1"></div>
+                        </div>
+                        <!-- 转发动态的预约信息 -->
+                        <div class="repost-reserve">
+                            <div class="repost-reserve-title"></div>
+                            <div class="repost-reserve-desc tw-font">
+                                <div class="repost-reserve-desc-first gray-color-1"></div>
+                                <div class="repost-reserve-desc-second gray-color-1"></div>
+                            </div>
+                            <div class="repost-reserve-button">预约</div>
+                        </div>
+                        <!-- 转发歌单 -->
+                        <div class="repost-playlist" id="playlist">
+                            <div class="repost-playlist-button tw-font">歌单</div>
+                            <div class="repost-playlist-cover"></div>
+                            <div class="repost-playlist-title"></div>
+                            <div class="repost-playlist-desc tw-font gray-color-1"></div>
+
+                        </div>
+                        <!-- 转发游戏卡片 -->
+                        <div class="repost-game">
+                            <div class="repost-game-cover"></div>
+                            <div class="repost-game-title"></div>
+                            <div class="repost-game-desc-fist tw-font gray-color-1"></div>
+                            <div class="repost-game-desc-second tw-font gray-color-1"></div>
+                            <div class="repost-game-button">进入</div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 页面底部的二维码以及各种图标所在的div -->
+            <div class="foot" id="foot">
+                <!-- 提醒所在的标签 -->
+                <a class="notice">识别二维码，查看动态</a>
+                <!-- 放二维码的div -->
+                <div class="qrcode">
+                </div>
+                <!-- 放bilibili标志的div -->
+                <div class="bilibili">
+
+                </div>
+                <!-- 放2233的div -->
+                <div class="mid-pic"></div>
+
+            </div>
+        </div>
+    </div>
+    <script src="jQuery.js"></script>
+    <script src="jquery.qrcode.min.js"></script>
+    <script src="temple.js"></script>
+</body>
+
+</html>
