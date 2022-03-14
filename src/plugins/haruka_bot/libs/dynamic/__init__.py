@@ -1,17 +1,18 @@
 from typing import Optional
 from nonebot.adapters.onebot.v11.message import MessageSegment, Message
-from pydantic import BaseModel, Json, root_validator
+from pydantic import BaseModel, root_validator
+# from pydantic import Json
 
 from .desc import Desc
-from .card import Card
-from .display import Display
+# from .card import Card
+# from .display import Display
 
 
 class Dynamic(BaseModel):
     desc: Desc
-    card: Json[Card]  # type: ignore
+    # card: Json[Card]  # type: ignore
     # extend_json: Json[Dict] # 不知道干什么的
-    display: Display
+    # display: Display
 
     type: int = 0
     id: int = 0

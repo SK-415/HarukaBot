@@ -29,7 +29,7 @@ class DescFirst(BaseModel):
 
 
 class ReserveAttachCard(BaseModel):
-    title: str
+    title: Optional[str]
     desc_first: Optional[Union[str, DescFirst]]
     desc_second: Optional[str]
     cover_url: Optional[str]
