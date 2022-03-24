@@ -32,6 +32,7 @@ pydantic = "^1.8.2"
 python-dotenv = "^0.17.1"
 rsa = "^4.7.2"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.18.1"}
+aerich = "^0.6.2"
 
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.4"
