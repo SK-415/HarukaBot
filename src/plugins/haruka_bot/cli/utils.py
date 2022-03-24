@@ -19,8 +19,8 @@ def create_env():
     if file_path.exists():
         return
 
-    if Path.cwd().stat().st_size != 0:
-        print("文件夹不为空，请跟换空文件夹后重试")
+    if any(Path.cwd().iterdir()):
+        print("文件夹不为空，请更换空文件夹后重试")
         import sys
         sys.exit()
 
