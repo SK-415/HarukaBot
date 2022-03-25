@@ -2,7 +2,7 @@ from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.typing import T_State
 
-from ...database import DB
+from ...database import DB as db
 from ...utils import get_type_id, permission_check, to_me, handle_uid
 
 
@@ -18,15 +18,14 @@ live_off.handle()(handle_uid)
 async def _(event: MessageEvent, state: T_State):
     """根据 UID 关闭直播"""
 
-    async with DB() as db:
-        if await db.set_sub(
-            "live",
-            False,
-            uid=state["uid"],
-            type_=event.message_type,
-            type_id=get_type_id(event),
-        ):
-            user = await db.get_user(state["uid"])
-            assert user is not None
-            await live_off.finish(f"已关闭 {user.name}（{user.uid}）的直播推送")
-        await live_off.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")
+    if await db.set_sub(
+        "live",
+        False,
+        uid=state["uid"],
+        type=event.message_type,
+        type_id=get_type_id(event),
+    ):
+        user = await db.get_user(uid=state["uid"])
+        assert user is not None
+        await live_off.finish(f"已关闭 {user.name}（{user.uid}）的直播推送")
+    await live_off.finish(f"UID（{state['uid']}）未关注，请先关注后再操作")

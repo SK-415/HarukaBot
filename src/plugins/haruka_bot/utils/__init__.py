@@ -47,18 +47,17 @@ async def handle_uid(
 async def permission_check(
     bot: Bot, event: Union[GroupMessageEvent, PrivateMessageEvent]
 ):
-    from ..database import DB
+    from ..database import DB as db
 
     if isinstance(event, PrivateMessageEvent):
         if event.sub_type == "group":  # 不处理群临时会话
             raise FinishedException
         return
-    async with DB() as db:
-        if await db.get_admin(event.group_id) and not await (
-            GROUP_ADMIN | GROUP_OWNER | SUPERUSER
-        )(bot, event):
-            await bot.send(event, "权限不足，目前只有管理员才能使用")
-            raise FinishedException
+    if await db.get_admin(event.group_id) and not await (
+        GROUP_ADMIN | GROUP_OWNER | SUPERUSER
+    )(bot, event):
+        await bot.send(event, "权限不足，目前只有管理员才能使用")
+        raise FinishedException
 
 
 def to_me():
