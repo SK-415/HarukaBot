@@ -2,12 +2,12 @@ import asyncio
 import traceback
 from datetime import datetime, timedelta
 
+from bilireq.dynamic import get_user_dynamics
 from nonebot.log import logger
 
-from bilireq.dynamic import get_user_dynamics
 from ...database import DB
 from ...libs.dynamic import Dynamic
-from ...utils import safe_send, scheduler, get_dynamic_screenshot
+from ...utils import PROXIES, get_dynamic_screenshot, safe_send, scheduler
 
 last_time = {}
 
@@ -25,7 +25,8 @@ async def dy_sched():
         name = user.name
 
     logger.debug(f"爬取动态 {name}（{uid}）")
-    dynamics = (await get_user_dynamics(uid)).get("cards", [])  # 获取最近十二条动态
+    # 获取最近十二条动态
+    dynamics = (await get_user_dynamics(uid, proxies=PROXIES)).get("cards", [])
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
     # await update_config(config)
 
