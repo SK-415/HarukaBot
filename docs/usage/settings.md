@@ -47,7 +47,25 @@ Haruka_TO_ME=False
 
 默认值：False
 
-下播提醒
+开启下播提醒。
 ```json
 HARUKA_LIVE_OFF_NOTIFY=True
+```
+
+## HARUKA_PROXY
+
+默认值：None
+
+设置后所有网络请求将使用代理端口，仅支持 HTTP 代理。
+```json
+HARUKA_PROXY=http://127.0.0.1:10809
+```
+
+## HARUKA_INTERVAL
+
+默认值：10
+
+直播、动态等刷新间隔，单位：秒。
+```json
+HARUKA_INTERVAL=20
 ```

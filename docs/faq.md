@@ -66,6 +66,16 @@ UID 不是 直播间ID！
 如果你仍然无法找到 UID，可以点击 [这里](http://wbnbd.com/?q=%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E5%88%AB%E4%BA%BA%E7%9A%84B%E7%AB%99UID) 获取更多信息   。
 :::
 
+## Playwright 依赖不全
+
+::: tip
+Linux 系统下，Playwright 需要安装额外的依赖才能运行 Chromium。目前 Playwright 官方只支持 Ubuntu，因此**强烈推荐**使用 Ubuntu 运行 HarukaBot。非 Ubuntu 系统依赖安装出现问题请去 [Playwright Issues](https://github.com/microsoft/playwright/issues) 寻找解决方法！
+:::
+
+Ubuntu：`playwright install-deps`
+
+CentOS（仅供参考）：`yum install -y atk at-spi2-atk cups-libs libxkbcommon libXcomposite libXdamage libXrandr mesa-libgbm gtk3`
+
 ## 启动的时候出现 pytz.exceptions.UnknownTimeZoneError: 'Can not find timezone '
 
 - 请依次点开 控制面板 -> 时钟和区域 -> 更改时区，如果出现【无法识别你当前的时区，请选择一个有效的时区】，点击更改时区选择到你所在地区的对应时区，然后重启 go-cqhttp 和 HarukaBot。

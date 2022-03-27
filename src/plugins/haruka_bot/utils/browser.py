@@ -71,7 +71,7 @@ def install():
         if e.code == 0:
             success = True
     if not success:
-        logger.info("Chromium 更新失败，尝试从原始仓库下载")
+        logger.info("Chromium 更新失败，尝试从原始仓库下载，速度较慢")
         os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = ""
         try:
             main()
@@ -89,5 +89,6 @@ async def check_playwright_env():
         await init()
     except Exception:
         raise ImportError(
-            "加载失败，Playwright 依赖不全，解决方法：https://github.com/SK-415/HarukaBot/issues/140"
+            "加载失败，Playwright 依赖不全，"
+            "解决方法：https://haruka-bot.sk415.icu/faq.html#Playwright%20依赖不全"
         )
