@@ -90,5 +90,5 @@ async def check_playwright_env():
     except Exception:
         raise ImportError(
             "加载失败，Playwright 依赖不全，"
-            "解决方法：https://haruka-bot.sk415.icu/faq.html#Playwright%20依赖不全"
+            "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
