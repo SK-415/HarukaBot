@@ -1,5 +1,8 @@
 # Project ignored
+*.sqlite3
+
 data
+accounts
 go-cqhttp
 logs
 test

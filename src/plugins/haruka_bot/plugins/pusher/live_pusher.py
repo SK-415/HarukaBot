@@ -3,22 +3,21 @@ from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
 from ... import config
-from ...database import DB
-from ...utils import safe_send, scheduler
+from ...database import DB as db
+from ...utils import PROXIES, safe_send, scheduler
 
 status = {}
 
 
-@scheduler.scheduled_job("interval", seconds=10, id="live_sched")
+@scheduler.scheduled_job("interval", seconds=config.haruka_interval, id="live_sched")
 async def live_sched():
     """直播推送"""
-    async with DB() as db:
-        uids = await db.get_uid_list("live")
+    uids = await db.get_uid_list("live")
 
     if not uids:  # 订阅为空
         return
     logger.debug(f"爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人")
-    res = await get_rooms_info_by_uids(uids, reqtype="web")
+    res = await get_rooms_info_by_uids(uids, reqtype="web", proxies=PROXIES)
     if not res:
         return
     for uid, info in res.items():
@@ -50,14 +49,14 @@ async def live_sched():
                 continue
             live_msg = f"{name} 下播了"
 
-        async with DB() as db:  # 推送
-            push_list = await db.get_push_list(uid, "live")
-            for sets in push_list:
-                await safe_send(
-                    bot_id=sets.bot_id,
-                    send_type=sets.type,
-                    type_id=sets.type_id,
-                    message=live_msg,
-                    at=bool(sets.at) if new_status else False,  # 下播不 @
-                )
-            await db.update_user(int(uid), name)
+        # 推送
+        push_list = await db.get_push_list(uid, "live")
+        for sets in push_list:
+            await safe_send(
+                bot_id=sets.bot_id,
+                send_type=sets.type,
+                type_id=sets.type_id,
+                message=live_msg,
+                at=bool(sets.at) if new_status else False,  # 下播不@全体
+            )
+        await db.update_user(int(uid), name)

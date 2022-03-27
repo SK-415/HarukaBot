@@ -2,25 +2,68 @@ from tortoise.models import Model
 from tortoise.fields.data import CharField, IntField, BooleanField
 
 
-class Sub(Model):
+class BaseModel(Model):
+    @classmethod
+    def get_(cls, *args, **kwargs):
+        super().get(*args, **kwargs)
+
+    @classmethod
+    def get(cls, **kwargs):
+        return cls.filter(**kwargs)
+
+    @classmethod
+    async def add(cls, **kwargs):
+        if await cls.get(**kwargs).exists():
+            return False
+        await cls.create(**kwargs)
+        return True
+
+    @classmethod
+    async def delete(cls, **kwargs):
+        query = cls.get(**kwargs)
+        if await query.exists():
+            await query.delete()
+            return True
+        return False
+
+    @classmethod
+    async def update(cls, q, **kwargs):
+        query = cls.get(**q)
+        if await query.exists():
+            await query.update(**kwargs)
+            return True
+        return False
+
+    class Meta:
+        abstract = True
+
+
+# TODO 自定义默认权限
+class Sub(BaseModel):
     type = CharField(max_length=10)
     type_id = IntField()
     uid = IntField()
-    live = BooleanField()
-    dynamic = BooleanField()
-    at = BooleanField()
+    live = BooleanField()  # default=True
+    dynamic = BooleanField()  # default=True
+    at = BooleanField()  # default=False
     bot_id = IntField()
 
 
-class User(Model):
+class User(BaseModel):
     uid = IntField(pk=True)
     name = CharField(max_length=20)
 
 
-class Group(Model):
+class Group(BaseModel):
     id = IntField(pk=True)
-    admin = BooleanField()
+    admin = BooleanField()  # default=True
 
 
-class Version(Model):
+class Version(BaseModel):
     version = CharField(max_length=30)
+
+
+# class Login(BaseModel):
+#     uid = IntField(pk=True)
+#     data = JSONField()
+#     expireed = IntField()
