@@ -47,7 +47,7 @@ Haruka_TO_ME=False
 
 默认值：False
 
-开启下播提醒。
+是否开启下播提醒。
 ```json
 HARUKA_LIVE_OFF_NOTIFY=True
 ```
@@ -68,4 +68,13 @@ HARUKA_PROXY=http://127.0.0.1:10809
 直播、动态等刷新间隔，单位：秒。
 ```json
 HARUKA_INTERVAL=20
+```
+
+## HARUKA_DYNAMIC_AT
+
+默认值：False
+
+动态、投稿是否也要@全体。
+```json
+HARUKA_DYNAMIC_AT=True
 ```
