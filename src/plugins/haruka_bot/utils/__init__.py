@@ -1,6 +1,9 @@
+import asyncio
+import sys
 from pathlib import Path
 from typing import Union
 
+import httpx
 import nonebot
 from nonebot import require
 from nonebot.adapters import Bot
@@ -104,13 +107,38 @@ def get_type_id(event: MessageEvent):
     return event.group_id if isinstance(event, GroupMessageEvent) else event.user_id
 
 
-scheduler = require("nonebot_plugin_apscheduler")
-assert scheduler is not None
-scheduler = scheduler.scheduler
+def check_proxy():
+    """检查代理是否有效"""
+    if config.haruka_proxy:
+        logger.info("检查代理是否有效")
+        try:
+            httpx.get(
+                "https://icanhazip.com/",
+                proxies={"all://": config.haruka_proxy},
+                timeout=2,
+            )
+        except Exception:
+            raise RuntimeError("加载失败，代理无法连接，请检查 HARUKA_PROXY 后重试")
 
 
-# bot 启动时检查 src\data\haruka_bot\ 目录是否存在
-if not Path(get_path()).is_dir():
-    Path(get_path()).mkdir(parents=True)
+def on_startup():
+    """安装依赖并检查当前环境是否满足运行条件"""
+    if config.fastapi_reload and sys.platform == "win32":
+        raise ImportError("加载失败，Windows 必须设置 FASTAPI_RELOAD=false 才能正常运行 HarukaBot")
+    try:  # 如果开启 realod 只在第一次运行
+        asyncio.get_running_loop()
+    except RuntimeError:
+        from .browser import check_playwright_env, install
+
+        check_proxy()
+        install()
+        asyncio.run(check_playwright_env())
+        # 创建数据存储目录
+        if not Path(get_path()).is_dir():
+            Path(get_path()).mkdir(parents=True)
+
+
+PROXIES = {"all://": config.haruka_proxy}
+scheduler = require("nonebot_plugin_apscheduler").scheduler
 
 from .browser import get_dynamic_screenshot  # noqa

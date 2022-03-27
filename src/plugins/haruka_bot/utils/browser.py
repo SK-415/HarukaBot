@@ -1,14 +1,13 @@
 import base64
-import shutil
-from pathlib import Path
+import os
+import sys
 from typing import Optional
 
-from appdirs import AppDirs
-from nonebot import get_driver
 from nonebot.log import logger
+from playwright.__main__ import main
 from playwright.async_api import Browser, async_playwright
 
-from . import config
+from .. import config
 
 _browser: Optional[Browser] = None
 
@@ -49,43 +48,46 @@ async def get_dynamic_screenshot(url):
         raise
 
 
-def delete_pyppeteer():
-    """删除 Pyppeteer 遗留的 Chromium"""
-    dir = Path(AppDirs("pyppeteer").user_data_dir)
-    if not dir.exists():
-        return
-
-    if not config.haruka_delete_pyppeteer:
-        logger.info(
-            "检测到 Pyppeteer 依赖（约 300 M），"
-            "新版 HarukaBot 已经不需要这些文件了。"
-            "如果没有其他程序依赖 Pyppeteer，请在 '.env.*' 中设置"
-            " 'HARUKA_DELETE_PYPPETEER=True' 并重启 Bot 后，将自动清除残留"
-        )
-    else:
-        shutil.rmtree(dir)
-        logger.info("已清理 Pyppeteer 依赖残留")
-
-
 def install():
     """自动安装、更新 Chromium"""
-    logger.info("正在检查 Chromium 更新")
-    import sys
-    from playwright.__main__ import main
 
+    def restore_env():
+        del os.environ["PLAYWRIGHT_DOWNLOAD_HOST"]
+        if config.haruka_proxy:
+            del os.environ["HTTPS_PROXY"]
+        if original_proxy is not None:
+            os.environ["HTTPS_PROXY"] = original_proxy
+
+    logger.info("检查 Chromium 更新")
     sys.argv = ["", "install", "chromium"]
+    original_proxy = os.environ.get("HTTPS_PROXY")
+    if config.haruka_proxy:
+        os.environ["HTTPS_PROXY"] = config.haruka_proxy
+    os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://playwright.sk415.workers.dev"
+    success = False
     try:
         main()
-    except SystemExit:
-        pass
+    except SystemExit as e:
+        if e.code == 0:
+            success = True
+    if not success:
+        logger.info("Chromium 更新失败，尝试从原始仓库下载")
+        os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = ""
+        try:
+            main()
+        except SystemExit as e:
+            if e.code != 0:
+                restore_env()
+                raise RuntimeError("未知错误，Chromium 下载失败")
+    restore_env()
 
 
-async def check_playwright_dependencies():
+async def check_playwright_env():
     """检查 Playwright 依赖"""
-    logger.info("检查 Playwright 依赖，不完整将自动退出")
-    await init()
-
-
-get_driver().on_startup(delete_pyppeteer)
-get_driver().on_startup(install)
-get_driver().on_startup(check_playwright_dependencies)
+    logger.info("检查 Playwright 依赖")
+    try:
+        await init()
+    except Exception:
+        raise ImportError(
+            "加载失败，Playwright 依赖不全，解决方法：https://github.com/SK-415/HarukaBot/issues/140"
+        )
