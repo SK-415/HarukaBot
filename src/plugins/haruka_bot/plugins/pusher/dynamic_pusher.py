@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from bilireq.dynamic import get_user_dynamics
 from nonebot.log import logger
 
+from ... import config
 from ...database import DB as db
 from ...libs.dynamic import Dynamic
 from ...utils import PROXIES, get_dynamic_screenshot, safe_send, scheduler
@@ -12,7 +13,7 @@ from ...utils import PROXIES, get_dynamic_screenshot, safe_send, scheduler
 last_time = {}
 
 
-@scheduler.scheduled_job("interval", seconds=10, id="dynamic_sched")
+@scheduler.scheduled_job("interval", seconds=config.haruka_interval, id="dynamic_sched")
 async def dy_sched():
     """直播推送"""
 

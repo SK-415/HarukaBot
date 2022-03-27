@@ -9,7 +9,7 @@ from ...utils import PROXIES, safe_send, scheduler
 status = {}
 
 
-@scheduler.scheduled_job("interval", seconds=10, id="live_sched")
+@scheduler.scheduled_job("interval", seconds=config.haruka_interval, id="live_sched")
 async def live_sched():
     """直播推送"""
     uids = await db.get_uid_list("live")

@@ -10,6 +10,7 @@ class Config(BaseSettings):
     haruka_to_me: bool = True
     haruka_live_off_notify: bool = False
     haruka_proxy: Optional[str] = None
+    haruka_interval: int = 10
 
     class Config:
         extra = "ignore"
