@@ -62,7 +62,13 @@ async def dy_sched():
 
             push_list = await db.get_push_list(uid, "dynamic")
             for sets in push_list:
-                await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message)
+                await safe_send(
+                    bot_id=sets.bot_id,
+                    send_type=sets.type,
+                    type_id=sets.type_id,
+                    message=dynamic.message,
+                    at=bool(sets.at) and config.haruka_dynamic_at,
+                )
 
             last_time[uid] = dynamic.time
 
