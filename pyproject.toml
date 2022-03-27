@@ -19,7 +19,6 @@ hb = 'haruka_bot.__main__:main'
 [tool.poetry.dependencies]
 python = "^3.8"
 packaging = "^21.3"
-appdirs = "^1.4.4"
 click = "^8.0.4"
 httpx = "^0.22.0"
 nonebot-adapter-onebot = "^2.0.0-beta.1"
@@ -28,10 +27,9 @@ nonebot2 = "^2.0.0-beta.2"
 playwright = "^1.20.1"
 pydantic = "^1.9.0"
 python-dotenv = "^0.19.2"
-rsa = "^4.8"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.18.1"}
 aerich = "^0.6.2"
-bilireq = "^0.1.1"
+bilireq = "^0.1.2"
 
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"
@@ -46,7 +44,7 @@ plugin_dirs = ["src/plugins"]
 [[tool.poetry.source]]
 name = "tsinghua"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
-default = true
+# default = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
