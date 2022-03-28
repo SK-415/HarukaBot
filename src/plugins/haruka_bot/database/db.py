@@ -125,7 +125,7 @@ class DB:
             return False
         await cls.add_user(uid=kwargs["uid"], name=name)
         if kwargs["type"] == "group":
-            await cls.add_group(id=kwargs["type_id"])
+            await cls.add_group(id=kwargs["type_id"], admin=True)
         await cls.update_uid_list()
         return True
 
