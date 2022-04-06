@@ -5,4 +5,4 @@ ENV TZ=Asia/Shanghai LANG=zh_CN.UTF-8 HARUKA_DIR=/data HOST=0.0.0.0 COMMAND_STAR
 EXPOSE 8080
 WORKDIR /data
 COPY .env.prod /data/.env.prod
-CMD ["hb" ,"run","$@"]
+CMD ["exec","hb" ,"run","$@"]
