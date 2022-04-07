@@ -124,7 +124,7 @@ def on_startup():
     """安装依赖并检查当前环境是否满足运行条件"""
     if config.fastapi_reload and sys.platform == "win32":
         raise ImportError("加载失败，Windows 必须设置 FASTAPI_RELOAD=false 才能正常运行 HarukaBot")
-    try:  # 如果开启 realod 只在第一次运行
+    try:  # 如果开启 relaod 只在第一次运行
         asyncio.get_running_loop()
     except RuntimeError:
         from .browser import check_playwright_env, install
