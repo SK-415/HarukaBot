@@ -46,3 +46,4 @@ body:
     attributes:
       label: 报错日志（如果有）
       description: 运行 hb run 的目录中的 log\error.log 文件
+      render: bash
