@@ -50,7 +50,13 @@ async def dy_sched():
             image = None
             for _ in range(3):
                 try:
-                    image = await get_dynamic_screenshot(dynamic.url)
+                    # PC版网页：
+                    # image = await get_dynamic_screenshot(dynamic.url)
+
+                    # 移动端网页：
+                    image = await get_dynamic_screenshot(
+                        f"https://m.bilibili.com/dynamic/{dynamic.id}"
+                    )
                     break
                 except Exception:
                     logger.error("截图失败，以下为错误日志:")
