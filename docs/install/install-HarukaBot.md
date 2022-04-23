@@ -87,9 +87,9 @@ HarukaBot 基于 [NoneBot2](https://github.com/nonebot/nonebot2) 开发，因此
 
 ```sh
 #master
-pip install --upgrade git+https://github.com/SK-415/HarukaBot.git#master
+pip install --upgrade git+https://github.com/SK-415/HarukaBot.git@master
 #dev
-pip install --upgrade git+https://github.com/SK-415/HarukaBot.git#dev
+pip install --upgrade git+https://github.com/SK-415/HarukaBot.git@dev
 ```
 :::
 
