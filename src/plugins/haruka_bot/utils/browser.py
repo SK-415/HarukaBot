@@ -50,6 +50,10 @@ async def get_dynamic_screenshot(url):
             '<div class="dyn-card">',
             '<div class="dyn-card" style="font-family: sans-serif;">',
         )  # 字体问题：.dyn-class里font-family是PingFangSC-Regular，使用行内CSS覆盖掉它
+        content = content.replace(
+            '<div class="launch-app-btn dynamic-float-openapp"><div class="m-dynamic-float-openapp"><span>打开APP，查看更多精彩内容</span></div> <!----></div>',
+            "",
+        )  # 去掉打开APP的按钮，防止遮挡较长的动态
         await page.set_content(content)
         card = await page.query_selector(".dyn-card")
         assert card
