@@ -30,6 +30,8 @@ python-dotenv = "^0.19.2"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.18.1"}
 aerich = "^0.6.2"
 bilireq = "^0.1.2"
+grpcio = "^1.46.0"
+grpcio-status = "^1.46.0"
 
 [tool.poetry.dev-dependencies]
 nb-cli = "^0.6.6"
