@@ -13,7 +13,7 @@ from ...utils import get_dynamic_screenshot, safe_send, scheduler
 OFFSET = {}
 
 
-@scheduler.scheduled_job("interval", seconds=1, id="dynamic_sched")
+@scheduler.scheduled_job("interval", seconds=5, id="dynamic_sched")
 async def dy_sched():
     """直播推送"""
 
