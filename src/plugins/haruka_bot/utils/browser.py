@@ -6,36 +6,43 @@ from typing import Optional
 from nonebot import get_driver
 from nonebot.log import logger
 from playwright.__main__ import main
-from playwright.async_api import Browser, async_playwright
+from playwright.async_api import Browser, BrowserContext, async_playwright
 
 from .. import config
 
-_browser: Optional[Browser] = None
+_browser_context: Optional[BrowserContext] = None
 
 
-async def init(**kwargs) -> Browser:
-    global _browser
+async def init(**kwargs) -> BrowserContext:
+    global _browser_context
     browser = await async_playwright().start()
     _browser = await browser.chromium.launch(**kwargs)
-    return _browser
+    _browser_context = await _browser.new_context(device_scale_factor=2)
+    await _browser_context.add_cookies([{
+        "name": "hit-dyn-v2",
+        "value": "1",
+        "domain": ".bilibili.com",
+        "path": "/"
+    }])
+    return _browser_context
 
 
-async def get_browser(**kwargs) -> Browser:
-    return _browser or await init(**kwargs)
+async def get_browser_context(**kwargs) -> Browser:
+    return _browser_context or await init(**kwargs)
 
 
 async def get_dynamic_screenshot(url):
-    browser = await get_browser()
+    browser_context = await get_browser_context()
     page = None
     try:
-        page = await browser.new_page(device_scale_factor=2)
+        page = await browser_context.new_page()
         await page.goto(url, wait_until="networkidle", timeout=10000)
         await page.set_viewport_size({"width": 2560, "height": 1080})
         card = await page.query_selector(".card")
         assert card
         clip = await card.bounding_box()
         assert clip
-        bar = await page.query_selector(".text-bar")
+        bar = await page.query_selector(".bili-dyn-action__icon")
         assert bar
         bar_bound = await bar.bounding_box()
         assert bar_bound
