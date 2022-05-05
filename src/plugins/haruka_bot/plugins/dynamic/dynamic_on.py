@@ -1,7 +1,7 @@
 from nonebot import on_command
-from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.typing import T_State
 
+from ...utils import MessageEvent
 from ...database import DB as db
 from ...utils import get_type_id, permission_check, to_me, handle_uid
 

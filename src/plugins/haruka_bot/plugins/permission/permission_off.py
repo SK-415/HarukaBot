@@ -1,10 +1,9 @@
 from typing import Union
 
 from nonebot import on_command
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
-from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
-from nonebot.permission import SUPERUSER
 
+from ...utils import GroupMessageEvent, PrivateMessageEvent
+from ...utils import GROUP_ADMIN, GROUP_OWNER, SUPERUSER
 from ...database import DB as db
 from ...utils import to_me
 

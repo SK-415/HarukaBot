@@ -1,11 +1,10 @@
 from typing import Union
 
 from nonebot import on_command
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
-from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
-from nonebot.permission import SUPERUSER
 from nonebot.typing import T_State
 
+from ...utils import GroupMessageEvent, PrivateMessageEvent
+from ...utils import GROUP_ADMIN, GROUP_OWNER, SUPERUSER
 from ... import config
 from ...database import DB as db
 from ...utils import handle_uid, to_me

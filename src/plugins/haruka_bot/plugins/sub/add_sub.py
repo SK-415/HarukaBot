@@ -1,9 +1,9 @@
 from bilireq.exceptions import ResponseCodeError
 from bilireq.user import get_user_info
 from nonebot import on_command
-from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.typing import T_State
 
+from ...utils import MessageEvent
 from ...database import DB as db
 from ...utils import PROXIES, get_type_id, handle_uid, permission_check, to_me
 

@@ -1,5 +1,5 @@
 from nonebot import on_notice
-from nonebot.adapters.onebot.v11 import GroupDecreaseNoticeEvent
+from ..utils import GroupDecreaseNoticeEvent
 
 from ..database import DB as db
 

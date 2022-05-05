@@ -1,7 +1,7 @@
 from bilireq.live import get_rooms_info_by_uids
-from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
+from ...utils import MessageSegment
 from ... import config
 from ...database import DB as db
 from ...utils import PROXIES, safe_send, scheduler

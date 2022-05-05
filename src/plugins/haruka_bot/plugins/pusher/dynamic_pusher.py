@@ -2,8 +2,8 @@ import asyncio
 import traceback
 
 from nonebot.log import logger
-from nonebot.adapters.onebot.v11.message import MessageSegment
 
+from ...utils import MessageSegment
 from ... import config
 from ...database import DB as db
 from ...libs.grpc import grpc_dyn_get

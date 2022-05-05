@@ -1,5 +1,5 @@
 from nonebot import on_request
-from nonebot.adapters.onebot.v11 import Bot, FriendRequestEvent, GroupRequestEvent
+from ..utils import Bot, FriendRequestEvent, GroupRequestEvent
 
 
 friend_req = on_request(priority=5)
