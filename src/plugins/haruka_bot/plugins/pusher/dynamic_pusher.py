@@ -46,7 +46,7 @@ async def dy_sched():
         dyn_id = int(dynamic.extend.dyn_id_str)
         if dyn_id > OFFSET[uid]:
             logger.info(f"检测到新动态（{dyn_id}）：{name}（{uid}）")
-            url = f"https://t.bilibili.com/{dyn_id}"
+            url = f"https://m.bilibili.com/dynamic/{dyn_id}"
             image = None
             for _ in range(3):
                 try:
@@ -54,9 +54,7 @@ async def dy_sched():
                     # image = await get_dynamic_screenshot(dynamic.url)
 
                     # 移动端网页：
-                    image = await get_dynamic_screenshot(
-                        f"https://m.bilibili.com/dynamic/{dynamic.id}"
-                    )
+                    image = await get_dynamic_screenshot(url)
                     break
                 except Exception:
                     logger.error("截图失败，以下为错误日志:")
