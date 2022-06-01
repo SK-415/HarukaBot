@@ -13,7 +13,12 @@ class BaseModel(Model):
 
     @classmethod
     async def add(cls, **kwargs):
-        if await cls.get(**kwargs).exists():
+        pk_name = cls.describe()["pk_field"]["name"]
+        if pk_name == "id" and pk_name not in kwargs:
+            filters = kwargs
+        else:
+            filters = {pk_name: kwargs[pk_name]}
+        if await cls.get(**filters).exists():
             return False
         await cls.create(**kwargs)
         return True
