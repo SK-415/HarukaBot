@@ -96,7 +96,7 @@ class DB:
     @classmethod
     async def set_permission(cls, id, switch):
         """设置指定位置权限"""
-        if not await cls.add_group(id=id):
+        if not await cls.add_group(id=id, admin=switch):
             await Group.update({"id": id}, admin=switch)
 
     @classmethod
