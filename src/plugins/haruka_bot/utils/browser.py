@@ -6,21 +6,34 @@ from typing import Optional
 from nonebot import get_driver
 from nonebot.log import logger
 from playwright.__main__ import main
-from playwright.async_api import Browser, async_playwright
+from playwright.async_api import BrowserContext, async_playwright
 
 from .. import config
 
-_browser: Optional[Browser] = None
+_browser: Optional[BrowserContext] = None
 
 
-async def init(**kwargs) -> Browser:
+async def init(**kwargs) -> BrowserContext:
     global _browser
-    browser = await async_playwright().start()
-    _browser = await browser.chromium.launch(**kwargs)
+    p = await async_playwright().start()
+    browser = await p.chromium.launch(**kwargs)
+    _browser = await browser.new_context(
+        device_scale_factor=2,
+        # 移动端
+        user_agent=(
+            "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
+        ),
+    )
+    # 电脑端
+    # await _browser.add_cookies(
+    #     [{"name": "hit-dyn-v2", "value": "1", "domain": ".bilibili.com", "path": "/"}]
+    # )
+
     return _browser
 
 
-async def get_browser(**kwargs) -> Browser:
+async def get_browser(**kwargs) -> BrowserContext:
     return _browser or await init(**kwargs)
 
 
@@ -28,18 +41,23 @@ async def get_dynamic_screenshot(url):
     browser = await get_browser()
     page = None
     try:
-        # PC版网页：
-        # page = await browser.new_page(device_scale_factor=2)
+        # 电脑端
+        # page = await browser.new_page()
         # await page.goto(url, wait_until="networkidle", timeout=10000)
         # await page.set_viewport_size({"width": 2560, "height": 1080})
         # card = await page.query_selector(".card")
+        # assert card
+        # clip = await card.bounding_box()
+        # assert clip
+        # bar = await page.query_selector(".bili-dyn-action__icon")
+        # assert bar
+        # bar_bound = await bar.bounding_box()
+        # assert bar_bound
+        # clip["height"] = bar_bound["y"] - clip["y"]
 
-        # 移动端网页：
-        page = await browser.new_page(
-            viewport={"width": 360, "height": 780},
-            user_agent="Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36",
-            device_scale_factor=3,
-        )
+        # 移动端
+        page = await browser.new_page()
+        await page.set_viewport_size({"width": 360, "height": 780})
         await page.goto(url, wait_until="networkidle", timeout=10000)
         content = await page.content()
         content = content.replace(
@@ -62,6 +80,7 @@ async def get_dynamic_screenshot(url):
         assert card
         clip = await card.bounding_box()
         assert clip
+
         image = await page.screenshot(clip=clip, full_page=True)
         await page.close()
         return base64.b64encode(image).decode()
@@ -84,9 +103,10 @@ def install():
     logger.info("检查 Chromium 更新")
     sys.argv = ["", "install", "chromium"]
     original_proxy = os.environ.get("HTTPS_PROXY")
+    # TODO 检查 google 可访问性
     if config.haruka_proxy:
         os.environ["HTTPS_PROXY"] = config.haruka_proxy
-    os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://playwright.sk415.workers.dev"
+    os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://playwright.sk415.icu"
     success = False
     try:
         main()
