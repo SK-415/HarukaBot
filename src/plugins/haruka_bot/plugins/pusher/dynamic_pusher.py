@@ -1,9 +1,12 @@
 import asyncio
+import base64
 import traceback
 from datetime import datetime, timedelta
 
 from bilireq.dynamic import get_user_dynamics
 from nonebot.log import logger
+from nonebot_plugin_bilibili_viode.img import build_video_poster
+from nonebot_plugin_bilibili_viode.utils import get_video_info
 
 from ... import config
 from ...database import DB as db
@@ -48,16 +51,23 @@ async def dy_sched():
         ):
             logger.info(f"检测到新动态（{dynamic.id}）：{name}（{uid}）")
             image = None
-            for _ in range(3):
-                try:
-                    image = await get_dynamic_screenshot(dynamic.url)
-                    break
-                except Exception:
-                    logger.error("截图失败，以下为错误日志:")
-                    logger.error(traceback.format_exc())
-                await asyncio.sleep(0.1)
-            if not image:
-                logger.error("已达到重试上限，将在下个轮询中重新尝试")
+            if dynamic.type == 8:  # 如果动态的类型是投稿
+                video_info = await get_video_info(dynamic.bvid)
+                if video_info:
+                    image = await build_video_poster(video_info)
+                    if image:
+                        image = base64.b64encode(image).decode()
+            else:
+                for _ in range(3):
+                    try:
+                        image = await get_dynamic_screenshot(dynamic.url)
+                        break
+                    except Exception:
+                        logger.error("截图失败，以下为错误日志:")
+                        logger.error(traceback.format_exc())
+                    await asyncio.sleep(0.1)
+                if not image:
+                    logger.error("已达到重试上限，将在下个轮询中重新尝试")
             await dynamic.format(image)
 
             push_list = await db.get_push_list(uid, "dynamic")

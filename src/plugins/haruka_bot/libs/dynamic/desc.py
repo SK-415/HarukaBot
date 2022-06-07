@@ -13,6 +13,7 @@ class Desc(BaseModel):
     orig_type: int
     user_profile: UserProfile
     dynamic_id: int
+    bvid: Optional[str]
     # uid: int
     # rid: int
     # acl: int

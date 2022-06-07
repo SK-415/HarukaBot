@@ -1,9 +1,11 @@
 from typing import Optional
 from nonebot.adapters.onebot.v11.message import MessageSegment, Message
 from pydantic import BaseModel, root_validator
+
 # from pydantic import Json
 
 from .desc import Desc
+
 # from .card import Card
 # from .display import Display
 
@@ -30,6 +32,7 @@ class Dynamic(BaseModel):
         values["time"] = values["desc"].timestamp
         values["uid"] = values["desc"].user_profile.info.uid
         values["name"] = values["desc"].user_profile.info.uname
+        values["bvid"] = values["desc"].bvid
         return values
 
     async def format(self, img):

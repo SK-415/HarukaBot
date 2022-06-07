@@ -548,6 +548,25 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 reference = "tsinghua"
 
 [[package]]
+name = "nonebot-plugin-bilibili-viode"
+version = "0.1.2"
+description = "一个nonebot2插件，用于获取哔哩哔哩伪分享卡片"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[package.dependencies]
+httpx = ">=0.22.0,<0.23.0"
+nonebot-plugin-guild-patch = ">=0.1.3,<0.2.0"
+Pillow = ">=9.1.1,<10.0.0"
+qrcode = {version = ">=7.3.1,<8.0.0", extras = ["pil"]}
+
+[package.source]
+type = "legacy"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+reference = "tsinghua"
+
+[[package]]
 name = "nonebot-plugin-gocqhttp"
 version = "0.5.5"
 description = "A plugin to run go-cqhttp directly in NoneBot2, without additional download and installation."
@@ -562,6 +581,23 @@ nonebot-adapter-onebot = ">=2.0.0-beta.1,<3.0.0"
 nonebot2 = ">=2.0.0-beta.1,<3.0.0"
 psutil = ">=5.9.0,<6.0.0"
 py-cpuinfo = ">=8.0.0,<9.0.0"
+
+[package.source]
+type = "legacy"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+reference = "tsinghua"
+
+[[package]]
+name = "nonebot-plugin-guild-patch"
+version = "0.1.3"
+description = "Patch plugin for NoneBot2 QQ guild (go-cqhttp) support."
+category = "main"
+optional = false
+python-versions = ">=3.7.3,<4.0.0"
+
+[package.dependencies]
+nonebot-adapter-onebot = ">=2.0.0-beta.1,<3.0.0"
+nonebot2 = ">=2.0.0-beta.1,<3.0.0"
 
 [package.source]
 type = "legacy"
@@ -621,6 +657,23 @@ description = "Utility library for gitignore style pattern matching of file path
 category = "dev"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+
+[package.source]
+type = "legacy"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+reference = "tsinghua"
+
+[[package]]
+name = "pillow"
+version = "9.1.1"
+description = "Python Imaging Library (Fork)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+docs = ["olefile", "sphinx (>=2.4)", "sphinx-copybutton", "sphinx-issues (>=3.0.1)", "sphinx-removed-in", "sphinx-rtd-theme (>=1.0)", "sphinxext-opengraph"]
+tests = ["check-manifest", "coverage", "defusedxml", "markdown2", "olefile", "packaging", "pyroma", "pytest", "pytest-cov", "pytest-timeout"]
 
 [package.source]
 type = "legacy"
@@ -860,6 +913,30 @@ description = "YAML parser and emitter for Python"
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[package.source]
+type = "legacy"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+reference = "tsinghua"
+
+[[package]]
+name = "qrcode"
+version = "7.3.1"
+description = "QR Code image generator"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+pillow = {version = "*", optional = true, markers = "extra == \"pil\""}
+
+[package.extras]
+all = ["zest.releaser", "tox", "pytest", "pytest", "pytest-cov", "pillow"]
+dev = ["tox", "pytest"]
+maintainer = ["zest.releaser"]
+pil = ["pillow"]
+test = ["pytest", "pytest-cov"]
 
 [package.source]
 type = "legacy"
@@ -1157,7 +1234,7 @@ reference = "tsinghua"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "df82b4647e36e792976b2efad38ab320ce7c47e47b552d3f22d13cf209e8a33a"
+content-hash = "5b071ef35a5886fe9ed7724ff6a3a9ef897f1d3446076b649fd2d0f4f07c68dd"
 
 [metadata.files]
 aerich = [
@@ -1485,9 +1562,17 @@ nonebot-plugin-apscheduler = [
     {file = "nonebot-plugin-apscheduler-0.1.2.tar.gz", hash = "sha256:1765336cd388dde15f723ed12dbca942b04e4c25d5d7786878e447b09e68b909"},
     {file = "nonebot_plugin_apscheduler-0.1.2-py3-none-any.whl", hash = "sha256:eed7b9e60d08826ae4919f82dc240fc7ec469185271c2271e14438a3e0ca7692"},
 ]
+nonebot-plugin-bilibili-viode = [
+    {file = "nonebot_plugin_bilibili_viode-0.1.2-py3-none-any.whl", hash = "sha256:fb21106cd11930989b61681168db3f9cbbcf0de7c2933e2e4527595290e60ccb"},
+    {file = "nonebot_plugin_bilibili_viode-0.1.2.tar.gz", hash = "sha256:b292f7f51e92ed7f3be1304d91a0ebd5e422c003ecac10c1f1ae8d528b9e676a"},
+]
 nonebot-plugin-gocqhttp = [
     {file = "nonebot-plugin-gocqhttp-0.5.5.tar.gz", hash = "sha256:b6160d44dba6cfd0f47219cfb4bb9c08664fef5c3d776132ccada98c2616f84f"},
     {file = "nonebot_plugin_gocqhttp-0.5.5-py3-none-any.whl", hash = "sha256:0b878cf20264470a814fb162fd361eac1486bdd737d6f03bb50051205e55517a"},
+]
+nonebot-plugin-guild-patch = [
+    {file = "nonebot-plugin-guild-patch-0.1.3.tar.gz", hash = "sha256:44be37c0cd403ddb6dff8e813e53bc6965b81155fb4eeb6663584b201efbb38a"},
+    {file = "nonebot_plugin_guild_patch-0.1.3-py3-none-any.whl", hash = "sha256:4b2b543f3bf6a1640f380690da28db90ef0157ca4f6f096b5244040d78b20b2c"},
 ]
 nonebot2 = [
     {file = "nonebot2-2.0.0b2-py3-none-any.whl", hash = "sha256:8166490311b607f8fbf5e31934b005e29f6d39ff222a6771ec36c9456ec337ec"},
@@ -1500,6 +1585,46 @@ packaging = [
 pathspec = [
     {file = "pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
     {file = "pathspec-0.9.0.tar.gz", hash = "sha256:e564499435a2673d586f6b2130bb5b95f04a3ba06f81b8f895b651a3c76aabb1"},
+]
+pillow = [
+    {file = "Pillow-9.1.1-cp310-cp310-macosx_10_10_x86_64.whl", hash = "sha256:42dfefbef90eb67c10c45a73a9bc1599d4dac920f7dfcbf4ec6b80cb620757fe"},
+    {file = "Pillow-9.1.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:ffde4c6fabb52891d81606411cbfaf77756e3b561b566efd270b3ed3791fde4e"},
+    {file = "Pillow-9.1.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9c857532c719fb30fafabd2371ce9b7031812ff3889d75273827633bca0c4602"},
+    {file = "Pillow-9.1.1-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:59789a7d06c742e9d13b883d5e3569188c16acb02eeed2510fd3bfdbc1bd1530"},
+    {file = "Pillow-9.1.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4d45dbe4b21a9679c3e8b3f7f4f42a45a7d3ddff8a4a16109dff0e1da30a35b2"},
+    {file = "Pillow-9.1.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:e9ed59d1b6ee837f4515b9584f3d26cf0388b742a11ecdae0d9237a94505d03a"},
+    {file = "Pillow-9.1.1-cp310-cp310-win32.whl", hash = "sha256:b3fe2ff1e1715d4475d7e2c3e8dabd7c025f4410f79513b4ff2de3d51ce0fa9c"},
+    {file = "Pillow-9.1.1-cp310-cp310-win_amd64.whl", hash = "sha256:5b650dbbc0969a4e226d98a0b440c2f07a850896aed9266b6fedc0f7e7834108"},
+    {file = "Pillow-9.1.1-cp37-cp37m-macosx_10_10_x86_64.whl", hash = "sha256:0b4d5ad2cd3a1f0d1df882d926b37dbb2ab6c823ae21d041b46910c8f8cd844b"},
+    {file = "Pillow-9.1.1-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:9370d6744d379f2de5d7fa95cdbd3a4d92f0b0ef29609b4b1687f16bc197063d"},
+    {file = "Pillow-9.1.1-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b761727ed7d593e49671d1827044b942dd2f4caae6e51bab144d4accf8244a84"},
+    {file = "Pillow-9.1.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8a66fe50386162df2da701b3722781cbe90ce043e7d53c1fd6bd801bca6b48d4"},
+    {file = "Pillow-9.1.1-cp37-cp37m-win32.whl", hash = "sha256:2b291cab8a888658d72b575a03e340509b6b050b62db1f5539dd5cd18fd50578"},
+    {file = "Pillow-9.1.1-cp37-cp37m-win_amd64.whl", hash = "sha256:1d4331aeb12f6b3791911a6da82de72257a99ad99726ed6b63f481c0184b6fb9"},
+    {file = "Pillow-9.1.1-cp38-cp38-macosx_10_10_x86_64.whl", hash = "sha256:8844217cdf66eabe39567118f229e275f0727e9195635a15e0e4b9227458daaf"},
+    {file = "Pillow-9.1.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:b6617221ff08fbd3b7a811950b5c3f9367f6e941b86259843eab77c8e3d2b56b"},
+    {file = "Pillow-9.1.1-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:20d514c989fa28e73a5adbddd7a171afa5824710d0ab06d4e1234195d2a2e546"},
+    {file = "Pillow-9.1.1-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:088df396b047477dd1bbc7de6e22f58400dae2f21310d9e2ec2933b2ef7dfa4f"},
+    {file = "Pillow-9.1.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:53c27bd452e0f1bc4bfed07ceb235663a1df7c74df08e37fd6b03eb89454946a"},
+    {file = "Pillow-9.1.1-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:3f6c1716c473ebd1649663bf3b42702d0d53e27af8b64642be0dd3598c761fb1"},
+    {file = "Pillow-9.1.1-cp38-cp38-win32.whl", hash = "sha256:c67db410508b9de9c4694c57ed754b65a460e4812126e87f5052ecf23a011a54"},
+    {file = "Pillow-9.1.1-cp38-cp38-win_amd64.whl", hash = "sha256:f054b020c4d7e9786ae0404278ea318768eb123403b18453e28e47cdb7a0a4bf"},
+    {file = "Pillow-9.1.1-cp39-cp39-macosx_10_10_x86_64.whl", hash = "sha256:c17770a62a71718a74b7548098a74cd6880be16bcfff5f937f900ead90ca8e92"},
+    {file = "Pillow-9.1.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:f3f6a6034140e9e17e9abc175fc7a266a6e63652028e157750bd98e804a8ed9a"},
+    {file = "Pillow-9.1.1-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f372d0f08eff1475ef426344efe42493f71f377ec52237bf153c5713de987251"},
+    {file = "Pillow-9.1.1-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:09e67ef6e430f90caa093528bd758b0616f8165e57ed8d8ce014ae32df6a831d"},
+    {file = "Pillow-9.1.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:66daa16952d5bf0c9d5389c5e9df562922a59bd16d77e2a276e575d32e38afd1"},
+    {file = "Pillow-9.1.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:d78ca526a559fb84faaaf84da2dd4addef5edb109db8b81677c0bb1aad342601"},
+    {file = "Pillow-9.1.1-cp39-cp39-win32.whl", hash = "sha256:55e74faf8359ddda43fee01bffbc5bd99d96ea508d8a08c527099e84eb708f45"},
+    {file = "Pillow-9.1.1-cp39-cp39-win_amd64.whl", hash = "sha256:7c150dbbb4a94ea4825d1e5f2c5501af7141ea95825fadd7829f9b11c97aaf6c"},
+    {file = "Pillow-9.1.1-pp37-pypy37_pp73-macosx_10_10_x86_64.whl", hash = "sha256:769a7f131a2f43752455cc72f9f7a093c3ff3856bf976c5fb53a59d0ccc704f6"},
+    {file = "Pillow-9.1.1-pp37-pypy37_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:488f3383cf5159907d48d32957ac6f9ea85ccdcc296c14eca1a4e396ecc32098"},
+    {file = "Pillow-9.1.1-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0b525a356680022b0af53385944026d3486fc8c013638cf9900eb87c866afb4c"},
+    {file = "Pillow-9.1.1-pp38-pypy38_pp73-macosx_10_10_x86_64.whl", hash = "sha256:6e760cf01259a1c0a50f3c845f9cad1af30577fd8b670339b1659c6d0e7a41dd"},
+    {file = "Pillow-9.1.1-pp38-pypy38_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:a4165205a13b16a29e1ac57efeee6be2dfd5b5408122d59ef2145bc3239fa340"},
+    {file = "Pillow-9.1.1-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:937a54e5694684f74dcbf6e24cc453bfc5b33940216ddd8f4cd8f0f79167f765"},
+    {file = "Pillow-9.1.1-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:baf3be0b9446a4083cc0c5bb9f9c964034be5374b5bc09757be89f5d2fa247b8"},
+    {file = "Pillow-9.1.1.tar.gz", hash = "sha256:7502539939b53d7565f3d11d87c78e7ec900d3c72945d4ee0e2f250d598309a0"},
 ]
 platformdirs = [
     {file = "platformdirs-2.5.1-py3-none-any.whl", hash = "sha256:bcae7cab893c2d310a711b70b24efb93334febe65f8de776ee320b517471e227"},
@@ -1661,6 +1786,9 @@ pyyaml = [
     {file = "PyYAML-6.0-cp39-cp39-win32.whl", hash = "sha256:b5b9eccad747aabaaffbc6064800670f0c297e52c12754eb1d976c57e4f74dcb"},
     {file = "PyYAML-6.0-cp39-cp39-win_amd64.whl", hash = "sha256:b3d267842bf12586ba6c734f89d1f5b871df0273157918b0ccefa29deb05c21c"},
     {file = "PyYAML-6.0.tar.gz", hash = "sha256:68fb519c14306fec9720a2a5b45bc9f0c8d1b9c72adf45c37baedfcd949c35a2"},
+]
+qrcode = [
+    {file = "qrcode-7.3.1.tar.gz", hash = "sha256:375a6ff240ca9bd41adc070428b5dfc1dcfbb0f2507f1ac848f6cded38956578"},
 ]
 rfc3986 = [
     {file = "rfc3986-1.5.0-py2.py3-none-any.whl", hash = "sha256:a86d6e1f5b1dc238b218b012df0aa79409667bb209e58da56d0b94704e712a97"},

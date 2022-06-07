@@ -30,6 +30,7 @@ python-dotenv = "^0.19.2"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.18.1"}
 aerich = "^0.6.2"
 bilireq = "^0.1.2"
+nonebot-plugin-bilibili-viode = "^0.1.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
