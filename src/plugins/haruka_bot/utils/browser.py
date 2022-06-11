@@ -13,7 +13,9 @@ from .. import config
 _browser: Optional[BrowserContext] = None
 
 
-async def init(**kwargs) -> BrowserContext:
+async def init(proxy=config.haruka_proxy, **kwargs) -> BrowserContext:
+    if proxy:
+        kwargs["proxy"] = {"server": proxy}
     global _browser
     p = await async_playwright().start()
     browser = await p.chromium.launch(**kwargs)
