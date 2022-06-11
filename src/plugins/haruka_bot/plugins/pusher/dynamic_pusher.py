@@ -26,24 +26,28 @@ async def dy_sched():
     assert user is not None
     name = user.name
 
+    logger.debug(f"爬取动态 {name}（{uid}）")
     # 获取 UP 最新动态列表
     dynamics = (
         await grpc_get_user_dynamics(uid, timeout=5, proxy=config.haruka_proxy)
     ).list
 
-    if dynamics:
-        # 如果 UP 发布过动态则更新昵称
-        name = dynamics[0].modules[0].module_author.author.name
-
-    logger.debug(f"爬取动态 {name}（{uid}）")
-
-    if uid not in offset:  # 没有爬取过这位主播就把最新一条动态时间为 last_time
-        dynamic = dynamics[0]
-        offset[uid] = int(dynamic.extend.dyn_id_str)
+    if not dynamics:  # 没发过动态
         return
+    # 更新昵称
+    name = dynamics[0].modules[0].module_author.author.name
+
+    if uid not in offset:  # 第一次爬取
+        if len(dynamics) == 1:  # 只有一条动态
+            offset[uid] = int(dynamics[0].extend.dyn_id_str)
+            return
+        else:  # 第一个可能是置顶动态，但置顶也可能是最新一条，所以取前两条的最大值
+            offset[uid] = max(
+                int(dynamics[0].extend.dyn_id_str), int(dynamics[1].extend.dyn_id_str)
+            )
 
     dynamic = None
-    for dynamic in dynamics[::-1]:  # 从旧到新取最近5条动态
+    for dynamic in dynamics[::-1]:  # 动态从旧到新排列
         dynamic_id = int(dynamic.extend.dyn_id_str)
         if dynamic_id > offset[uid]:
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
