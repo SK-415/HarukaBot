@@ -6,16 +6,18 @@ from nonebot.adapters.onebot.v11.message import MessageSegment
 
 from ... import config
 from ...database import DB as db
-from ...libs.grpc import grpc_dyn_get
-from ...libs.grpc.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
+from bilireq.grpc.dynamic import grpc_get_user_dynamics
+from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
 
-OFFSET = {}
+offset = {}
 
 
-@scheduler.scheduled_job("interval", seconds=5, id="dynamic_sched")
+@scheduler.scheduled_job(
+    "interval", seconds=config.haruka_dynamic_interval, id="dynamic_sched"
+)
 async def dy_sched():
-    """直播推送"""
+    """动态推送"""
 
     uid = await db.next_uid("dynamic")
     if not uid:
@@ -24,29 +26,28 @@ async def dy_sched():
     assert user is not None
     name = user.name
 
-    # 获取 up 个人主页
-    user_dyn_page = await grpc_dyn_get(uid)
-    dynamics = user_dyn_page.list
+    # 获取 UP 最新动态列表
+    dynamics = (
+        await grpc_get_user_dynamics(uid, timeout=5, proxy=config.haruka_proxy)
+    ).list
+
     if dynamics:
-        # 如果 up 动态页正常则更新 up 名字
+        # 如果 UP 发布过动态则更新昵称
         name = dynamics[0].modules[0].module_author.author.name
 
     logger.debug(f"爬取动态 {name}（{uid}）")
 
-    # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
-    # await update_config(config)
-
-    if uid not in OFFSET:  # 没有爬取过这位主播就把最新一条动态时间为 last_time
+    if uid not in offset:  # 没有爬取过这位主播就把最新一条动态时间为 last_time
         dynamic = dynamics[0]
-        OFFSET[uid] = int(dynamic.extend.dyn_id_str)
+        offset[uid] = int(dynamic.extend.dyn_id_str)
         return
 
     dynamic = None
     for dynamic in dynamics[::-1]:  # 从旧到新取最近5条动态
-        dyn_id = int(dynamic.extend.dyn_id_str)
-        if dyn_id > OFFSET[uid]:
-            logger.info(f"检测到新动态（{dyn_id}）：{name}（{uid}）")
-            url = f"https://m.bilibili.com/dynamic/{dyn_id}"
+        dynamic_id = int(dynamic.extend.dyn_id_str)
+        if dynamic_id > offset[uid]:
+            logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
+            url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
             image = None
             for _ in range(3):
                 try:
@@ -89,7 +90,7 @@ async def dy_sched():
                     at=bool(sets.at) and config.haruka_dynamic_at,
                 )
 
-            OFFSET[uid] = dyn_id
+            offset[uid] = dynamic_id
 
     if dynamic:
         await db.update_user(uid, name)
