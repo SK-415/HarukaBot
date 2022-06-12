@@ -114,7 +114,7 @@ def install():
     # TODO 检查 google 可访问性
     if config.haruka_proxy:
         os.environ["HTTPS_PROXY"] = config.haruka_proxy
-    os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://playwright.sk415.icu"
+    os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://npmmirror.com/mirrors/playwright/"
     success = False
     try:
         main()
