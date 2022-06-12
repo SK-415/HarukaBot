@@ -65,7 +65,26 @@ HARUKA_PROXY=http://127.0.0.1:10809
 
 默认值：10
 
-直播、动态等刷新间隔，单位：秒。
+不推荐使用，请更换为 `HARUKA_LIVE_INTERVAL`。
+直播刷新间隔，单位：秒。
+```json
+HARUKA_INTERVAL=20
+```
+
+## HARUKA_DYNAMIC_INTERVAL
+
+默认值：1
+
+动态刷新间隔，单位：秒。
+```json
+HARUKA_INTERVAL=5
+```
+
+## HARUKA_LIVE_INTERVAL
+
+默认值：`HARUKA_INTERVAL` 的值
+
+直播刷新间隔，单位：秒。
 ```json
 HARUKA_INTERVAL=20
 ```
