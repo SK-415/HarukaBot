@@ -7,6 +7,7 @@ from nonebot.adapters.onebot.v11.message import MessageSegment
 from ... import config
 from ...database import DB as db
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
+from dynamicrendergrpc.Core.Dynamic import Render
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
 
@@ -55,11 +56,13 @@ async def dy_sched():
             image = None
             for _ in range(3):
                 try:
-                    # PC版网页：
-                    # image = await get_dynamic_screenshot(dynamic.url)
-
-                    # 移动端网页：
-                    image = await get_dynamic_screenshot(url)
+                    if config.native_render:
+                        image = MessageSegment.image(await Render().run(dynamic))
+                    else:
+                        # PC版网页：
+                        # image = await get_dynamic_screenshot(dynamic.url)
+                        # 移动端网页：
+                        image = MessageSegment.image(f"base64://{await get_dynamic_screenshot(url)}")
                     break
                 except Exception:
                     logger.error("截图失败，以下为错误日志:")
@@ -81,7 +84,7 @@ async def dy_sched():
                 f"{name} "
                 + f"{type_msg.get(dynamic.card_type, type_msg[0])}：\n"
                 + f"{url}\n"
-                + MessageSegment.image(f"base64://{image}")
+                + image
             )
 
             push_list = await db.get_push_list(uid, "dynamic")

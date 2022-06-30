@@ -6,6 +6,7 @@ from pydantic import BaseSettings
 class Config(BaseSettings):
 
     fastapi_reload: bool = False
+    native_render: bool = False
     haruka_dir: Optional[str] = None
     haruka_to_me: bool = True
     haruka_live_off_notify: bool = False
