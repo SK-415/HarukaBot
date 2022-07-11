@@ -13,7 +13,7 @@ delete_sub.handle()(permission_check)
 
 delete_sub.handle()(handle_uid)
 
-delete_sub.got("uid", prompt="请输入要关注的UID")(uid_check)
+delete_sub.got("uid", prompt="请输入要取关的UID")(uid_check)
 
 
 @delete_sub.handle()

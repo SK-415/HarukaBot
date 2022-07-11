@@ -13,7 +13,7 @@ dynamic_on.handle()(permission_check)
 
 dynamic_on.handle()(handle_uid)
 
-dynamic_on.got("uid", prompt="请输入要关注的UID")(uid_check)
+dynamic_on.got("uid", prompt="请输入要开启动态的UID")(uid_check)
 
 
 @dynamic_on.handle()

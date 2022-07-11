@@ -12,7 +12,7 @@ dynamic_off.handle()(permission_check)
 
 dynamic_off.handle()(handle_uid)
 
-dynamic_off.got("uid", prompt="请输入要关注的UID")(uid_check)
+dynamic_off.got("uid", prompt="请输入要关闭动态的UID")(uid_check)
 
 
 @dynamic_off.handle()
