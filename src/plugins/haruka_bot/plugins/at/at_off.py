@@ -17,7 +17,7 @@ at_off.__doc__ = """关闭全体 UID"""
 
 at_off.handle()(handle_uid)
 
-at_off.got("uid", prompt="请输入要关注的UID")(uid_check)
+at_off.got("uid", prompt="请输入要关闭全体的UID")(uid_check)
 
 
 @at_off.handle()

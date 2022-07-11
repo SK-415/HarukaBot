@@ -13,7 +13,7 @@ live_on.handle()(permission_check)
 
 live_on.handle()(handle_uid)
 
-live_on.got("uid", prompt="请输入要关注的UID")(uid_check)
+live_on.got("uid", prompt="请输入要开启直播的UID")(uid_check)
 
 
 @live_on.handle()

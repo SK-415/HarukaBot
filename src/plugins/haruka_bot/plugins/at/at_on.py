@@ -20,7 +20,7 @@ at_on.__doc__ = """开启全体 UID"""
 
 at_on.handle()(handle_uid)
 
-at_on.got("uid", prompt="请输入要关注的UID")(uid_check)
+at_on.got("uid", prompt="请输入要开启全体的UID")(uid_check)
 
 
 @at_on.handle()
