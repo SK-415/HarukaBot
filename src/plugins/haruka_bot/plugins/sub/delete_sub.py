@@ -1,9 +1,9 @@
 from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
-from nonebot.typing import T_State
+from nonebot.params import ArgPlainText
 
 from ...database import DB as db
-from ...utils import get_type_id, permission_check, to_me, handle_uid
+from ...utils import get_type_id, permission_check, to_me, handle_uid, uid_check
 
 
 delete_sub = on_command("取关", aliases={"删除主播"}, rule=to_me(), priority=5)
@@ -13,11 +13,12 @@ delete_sub.handle()(permission_check)
 
 delete_sub.handle()(handle_uid)
 
+delete_sub.got("uid", prompt="请输入要关注的UID")(uid_check)
 
-@delete_sub.got("uid", prompt="请输入要取关的UID")
-async def _(event: MessageEvent, state: T_State):
+
+@delete_sub.handle()
+async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 删除 UP 主订阅"""
-    uid = state["uid"]
     name = getattr(await db.get_user(uid=uid), "name", None)
     if name:
         result = await db.delete_sub(
