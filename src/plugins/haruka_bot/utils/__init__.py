@@ -12,11 +12,12 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageE
 from nonebot.adapters.onebot.v11 import ActionFailed, NetworkError
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
+from nonebot.params import ArgPlainText
 from nonebot.log import logger
 from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
-from nonebot.typing import T_State
+from nonebot.matcher import Matcher
 
 from .. import config
 
@@ -32,19 +33,20 @@ def get_path(*other):
 
 
 async def handle_uid(
-    bot: Bot,
-    event: MessageEvent,
-    state: T_State,
+    matcher: Matcher,
     command_arg: Message = CommandArg(),
 ):
     uid = command_arg.extract_plain_text().strip()
-    if not uid:
-        return
-    if uid.isdecimal():
-        state["uid"] = uid
-    else:
-        await bot.send(event, "UID 必须为纯数字")
-        raise FinishedException
+    if uid:
+        matcher.set_arg("uid", command_arg)
+
+
+async def uid_check(
+    matcher: Matcher,
+    uid: str = ArgPlainText("uid"),
+):
+    if not uid.isdecimal():
+        await matcher.finish("UID 必须为纯数字")
 
 
 async def permission_check(
