@@ -78,7 +78,7 @@ async def get_dynamic_screenshot(url):
         # 1. 字体问题：.dyn-class里font-family是PingFangSC-Regular，使用行内CSS覆盖掉它
         # 2. 换行问题：遇到太长的内容（长单词、某些长链接等）允许强制换行，防止溢出
         content = content.replace(
-            '<div class="launch-app-btn dynamic-float-openapp">'
+            '<div class="launch-app-btn dynamic-float-openapp dynamic-float-btn">'
             '<div class="m-dynamic-float-openapp">'
             "<span>打开APP，查看更多精彩内容</span></div> <!----></div>",
             "",
