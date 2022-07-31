@@ -18,7 +18,6 @@ live_on.got("uid", prompt="请输入要开启直播的UID")(uid_check)
 @live_on.handle()
 async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 开启直播"""
-
     if await db.set_sub(
         "live",
         True,
