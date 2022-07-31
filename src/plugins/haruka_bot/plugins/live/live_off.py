@@ -3,8 +3,7 @@ from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import ArgPlainText
 
 from ...database import DB as db
-from ...utils import get_type_id, permission_check, to_me, handle_uid, uid_check
-
+from ...utils import get_type_id, handle_uid, permission_check, to_me, uid_check
 
 live_off = on_command("关闭直播", rule=to_me(), priority=5)
 live_off.__doc__ = """关闭直播 UID"""

@@ -5,7 +5,14 @@ from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import ArgPlainText
 
 from ...database import DB as db
-from ...utils import PROXIES, get_type_id, handle_uid, permission_check, to_me, uid_check
+from ...utils import (
+    PROXIES,
+    get_type_id,
+    handle_uid,
+    permission_check,
+    to_me,
+    uid_check,
+)
 
 add_sub = on_command("关注", aliases={"添加主播"}, rule=to_me(), priority=5)
 add_sub.__doc__ = """关注 UID"""
