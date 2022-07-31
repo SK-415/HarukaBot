@@ -1,14 +1,12 @@
-from typing import Union
-
 from nonebot import on_command
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
+from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.params import ArgPlainText
 from nonebot.permission import SUPERUSER
 
 from ... import config
 from ...database import DB as db
-from ...utils import handle_uid, to_me, uid_check
+from ...utils import group_only, handle_uid, to_me, uid_check
 
 at_on = on_command(
     "开启全体",
@@ -18,20 +16,14 @@ at_on = on_command(
 )
 at_on.__doc__ = """开启全体 UID"""
 
+at_on.handle()(group_only)
 at_on.handle()(handle_uid)
-
 at_on.got("uid", prompt="请输入要开启全体的UID")(uid_check)
 
 
 @at_on.handle()
-async def _(
-    event: Union[PrivateMessageEvent, GroupMessageEvent], uid: str = ArgPlainText("uid")
-):
+async def _(event: GroupMessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 开启全体"""
-
-    if isinstance(event, PrivateMessageEvent):
-        await at_on.finish("只有群里才能开启全体")
-        return  # IDE 快乐行
     if await db.set_sub("at", True, uid=uid, type="group", type_id=event.group_id):
         user = await db.get_user(uid=uid)
         assert user is not None

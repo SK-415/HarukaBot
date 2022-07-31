@@ -1,34 +1,26 @@
-from typing import Union
-
 from nonebot import on_command
-from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
+from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.params import ArgPlainText
 from nonebot.permission import SUPERUSER
 
 from ... import config
 from ...database import DB as db
-from ...utils import handle_uid, to_me, uid_check
+from ...utils import group_only, handle_uid, to_me, uid_check
 
 at_off = on_command(
     "关闭全体", rule=to_me(), permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER, priority=5
 )
 at_off.__doc__ = """关闭全体 UID"""
 
+at_off.handle()(group_only)
 at_off.handle()(handle_uid)
-
 at_off.got("uid", prompt="请输入要关闭全体的UID")(uid_check)
 
 
 @at_off.handle()
-async def _(
-    event: Union[PrivateMessageEvent, GroupMessageEvent], uid: str = ArgPlainText("uid")
-):
+async def _(event: GroupMessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 关闭全体"""
-
-    if isinstance(event, PrivateMessageEvent):
-        await at_off.finish("只有群里才能关闭全体")
-        return  # IDE 快乐行
     if await db.set_sub("at", False, uid=uid, type="group", type_id=event.group_id):
         user = await db.get_user(uid=uid)
         assert user is not None

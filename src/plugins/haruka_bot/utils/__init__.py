@@ -19,7 +19,7 @@ from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
 from nonebot.log import logger
 from nonebot.matcher import Matcher
-from nonebot.params import ArgPlainText, CommandArg
+from nonebot.params import ArgPlainText, CommandArg, RawCommand
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
 
@@ -69,6 +69,13 @@ async def permission_check(
     )(bot, event):
         await bot.send(event, "权限不足，目前只有管理员才能使用")
         raise FinishedException
+
+
+async def group_only(
+    matcher: Matcher, event: MessageEvent, command: str = RawCommand()
+):
+    if not isinstance(event, GroupMessageEvent):
+        await matcher.finish(f"只有群里才能{command}")
 
 
 def to_me():
