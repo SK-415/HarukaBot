@@ -7,16 +7,21 @@ import httpx
 import nonebot
 from nonebot import require
 from nonebot.adapters import Bot
-from nonebot.adapters.onebot.v11 import Message, MessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import (
+    ActionFailed,
+    Message,
+    MessageEvent,
+    MessageSegment,
+    NetworkError,
+)
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
-from nonebot.adapters.onebot.v11 import ActionFailed, NetworkError
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
 from nonebot.log import logger
-from nonebot.params import CommandArg
+from nonebot.matcher import Matcher
+from nonebot.params import ArgPlainText, CommandArg, RawCommand
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
-from nonebot.typing import T_State
 
 from .. import config
 
@@ -32,19 +37,22 @@ def get_path(*other):
 
 
 async def handle_uid(
-    bot: Bot,
-    event: MessageEvent,
-    state: T_State,
+    matcher: Matcher,
     command_arg: Message = CommandArg(),
 ):
     uid = command_arg.extract_plain_text().strip()
-    if not uid:
-        return
-    if uid.isdecimal():
-        state["uid"] = uid
-    else:
-        await bot.send(event, "UID 必须为纯数字")
-        raise FinishedException
+    if uid:
+        matcher.set_arg("uid", command_arg)
+
+
+async def uid_check(
+    matcher: Matcher,
+    uid: str = ArgPlainText("uid"),
+):
+    uid = uid.strip()
+    if not uid.isdecimal():
+        await matcher.finish("UID 必须为纯数字")
+    matcher.set_arg("uid", Message(uid))
 
 
 async def permission_check(
@@ -61,6 +69,13 @@ async def permission_check(
     )(bot, event):
         await bot.send(event, "权限不足，目前只有管理员才能使用")
         raise FinishedException
+
+
+async def group_only(
+    matcher: Matcher, event: MessageEvent, command: str = RawCommand()
+):
+    if not isinstance(event, GroupMessageEvent):
+        await matcher.finish(f"只有群里才能{command}")
 
 
 def to_me():

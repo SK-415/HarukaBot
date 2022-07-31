@@ -1,13 +1,13 @@
 import asyncio
 import traceback
 
-from nonebot.log import logger
+from bilireq.grpc.dynamic import grpc_get_user_dynamics
+from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from nonebot.adapters.onebot.v11.message import MessageSegment
+from nonebot.log import logger
 
 from ... import config
 from ...database import DB as db
-from bilireq.grpc.dynamic import grpc_get_user_dynamics
-from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
 
 offset = {}
@@ -18,7 +18,6 @@ offset = {}
 )
 async def dy_sched():
     """动态推送"""
-
     uid = await db.next_uid("dynamic")
     if not uid:
         return

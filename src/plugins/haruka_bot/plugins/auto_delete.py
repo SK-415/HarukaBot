@@ -3,7 +3,6 @@ from nonebot.adapters.onebot.v11 import GroupDecreaseNoticeEvent
 
 from ..database import DB as db
 
-
 group_decrease = on_notice(priority=5)
 
 
