@@ -7,17 +7,21 @@ import httpx
 import nonebot
 from nonebot import require
 from nonebot.adapters import Bot
-from nonebot.adapters.onebot.v11 import Message, MessageEvent, MessageSegment
+from nonebot.adapters.onebot.v11 import (
+    ActionFailed,
+    Message,
+    MessageEvent,
+    MessageSegment,
+    NetworkError,
+)
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent, PrivateMessageEvent
-from nonebot.adapters.onebot.v11 import ActionFailed, NetworkError
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.exception import FinishedException
-from nonebot.params import ArgPlainText
 from nonebot.log import logger
-from nonebot.params import CommandArg
+from nonebot.matcher import Matcher
+from nonebot.params import ArgPlainText, CommandArg
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
-from nonebot.matcher import Matcher
 
 from .. import config
 
@@ -45,8 +49,10 @@ async def uid_check(
     matcher: Matcher,
     uid: str = ArgPlainText("uid"),
 ):
+    uid = uid.strip()
     if not uid.isdecimal():
         await matcher.finish("UID 必须为纯数字")
+    matcher.set_arg("uid", Message(uid))
 
 
 async def permission_check(
