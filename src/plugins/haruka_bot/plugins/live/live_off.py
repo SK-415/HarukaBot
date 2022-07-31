@@ -18,7 +18,6 @@ live_off.got("uid", prompt="请输入要关闭直播的UID")(uid_check)
 @live_off.handle()
 async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 关闭直播"""
-
     if await db.set_sub(
         "live",
         False,
