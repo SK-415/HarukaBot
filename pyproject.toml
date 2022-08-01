@@ -27,13 +27,13 @@ nonebot2 = "2.0.0b4"
 playwright = "^1.22.0"
 pydantic = "^1.9.0"
 python-dotenv = "^0.19.2"
-tortoise-orm = {extras = ["asyncpg"], version = "^0.18.1"}
+tortoise-orm = {extras = ["asyncpg"], version = ">=0.18.1,<0.20.0"}
 aerich = "^0.6.2"
 bilireq = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
-black = "^22.3.0"
-flake8 = "^4.0.1"
+black = "^22.6.0"
+flake8 = "^5.0.2"
 nonebot-plugin-gocqhttp = "^0.5.6"
 
 [tool.nonebot]
