@@ -143,7 +143,7 @@ reference = "tsinghua"
 
 [[package]]
 name = "bilireq"
-version = "0.2.0"
+version = "0.2.0.post1"
 description = ""
 category = "main"
 optional = false
@@ -1231,8 +1231,8 @@ asyncpg = [
     {file = "backports.zoneinfo-0.2.1.tar.gz", hash = "sha256:fadbfe37f74051d024037f223b8e001611eac868b5c5b06144ef4d8b799862f2"},
 ]
 bilireq = [
-    {file = "bilireq-0.2.0-py3-none-any.whl", hash = "sha256:869f2cc872a9bd7a3d41e50f98b47676783d887f253601c98e9b48658f7c214f"},
-    {file = "bilireq-0.2.0.tar.gz", hash = "sha256:9a9896fdcfa1f585a47b8da88b00c2a1ffa632162719af8e1c33f042e997f822"},
+    {file = "bilireq-0.2.0.post1-py3-none-any.whl", hash = "sha256:bced02207c09fc29d08f1f37cfeaefdcfdde3dbff180d35d5c3c9d7ea3fa1f90"},
+    {file = "bilireq-0.2.0.post1.tar.gz", hash = "sha256:f731a5768c7e3159b1e0d5b02b3fdb58939ed24d6cd23a428ab1df20fbbf62cc"},
 ]
 black = [
     {file = "black-22.6.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:f586c26118bc6e714ec58c09df0157fe2d9ee195c764f630eb0d8e7ccce72e69"},
