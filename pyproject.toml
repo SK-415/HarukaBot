@@ -32,7 +32,7 @@ aerich = "^0.6.2"
 bilireq = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
-black = "^22.3.0"
+black = "^22.6.0"
 flake8 = "^4.0.1"
 nonebot-plugin-gocqhttp = "^0.5.6"
 
