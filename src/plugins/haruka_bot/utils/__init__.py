@@ -153,6 +153,8 @@ def on_startup():
 
 
 PROXIES = {"all://": config.haruka_proxy}
-scheduler = require("nonebot_plugin_apscheduler").scheduler
+
+require("nonebot_plugin_apscheduler")
+from nonebot_plugin_apscheduler import scheduler
 
 from .browser import get_dynamic_screenshot  # noqa

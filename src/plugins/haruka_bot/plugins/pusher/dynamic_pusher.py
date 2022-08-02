@@ -1,6 +1,12 @@
 import asyncio
-import traceback
+from datetime import datetime
 
+from apscheduler.events import (
+    EVENT_JOB_ERROR,
+    EVENT_JOB_EXECUTED,
+    EVENT_JOB_MISSED,
+    EVENT_SCHEDULER_STARTED,
+)
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from nonebot.adapters.onebot.v11.message import MessageSegment
@@ -13,9 +19,6 @@ from ...utils import get_dynamic_screenshot, safe_send, scheduler
 offset = {}
 
 
-@scheduler.scheduled_job(
-    "interval", seconds=config.haruka_dynamic_interval, id="dynamic_sched"
-)
 async def dy_sched():
     """动态推送"""
     uid = await db.next_uid("dynamic")
@@ -95,3 +98,27 @@ async def dy_sched():
 
     if dynamic:
         await db.update_user(uid, name)
+
+
+def dynamic_lisener(event):
+    if hasattr(event, "job_id") and event.job_id != "dynamic_sched":
+        return
+    job = scheduler.get_job("dynamic_sched")
+    if not job:
+        scheduler.add_job(
+            dy_sched, id="dynamic_sched", next_run_time=datetime.now(scheduler.timezone)  # type: ignore
+        )
+
+
+if config.haruka_dynamic_interval == 0:
+    scheduler.add_listener(
+        dynamic_lisener,
+        EVENT_JOB_EXECUTED
+        | EVENT_JOB_ERROR
+        | EVENT_JOB_MISSED
+        | EVENT_SCHEDULER_STARTED,
+    )
+else:
+    scheduler.add_job(
+        dy_sched, "interval", seconds=config.haruka_dynamic_interval, id="dynamic_sched"
+    )
