@@ -32,6 +32,8 @@ async def dy_sched():
     ).list
 
     if not dynamics:  # 没发过动态
+        if uid not in offset:  # 不记录会导致第一次发动态不推送
+            offset[uid] = 0
         return
     # 更新昵称
     name = dynamics[0].modules[0].module_author.author.name
@@ -50,17 +52,14 @@ async def dy_sched():
         dynamic_id = int(dynamic.extend.dyn_id_str)
         if dynamic_id > offset[uid]:
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
-            url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
+            url = f"https://t.bilibili.com/{dynamic_id}"
             image = None
             for _ in range(3):
                 try:
-                    # PC版网页：
-                    # image = await get_dynamic_screenshot(dynamic.url)
-
-                    # 移动端网页：
                     image = await get_dynamic_screenshot(url)
                     break
                 except Exception:
+                    # TODO 输出优化一下
                     logger.error("截图失败，以下为错误日志:")
                     logger.error(traceback.format_exc())
                 await asyncio.sleep(0.1)
