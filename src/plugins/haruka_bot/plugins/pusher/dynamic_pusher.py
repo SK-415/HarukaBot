@@ -58,10 +58,9 @@ async def dy_sched():
                 try:
                     image = await get_dynamic_screenshot(url)
                     break
-                except Exception:
-                    # TODO 输出优化一下
+                except Exception as e:
                     logger.error("截图失败，以下为错误日志:")
-                    logger.error(traceback.format_exc())
+                    logger.exception(e)
                 await asyncio.sleep(0.1)
             if not image:
                 logger.error("已达到重试上限，将在下个轮询中重新尝试")
