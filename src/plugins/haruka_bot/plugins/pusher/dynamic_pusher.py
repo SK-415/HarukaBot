@@ -17,6 +17,8 @@ from ...database import DB as db
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
 
 offset = {}
+from grpc import StatusCode
+from grpc.aio import AioRpcError
 
 
 async def dy_sched():
@@ -29,10 +31,16 @@ async def dy_sched():
     name = user.name
 
     logger.debug(f"爬取动态 {name}（{uid}）")
-    # 获取 UP 最新动态列表
-    dynamics = (
-        await grpc_get_user_dynamics(uid, timeout=5, proxy=config.haruka_proxy)
-    ).list
+    try:
+        # 获取 UP 最新动态列表
+        dynamics = (
+            await grpc_get_user_dynamics(uid, timeout=10, proxy=config.haruka_proxy)
+        ).list
+    except AioRpcError as e:
+        if e.code() == StatusCode.DEADLINE_EXCEEDED:
+            logger.error(f"爬取动态超时，将在下个轮询中重试")
+            return
+        raise
 
     if not dynamics:  # 没发过动态
         if uid not in offset:  # 不记录会导致第一次发动态不推送
@@ -66,7 +74,7 @@ async def dy_sched():
                     logger.exception(e)
                 await asyncio.sleep(0.1)
             if not image:
-                logger.error("已达到重试上限，将在下个轮询中重新尝试")
+                logger.error("已达到重试上限，将在下个轮询中重试")
 
             type_msg = {
                 0: "发布了新动态",
