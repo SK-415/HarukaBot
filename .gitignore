@@ -9,6 +9,7 @@ test
 _test
 tests
 migration
+playground
 
 # Editor config
 .vscode
