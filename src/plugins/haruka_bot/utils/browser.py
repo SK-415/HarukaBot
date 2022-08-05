@@ -61,7 +61,7 @@ async def get_dynamic_screenshot_mobile(url):
         content = content.replace(
             '<div class="dyn-card">',
             '<div class="dyn-card" '
-            'style="font-family: sans-serif; overflow-wrap: break-word;">',
+            'style="font-family: Noto Sans CJK SC, sans-serif; overflow-wrap: break-word;">',
         )
         # 去掉打开APP的按钮，防止遮挡较长的动态
         content = content.replace(
