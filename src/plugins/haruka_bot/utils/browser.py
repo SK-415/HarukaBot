@@ -176,11 +176,4 @@ async def check_playwright_env():
         )
 
 
-async def shutdown_browser():
-    """关闭浏览器"""
-    if _browser:
-        await _browser.close()
-
-
 get_driver().on_startup(init_browser)
-get_driver().on_shutdown(shutdown_browser)
