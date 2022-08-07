@@ -18,11 +18,13 @@ async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
         kwargs["proxy"] = {"server": proxy}
     global _browser
     p = await async_playwright().start()
-    return await p.chromium.launch(**kwargs)
+    _browser = await p.chromium.launch(**kwargs)
+    return _browser
 
 
-async def get_browser(**kwargs) -> Browser:
-    return _browser or await init_browser(**kwargs)
+async def get_browser() -> Browser:
+    assert _browser
+    return _browser
 
 
 async def get_dynamic_screenshot(dynamic_id, style=config.haruka_screenshot_style):
