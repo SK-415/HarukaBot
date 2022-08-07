@@ -25,16 +25,17 @@ async def get_browser(**kwargs) -> Browser:
     return _browser or await init_browser(**kwargs)
 
 
-async def get_dynamic_screenshot(url, style=config.haruka_screenshot_style):
+async def get_dynamic_screenshot(dynamic_id, style=config.haruka_screenshot_style):
     """获取动态截图"""
     if style == "mobile":
-        return await get_dynamic_screenshot_mobile(url)
+        return await get_dynamic_screenshot_mobile(dynamic_id)
     else:
-        return await get_dynamic_screenshot_pc(url)
+        return await get_dynamic_screenshot_pc(dynamic_id)
 
 
-async def get_dynamic_screenshot_mobile(url):
+async def get_dynamic_screenshot_mobile(dynamic_id):
     """移动端动态截图"""
+    url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
     browser = await get_browser()
     page = None
     try:
@@ -84,8 +85,9 @@ async def get_dynamic_screenshot_mobile(url):
         raise
 
 
-async def get_dynamic_screenshot_pc(url):
+async def get_dynamic_screenshot_pc(dynamic_id):
     """电脑端动态截图"""
+    url = f"https://t.bilibili.com/{dynamic_id}"
     browser = await get_browser()
     context = None
     try:
