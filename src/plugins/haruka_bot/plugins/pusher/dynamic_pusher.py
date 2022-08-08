@@ -1,4 +1,3 @@
-import asyncio
 from datetime import datetime
 
 from apscheduler.events import (
@@ -64,17 +63,10 @@ async def dy_sched():
         if dynamic_id > offset[uid]:
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
             url = f"https://t.bilibili.com/{dynamic_id}"
-            image = None
-            for _ in range(3):
-                try:
-                    image = await get_dynamic_screenshot(url)
-                    break
-                except Exception as e:
-                    logger.error("截图失败，以下为错误日志:")
-                    logger.exception(e)
-                await asyncio.sleep(0.1)
-            if not image:
-                logger.error("已达到重试上限，将在下个轮询中重试")
+            image = await get_dynamic_screenshot(dynamic_id)
+            if image is None:
+                logger.debug(f"动态不存在，已跳过：{url}")
+                return
 
             type_msg = {
                 0: "发布了新动态",
@@ -87,9 +79,9 @@ async def dy_sched():
             }
             message = (
                 f"{name} "
-                + f"{type_msg.get(dynamic.card_type, type_msg[0])}：\n"
-                + f"{url}\n"
-                + MessageSegment.image(f"base64://{image}")
+                f"{type_msg.get(dynamic.card_type, type_msg[0])}：\n"
+                f"{MessageSegment.image(image)}\n"
+                f"{url}"
             )
 
             push_list = await db.get_push_list(uid, "dynamic")

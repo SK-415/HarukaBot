@@ -1,4 +1,3 @@
-import base64
 import os
 import sys
 from typing import Optional
@@ -39,17 +38,19 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
     """移动端动态截图"""
     url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
     browser = await get_browser()
-    page = None
+    page = await browser.new_page(
+        device_scale_factor=2,
+        user_agent=(
+            "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
+            "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
+        ),
+        viewport={"width": 360, "height": 780},
+    )
     try:
-        page = await browser.new_page(
-            device_scale_factor=2,
-            user_agent=(
-                "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
-                "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
-            ),
-            viewport={"width": 360, "height": 780},
-        )
         await page.goto(url, wait_until="networkidle", timeout=10000)
+        # 动态被删除或者进审核了
+        if page.url == "https://m.bilibili.com/404":
+            return None
         content = await page.content()
         # 去掉关注按钮
         content = content.replace(
@@ -78,37 +79,38 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         assert card
         clip = await card.bounding_box()
         assert clip
-        image = await page.screenshot(clip=clip, full_page=True)
-        await page.close()
-        return base64.b64encode(image).decode()
+        return await page.screenshot(clip=clip, full_page=True)
     except Exception:
-        if page:
-            await page.close()
-        raise
+        logger.exception(f"截取动态时发生错误：{url}")
+        return await page.screenshot(full_page=True)
+    finally:
+        await page.close()
 
 
 async def get_dynamic_screenshot_pc(dynamic_id):
     """电脑端动态截图"""
     url = f"https://t.bilibili.com/{dynamic_id}"
     browser = await get_browser()
-    context = None
+    context = await browser.new_context(
+        viewport={"width": 2560, "height": 1080},
+        device_scale_factor=2,
+    )
+    await context.add_cookies(
+        [
+            {
+                "name": "hit-dyn-v2",
+                "value": "1",
+                "domain": ".bilibili.com",
+                "path": "/",
+            }
+        ]
+    )
+    page = await context.new_page()
     try:
-        context = await browser.new_context(
-            viewport={"width": 2560, "height": 1080},
-            device_scale_factor=2,
-        )
-        await context.add_cookies(
-            [
-                {
-                    "name": "hit-dyn-v2",
-                    "value": "1",
-                    "domain": ".bilibili.com",
-                    "path": "/",
-                }
-            ]
-        )
-        page = await context.new_page()
         await page.goto(url, wait_until="networkidle", timeout=10000)
+        # 动态被删除或者进审核了
+        if page.url == "https://www.bilibili.com/404":
+            return None
         card = await page.query_selector(".card")
         assert card
         clip = await card.bounding_box()
@@ -118,13 +120,12 @@ async def get_dynamic_screenshot_pc(dynamic_id):
         bar_bound = await bar.bounding_box()
         assert bar_bound
         clip["height"] = bar_bound["y"] - clip["y"]
-        image = await page.screenshot(clip=clip, full_page=True)
-        await context.close()
-        return base64.b64encode(image).decode()
+        return await page.screenshot(clip=clip, full_page=True)
     except Exception:
-        if context:
-            await context.close()
-        raise
+        logger.exception(f"截取动态时发生错误：{url}")
+        return await page.screenshot(full_page=True)
+    finally:
+        await context.close()
 
 
 def install():
@@ -140,8 +141,6 @@ def install():
     logger.info("检查 Chromium 更新")
     sys.argv = ["", "install", "chromium"]
     original_proxy = os.environ.get("HTTPS_PROXY")
-    # TODO 检查 google 可访问性
-    # TODO 检查个锤子，直接加个设置项让用户自己选择开关
     if config.haruka_proxy:
         os.environ["HTTPS_PROXY"] = config.haruka_proxy
     os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://npmmirror.com/mirrors/playwright/"
