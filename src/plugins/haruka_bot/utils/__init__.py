@@ -111,8 +111,17 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
             },
         )
     except ActionFailed as e:
-        url = "https://haruka-bot.sk415.icu/usage/faq.html#机器人不发消息也没反应"
-        logger.error(f"推送失败，账号可能被风控（{url}），错误信息：{e.info}")
+        if e.info["msg"] == "GROUP_NOT_FOUND":
+            from ..database import DB as db
+
+            await db.delete_sub_list(type="group", type_id=type_id)
+            await db.delete_group(id=type_id)
+            logger.error(f"推送失败，群（{type_id}）不存在，已自动清理群订阅列表")
+        elif e.info["msg"] == "SEND_MSG_API_ERROR":
+            url = "https://haruka-bot.sk415.icu/usage/faq.html#机器人不发消息也没反应"
+            logger.error(f"推送失败，账号可能被风控（{url}），错误信息：{e.info}")
+        else:
+            logger.error(f"推送失败，未知错误，错误信息：{e.info}")
     except NetworkError as e:
         logger.error(f"推送失败，请检查网络连接，错误信息：{e.msg}")
 
