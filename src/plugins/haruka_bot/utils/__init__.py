@@ -93,16 +93,7 @@ def to_me():
 async def safe_send(bot_id, send_type, type_id, message, at=False):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
 
-    try:
-        bot = nonebot.get_bots()[str(bot_id)]
-    except KeyError:
-        logger.error(f"推送失败，Bot（{bot_id}）未连接")
-        return
-
-    if at and (await bot.get_group_at_all_remain(group_id=type_id))["can_at_all"]:
-        message = MessageSegment.at("all") + message
-
-    try:
+    async def _safe_send(bot, send_type, type_id, message):
         return await bot.call_api(
             "send_" + send_type + "_msg",
             **{
@@ -110,6 +101,31 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
                 "user_id" if send_type == "private" else "group_id": type_id,
             },
         )
+
+    bots = nonebot.get_bots()
+    bot = bots.get(str(bot_id))
+    if bot is None:
+        logger.error(f"推送失败，Bot（{bot_id}）未连接，尝试使用其他 Bot 推送")
+        for bot_id, bot in bots.items():
+            if (
+                at
+                and (await bot.get_group_at_all_remain(group_id=type_id))["can_at_all"]
+            ):
+                message = MessageSegment.at("all") + message
+            try:
+                result = await _safe_send(bot, send_type, type_id, message)
+                logger.info(f"尝试使用 Bot（{bot_id}）推送成功")
+                return result
+            except Exception:
+                continue
+        logger.error(f"尝试失败，所有 Bot 均无法推送")
+        return
+
+    if at and (await bot.get_group_at_all_remain(group_id=type_id))["can_at_all"]:
+        message = MessageSegment.at("all") + message
+
+    try:
+        return await _safe_send(bot, send_type, type_id, message)
     except ActionFailed as e:
         if e.info["msg"] == "GROUP_NOT_FOUND":
             from ..database import DB as db
