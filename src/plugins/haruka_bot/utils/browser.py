@@ -28,7 +28,7 @@ async def get_browser() -> Browser:
 
 async def get_dynamic_screenshot(dynamic_id, style=config.haruka_screenshot_style):
     """获取动态截图"""
-    if style == "mobile":
+    if style.lower() == "mobile":
         return await get_dynamic_screenshot_mobile(dynamic_id)
     else:
         return await get_dynamic_screenshot_pc(dynamic_id)
