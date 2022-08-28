@@ -127,7 +127,7 @@ reference = "tsinghua"
 
 [[package]]
 name = "bilireq"
-version = "0.2.0.post1"
+version = "0.2.1"
 description = ""
 category = "main"
 optional = false
@@ -1075,7 +1075,7 @@ reference = "tsinghua"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "0e909ec069f31c8a8a46b4b52f5dbaeca37f391aa095800e33adcbdd1f3e8d08"
+content-hash = "1617aa7eb09ef860e63c6c2f73ae448b346f667c45d585241cebd1957207f81c"
 
 [metadata.files]
 aerich = [
@@ -1141,8 +1141,8 @@ asyncpg = [
     {file = "backports.zoneinfo-0.2.1.tar.gz", hash = "sha256:fadbfe37f74051d024037f223b8e001611eac868b5c5b06144ef4d8b799862f2"},
 ]
 bilireq = [
-    {file = "bilireq-0.2.0.post1-py3-none-any.whl", hash = "sha256:bced02207c09fc29d08f1f37cfeaefdcfdde3dbff180d35d5c3c9d7ea3fa1f90"},
-    {file = "bilireq-0.2.0.post1.tar.gz", hash = "sha256:f731a5768c7e3159b1e0d5b02b3fdb58939ed24d6cd23a428ab1df20fbbf62cc"},
+    {file = "bilireq-0.2.1-py3-none-any.whl", hash = "sha256:5a3f85d8548e88411c7acb1a57ffd2fc709ba1590c02ea52c67a56a2a34f0194"},
+    {file = "bilireq-0.2.1.tar.gz", hash = "sha256:1de79c66330e7c021aca60845ad2d7ddf900c953f898820300559b78244b3270"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
