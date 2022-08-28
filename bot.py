@@ -2,7 +2,6 @@ import nonebot
 from nonebot.adapters.onebot.v11 import Adapter as OneBotV11Adapter
 from nonebot.log import default_format, logger
 
-
 logger.add(
     "logs/error.log",
     rotation="00:00",

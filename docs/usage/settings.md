@@ -5,6 +5,7 @@ HarukaBot 存在一些**非必须的**进阶配置项，用户可以在 `.env.pr
 ::: tip 提示
 添加配置项只需在 `.env.*` 文件最底下另起一行直接添加即可。
 ::: details 示例（点我展开）
+
 ```json {7-8}
 HOST=0.0.0.0
 PORT=8080
@@ -15,6 +16,7 @@ COMMAND_SEP=["."]
 HARUKA_DIR="./data/"
 HARUKA_TO_ME=false
 ```
+
 :::
 
 ## HARUKA_DIR
@@ -48,7 +50,8 @@ Haruka_TO_ME=False
 默认值：False
 
 是否开启下播提醒。
-```json
+
+```yml
 HARUKA_LIVE_OFF_NOTIFY=True
 ```
 
@@ -57,7 +60,8 @@ HARUKA_LIVE_OFF_NOTIFY=True
 默认值：None
 
 设置后所有网络请求将使用代理端口，仅支持 HTTP 代理。
-```json
+
+```yml
 HARUKA_PROXY=http://127.0.0.1:10809
 ```
 
@@ -67,7 +71,8 @@ HARUKA_PROXY=http://127.0.0.1:10809
 
 不推荐使用，请更换为 `HARUKA_LIVE_INTERVAL`。
 直播刷新间隔，单位：秒。
-```json
+
+```yml
 HARUKA_INTERVAL=20
 ```
 
@@ -76,7 +81,8 @@ HARUKA_INTERVAL=20
 默认值：1
 
 动态刷新间隔，单位：秒。
-```json
+
+```yml
 HARUKA_DYNAMIC_INTERVAL=5
 ```
 
@@ -85,7 +91,8 @@ HARUKA_DYNAMIC_INTERVAL=5
 默认值：`HARUKA_INTERVAL` 设置的值
 
 直播刷新间隔，单位：秒。
-```json
+
+```yml
 HARUKA_LIVE_INTERVAL=20
 ```
 
@@ -94,6 +101,17 @@ HARUKA_LIVE_INTERVAL=20
 默认值：False
 
 动态、投稿是否也要@全体。
-```json
+
+```yml
 HARUKA_DYNAMIC_AT=True
+```
+
+## HARUKA_SCREENSHOT_STYLE
+
+默认值：mobile
+
+截图样式，可选值：mobile（手机）、pc（电脑）。
+
+```yml
+HARUKA_SCREENSHOT_STYLE=pc
 ```

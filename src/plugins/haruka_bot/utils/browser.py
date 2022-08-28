@@ -1,4 +1,3 @@
-import base64
 import os
 import sys
 from typing import Optional
@@ -6,96 +5,127 @@ from typing import Optional
 from nonebot import get_driver
 from nonebot.log import logger
 from playwright.__main__ import main
-from playwright.async_api import BrowserContext, async_playwright
+from playwright.async_api import Browser, async_playwright
 
 from .. import config
 
-_browser: Optional[BrowserContext] = None
+_browser: Optional[Browser] = None
 
 
-async def init(proxy=config.haruka_proxy, **kwargs) -> BrowserContext:
+async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
     if proxy:
         kwargs["proxy"] = {"server": proxy}
     global _browser
     p = await async_playwright().start()
-    browser = await p.chromium.launch(**kwargs)
-    _browser = await browser.new_context(
+    _browser = await p.chromium.launch(**kwargs)
+    return _browser
+
+
+async def get_browser() -> Browser:
+    assert _browser
+    return _browser
+
+
+async def get_dynamic_screenshot(dynamic_id, style=config.haruka_screenshot_style):
+    """获取动态截图"""
+    if style.lower() == "mobile":
+        return await get_dynamic_screenshot_mobile(dynamic_id)
+    else:
+        return await get_dynamic_screenshot_pc(dynamic_id)
+
+
+async def get_dynamic_screenshot_mobile(dynamic_id):
+    """移动端动态截图"""
+    url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
+    browser = await get_browser()
+    page = await browser.new_page(
         device_scale_factor=2,
-        # 移动端
         user_agent=(
             "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
             "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
         ),
+        viewport={"width": 360, "height": 780},
     )
-    # 电脑端
-    # await _browser.add_cookies(
-    #     [{"name": "hit-dyn-v2", "value": "1", "domain": ".bilibili.com", "path": "/"}]
-    # )
-
-    return _browser
-
-
-async def get_browser(**kwargs) -> BrowserContext:
-    return _browser or await init(**kwargs)
-
-
-async def get_dynamic_screenshot(url):
-    browser = await get_browser()
-    page = None
     try:
-        # 电脑端
-        # page = await browser.new_page()
-        # await page.goto(url, wait_until="networkidle", timeout=10000)
-        # await page.set_viewport_size({"width": 2560, "height": 1080})
-        # card = await page.query_selector(".card")
-        # assert card
-        # clip = await card.bounding_box()
-        # assert clip
-        # bar = await page.query_selector(".bili-dyn-action__icon")
-        # assert bar
-        # bar_bound = await bar.bounding_box()
-        # assert bar_bound
-        # clip["height"] = bar_bound["y"] - clip["y"]
-
-        # 移动端
-        page = await browser.new_page()
-        await page.set_viewport_size({"width": 360, "height": 780})
         await page.goto(url, wait_until="networkidle", timeout=10000)
+        # 动态被删除或者进审核了
+        if page.url == "https://m.bilibili.com/404":
+            return None
         content = await page.content()
+        # 去掉关注按钮
         content = content.replace(
             '<div class="dyn-header__right">'
             '<div data-pos="follow" class="dyn-header__following">'
             '<span class="dyn-header__following__icon"></span>'
             '<span class="dyn-header__following__text">关注</span></div></div>',
             "",
-        )  # 去掉关注按钮
-
-        content = content.replace(
-            '<div class="dyn-card">',
-            '<div class="dyn-card" '
-            'style="font-family: sans-serif; overflow-wrap: break-word;">',
         )
         # 1. 字体问题：.dyn-class里font-family是PingFangSC-Regular，使用行内CSS覆盖掉它
         # 2. 换行问题：遇到太长的内容（长单词、某些长链接等）允许强制换行，防止溢出
         content = content.replace(
-            '<div class="launch-app-btn dynamic-float-openapp">'
+            '<div class="dyn-card">',
+            '<div class="dyn-card" '
+            'style="font-family: Noto Sans CJK SC, sans-serif; overflow-wrap: break-word;">',
+        )
+        # 去掉打开APP的按钮，防止遮挡较长的动态
+        content = content.replace(
+            '<div class="launch-app-btn dynamic-float-openapp dynamic-float-btn">'
             '<div class="m-dynamic-float-openapp">'
             "<span>打开APP，查看更多精彩内容</span></div> <!----></div>",
             "",
-        )  # 去掉打开APP的按钮，防止遮挡较长的动态
+        )
         await page.set_content(content)
         card = await page.query_selector(".dyn-card")
         assert card
         clip = await card.bounding_box()
         assert clip
-
-        image = await page.screenshot(clip=clip, full_page=True)
-        await page.close()
-        return base64.b64encode(image).decode()
+        return await page.screenshot(clip=clip, full_page=True)
     except Exception:
-        if page:
-            await page.close()
-        raise
+        logger.exception(f"截取动态时发生错误：{url}")
+        return await page.screenshot(full_page=True)
+    finally:
+        await page.close()
+
+
+async def get_dynamic_screenshot_pc(dynamic_id):
+    """电脑端动态截图"""
+    url = f"https://t.bilibili.com/{dynamic_id}"
+    browser = await get_browser()
+    context = await browser.new_context(
+        viewport={"width": 2560, "height": 1080},
+        device_scale_factor=2,
+    )
+    await context.add_cookies(
+        [
+            {
+                "name": "hit-dyn-v2",
+                "value": "1",
+                "domain": ".bilibili.com",
+                "path": "/",
+            }
+        ]
+    )
+    page = await context.new_page()
+    try:
+        await page.goto(url, wait_until="networkidle", timeout=10000)
+        # 动态被删除或者进审核了
+        if page.url == "https://www.bilibili.com/404":
+            return None
+        card = await page.query_selector(".card")
+        assert card
+        clip = await card.bounding_box()
+        assert clip
+        bar = await page.query_selector(".bili-dyn-action__icon")
+        assert bar
+        bar_bound = await bar.bounding_box()
+        assert bar_bound
+        clip["height"] = bar_bound["y"] - clip["y"]
+        return await page.screenshot(clip=clip, full_page=True)
+    except Exception:
+        logger.exception(f"截取动态时发生错误：{url}")
+        return await page.screenshot(full_page=True)
+    finally:
+        await context.close()
 
 
 def install():
@@ -111,7 +141,6 @@ def install():
     logger.info("检查 Chromium 更新")
     sys.argv = ["", "install", "chromium"]
     original_proxy = os.environ.get("HTTPS_PROXY")
-    # TODO 检查 google 可访问性
     if config.haruka_proxy:
         os.environ["HTTPS_PROXY"] = config.haruka_proxy
     os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://npmmirror.com/mirrors/playwright/"
@@ -146,4 +175,4 @@ async def check_playwright_env():
         )
 
 
-get_driver().on_startup(init)
+get_driver().on_startup(init_browser)

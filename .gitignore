@@ -7,6 +7,9 @@ go-cqhttp
 logs
 test
 _test
+tests
+migration
+playground
 
 # Editor config
 .vscode
