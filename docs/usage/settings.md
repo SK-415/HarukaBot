@@ -78,9 +78,9 @@ HARUKA_INTERVAL=20
 
 ## HARUKA_DYNAMIC_INTERVAL
 
-默认值：1
+默认值：0
 
-动态刷新间隔，单位：秒。
+动态刷新间隔，单位：秒。设置为 0 时根据网络情况自动调整间隔。
 
 ```yml
 HARUKA_DYNAMIC_INTERVAL=5
