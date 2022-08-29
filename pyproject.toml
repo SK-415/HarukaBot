@@ -9,9 +9,7 @@ homepage = "https://github.com/SK-415/HarukaBot"
 repository = "https://github.com/SK-415/HarukaBot/tree/master/src/plugins/haruka_bot"
 documentation = "https://github.com/SK-415/HarukaBot#readme"
 keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
-packages = [
-    { include = "haruka_bot", from = "./src/plugins/"}
-]
+include = ["haruka_bot/web/build/**/*"]
 
 [tool.poetry.scripts]
 hb = 'haruka_bot.__main__:main'
@@ -36,8 +34,7 @@ flake8 = "^5.0.4"
 nonebot-plugin-gocqhttp = "^0.5.6"
 
 [tool.nonebot]
-plugins = ["nonebot_plugin_gocqhttp"]
-plugin_dirs = ["src/plugins"]
+plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
 
 [[tool.poetry.source]]
 name = "tsinghua"

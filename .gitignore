@@ -1,15 +1,15 @@
 # Project ignored
 *.sqlite3
 
-data
-accounts
-go-cqhttp
-logs
-test
-_test
-tests
-migration
-playground
+data/
+accounts/
+go-cqhttp/
+logs/
+test/
+_test/
+tests/
+migration/
+playground/
 
 # Editor config
 .vscode
