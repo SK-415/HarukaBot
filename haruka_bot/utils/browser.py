@@ -51,30 +51,17 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
             return None
-        content = await page.content()
-        # 去掉关注按钮
-        content = content.replace(
-            '<div class="dyn-header__right">'
-            '<div data-pos="follow" class="dyn-header__following">'
-            '<span class="dyn-header__following__icon"></span>'
-            '<span class="dyn-header__following__text">关注</span></div></div>',
-            "",
+        await page.add_script_tag(
+            content=
+            # 去除打开app按钮
+            "document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove());"
+            # 去除关注按钮
+            "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
+            # 修复字体与换行问题
+            "const dyn=document.getElementsByClassName('dyn-card')[0];"
+            "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
+            "dyn.style.overflowWrap='break-word'"
         )
-        # 1. 字体问题：.dyn-class里font-family是PingFangSC-Regular，使用行内CSS覆盖掉它
-        # 2. 换行问题：遇到太长的内容（长单词、某些长链接等）允许强制换行，防止溢出
-        content = content.replace(
-            '<div class="dyn-card">',
-            '<div class="dyn-card" '
-            'style="font-family: Noto Sans CJK SC, sans-serif; overflow-wrap: break-word;">',
-        )
-        # 去掉打开APP的按钮，防止遮挡较长的动态
-        content = content.replace(
-            '<div class="launch-app-btn dynamic-float-openapp dynamic-float-btn">'
-            '<div class="m-dynamic-float-openapp">'
-            "<span>打开APP，查看更多精彩内容</span></div> <!----></div>",
-            "",
-        )
-        await page.set_content(content)
         card = await page.query_selector(".dyn-card")
         assert card
         clip = await card.bounding_box()
