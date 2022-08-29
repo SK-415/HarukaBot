@@ -79,6 +79,10 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         assert card
         clip = await card.bounding_box()
         assert clip
+
+        # 去打开app按钮
+        await page.add_script_tag("document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove())")
+
         return await page.screenshot(clip=clip, full_page=True)
     except Exception:
         logger.exception(f"截取动态时发生错误：{url}")
