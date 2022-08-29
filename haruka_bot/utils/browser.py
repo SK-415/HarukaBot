@@ -53,13 +53,13 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
             return None
         content = await page.content()
         # 去掉关注按钮
-        content = content.replace(
-            '<div class="dyn-header__right">'
-            '<div data-pos="follow" class="dyn-header__following">'
-            '<span class="dyn-header__following__icon"></span>'
-            '<span class="dyn-header__following__text">关注</span></div></div>',
-            "",
-        )
+        # content = content.replace(
+        #     '<div class="dyn-header__right">'
+        #     '<div data-pos="follow" class="dyn-header__following">'
+        #     '<span class="dyn-header__following__icon"></span>'
+        #     '<span class="dyn-header__following__text">关注</span></div></div>',
+        #     "",
+        # )
         # 1. 字体问题：.dyn-class里font-family是PingFangSC-Regular，使用行内CSS覆盖掉它
         # 2. 换行问题：遇到太长的内容（长单词、某些长链接等）允许强制换行，防止溢出
         content = content.replace(
@@ -82,7 +82,9 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
 
         # 去打开app按钮
         await page.add_script_tag("document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove())")
-
+        # 去关注按钮
+        await page.add_script_tag("document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove())")
+        
         return await page.screenshot(clip=clip, full_page=True)
     except Exception:
         logger.exception(f"截取动态时发生错误：{url}")
