@@ -62,11 +62,11 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         # )
         # 1. 字体问题：.dyn-class里font-family是PingFangSC-Regular，使用行内CSS覆盖掉它
         # 2. 换行问题：遇到太长的内容（长单词、某些长链接等）允许强制换行，防止溢出
-        content = content.replace(
-            '<div class="dyn-card">',
-            '<div class="dyn-card" '
-            'style="font-family: Noto Sans CJK SC, sans-serif; overflow-wrap: break-word;">',
-        )
+        # content = content.replace(
+        #     '<div class="dyn-card">',
+        #     '<div class="dyn-card" '
+        #     'style="font-family: Noto Sans CJK SC, sans-serif; overflow-wrap: break-word;">',
+        # )
         # 去掉打开APP的按钮，防止遮挡较长的动态
         # content = content.replace(
         #     '<div class="launch-app-btn dynamic-float-openapp dynamic-float-btn">'
@@ -80,10 +80,16 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         clip = await card.bounding_box()
         assert clip
 
-        # 去打开app按钮
-        await page.add_script_tag("document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove())")
-        # 去关注按钮
-        await page.add_script_tag("document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove())")
+        await page.add_script_tag(
+            # 去打开app按钮
+            "document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove());"
+            # 去关注按钮
+            "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
+            # 修复字体与换行问题
+            "const dyn=document.getElementsByClassName('dyn-card')[0];"
+            "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
+            "dyn.style.overflowWrap='break-word'"
+        )
         
         return await page.screenshot(clip=clip, full_page=True)
     except Exception:
