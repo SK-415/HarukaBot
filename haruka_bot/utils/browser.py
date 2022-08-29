@@ -68,12 +68,12 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
             'style="font-family: Noto Sans CJK SC, sans-serif; overflow-wrap: break-word;">',
         )
         # 去掉打开APP的按钮，防止遮挡较长的动态
-        content = content.replace(
-            '<div class="launch-app-btn dynamic-float-openapp dynamic-float-btn">'
-            '<div class="m-dynamic-float-openapp">'
-            "<span>打开APP，查看更多精彩内容</span></div> <!----></div>",
-            "",
-        )
+        # content = content.replace(
+        #     '<div class="launch-app-btn dynamic-float-openapp dynamic-float-btn">'
+        #     '<div class="m-dynamic-float-openapp">'
+        #     "<span>打开APP，查看更多精彩内容</span></div> <!----></div>",
+        #     "",
+        # )
         await page.set_content(content)
         card = await page.query_selector(".dyn-card")
         assert card
