@@ -81,6 +81,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         assert clip
 
         await page.add_script_tag(
+            content=
             # 去打开app按钮
             "document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove());"
             # 去关注按钮
@@ -90,7 +91,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
             "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
             "dyn.style.overflowWrap='break-word'"
         )
-        
+
         return await page.screenshot(clip=clip, full_page=True)
     except Exception:
         logger.exception(f"截取动态时发生错误：{url}")
