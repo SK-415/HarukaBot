@@ -81,10 +81,9 @@ async def dy_sched():
                 DynamicType.music: "发布了新音频",
             }
             message = (
-                f"{name} "
-                f"{type_msg.get(dynamic.card_type, type_msg[0])}：\n"
-                f"{MessageSegment.image(image)}\n"
-                f"{url}"
+                f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
+                + MessageSegment.image(image)
+                + f"\n{url}"
             )
 
             push_list = await db.get_push_list(uid, "dynamic")

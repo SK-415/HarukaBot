@@ -13,7 +13,7 @@
     "vuepress-vite": "^2.0.0-beta.26"
   },
   "scripts": {
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "dev": "vuepress dev",
+    "build": "vuepress build"
   }
 }

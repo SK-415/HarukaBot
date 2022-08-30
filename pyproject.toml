@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.4.1.post1"
+version = "1.4.1.post2"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "AGPL-3.0-or-later"
@@ -9,9 +9,7 @@ homepage = "https://github.com/SK-415/HarukaBot"
 repository = "https://github.com/SK-415/HarukaBot/tree/master/src/plugins/haruka_bot"
 documentation = "https://github.com/SK-415/HarukaBot#readme"
 keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
-packages = [
-    { include = "haruka_bot", from = "./src/plugins/"}
-]
+include = ["haruka_bot/web/build/**/*"]
 
 [tool.poetry.scripts]
 hb = 'haruka_bot.__main__:main'
@@ -36,8 +34,7 @@ flake8 = "^5.0.4"
 nonebot-plugin-gocqhttp = "^0.5.6"
 
 [tool.nonebot]
-plugins = ["nonebot_plugin_gocqhttp"]
-plugin_dirs = ["src/plugins"]
+plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
 
 [[tool.poetry.source]]
 name = "tsinghua"
