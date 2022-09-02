@@ -1,24 +1,19 @@
 import asyncio
 from datetime import datetime
 
-from apscheduler.events import (
-    EVENT_JOB_ERROR,
-    EVENT_JOB_EXECUTED,
-    EVENT_JOB_MISSED,
-    EVENT_SCHEDULER_STARTED,
-)
+from apscheduler.events import (EVENT_JOB_ERROR, EVENT_JOB_EXECUTED,
+                                EVENT_JOB_MISSED, EVENT_SCHEDULER_STARTED)
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
+from grpc import StatusCode
+from grpc.aio import AioRpcError
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
 from ... import config
 from ...database import DB as db
+from ...database import dynamic_offset as offset
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
-
-offset = {}
-from grpc import StatusCode
-from grpc.aio import AioRpcError
 
 
 async def dy_sched():
@@ -45,20 +40,22 @@ async def dy_sched():
         raise
 
     if not dynamics:  # 没发过动态
-        if uid not in offset:  # 不记录会导致第一次发动态不推送
+        if uid in offset and offset[uid] == -1:  # 不记录会导致第一次发动态不推送
             offset[uid] = 0
         return
     # 更新昵称
     name = dynamics[0].modules[0].module_author.author.name
 
-    if uid not in offset:  # 第一次爬取
+    if uid not in offset:  # 已删除
+        return
+    elif offset[uid] == -1:  # 第一次爬取
         if len(dynamics) == 1:  # 只有一条动态
             offset[uid] = int(dynamics[0].extend.dyn_id_str)
-            return
         else:  # 第一个可能是置顶动态，但置顶也可能是最新一条，所以取前两条的最大值
             offset[uid] = max(
                 int(dynamics[0].extend.dyn_id_str), int(dynamics[1].extend.dyn_id_str)
             )
+        return
 
     dynamic = None
     for dynamic in dynamics[::-1]:  # 动态从旧到新排列
