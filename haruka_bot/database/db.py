@@ -12,6 +12,7 @@ from ..version import VERSION as HBVERSION
 from .models import Group, Sub, User, Version
 
 uid_list = {"live": {"list": [], "index": 0}, "dynamic": {"list": [], "index": 0}}
+dynamic_offset = {}
 
 
 class DB:
@@ -231,6 +232,14 @@ class DB:
         uid_list["dynamic"]["list"] = list(
             set([sub.uid async for sub in subs if sub.dynamic])
         )
+
+        # 清除没有订阅的 offset
+        dynamic_offset_keys = set(dynamic_offset)
+        dynamic_uids = set(uid_list["dynamic"]["list"])
+        for uid in dynamic_offset_keys - dynamic_uids:
+            del dynamic_offset[uid]
+        for uid in dynamic_uids - dynamic_offset_keys:
+            dynamic_offset[uid] = -1
 
     async def backup(self):
         """备份数据库"""
