@@ -128,7 +128,7 @@ reference = "tsinghua"
 
 [[package]]
 name = "bilireq"
-version = "0.2.1"
+version = "0.2.2"
 description = ""
 category = "main"
 optional = false
@@ -1160,8 +1160,8 @@ backports-zoneinfo = [
     {file = "backports.zoneinfo-0.2.1.tar.gz", hash = "sha256:fadbfe37f74051d024037f223b8e001611eac868b5c5b06144ef4d8b799862f2"},
 ]
 bilireq = [
-    {file = "bilireq-0.2.1-py3-none-any.whl", hash = "sha256:5a3f85d8548e88411c7acb1a57ffd2fc709ba1590c02ea52c67a56a2a34f0194"},
-    {file = "bilireq-0.2.1.tar.gz", hash = "sha256:1de79c66330e7c021aca60845ad2d7ddf900c953f898820300559b78244b3270"},
+    {file = "bilireq-0.2.2-py3-none-any.whl", hash = "sha256:0c82908eb908b766a602709b413dfcea076ce34ad7d3c3d70970884c13f31a15"},
+    {file = "bilireq-0.2.2.tar.gz", hash = "sha256:fbd93654e33a40e0a99e7ccc291f3c663feec39996aa639ab2a21f24d6fe3f70"},
 ]
 certifi = [
     {file = "certifi-2022.6.15-py3-none-any.whl", hash = "sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412"},
