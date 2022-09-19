@@ -6,6 +6,7 @@ from nonebot import get_driver
 from nonebot.log import logger
 from packaging.version import Version as version_parser
 from tortoise import Tortoise
+from tortoise.connection import connections
 
 from ..utils import get_path
 from ..version import VERSION as HBVERSION
@@ -257,4 +258,4 @@ class DB:
 
 
 get_driver().on_startup(DB.init)
-get_driver().on_shutdown(Tortoise.close_connections)
+get_driver().on_shutdown(connections.close_all)
