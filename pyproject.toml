@@ -31,7 +31,7 @@ packaging = "^21.3"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
-nonebot-plugin-gocqhttp = "^0.5.6"
+nonebot-plugin-gocqhttp = "^0.6.1"
 
 [tool.nonebot]
 plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
