@@ -37,6 +37,7 @@ HarukaBot 针对不同的推送场景（粉丝群、娱乐群、直播通知群�
 - [go-cqhttp](https://github.com/Mrs4s/go-cqhttp)：稳定完善的 CQHTTP 实现。
 - [bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect)：非常详细的 B 站 API 文档。
 - [bilibili_api](https://github.com/Passkou/bilibili_api)：Python 实现的 B 站 API 库。
+- [频道适配版](https://github.com/17TheWord/HarukaBot_Guild_Patch) 可以让HarukaBot适用于频道的方法。
 
 ## 支持与贡献
 
