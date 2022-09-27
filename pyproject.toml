@@ -25,7 +25,7 @@ playwright = "^1.22.0"
 pydantic = "^1.9.0"
 python-dotenv = ">=0.19.2,<0.22.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
-aerich = "^0.6.3"
+aerich = ">=0.6.3,<0.8.0"
 bilireq = "^0.2.2.post0"
 packaging = "^21.3"
 
