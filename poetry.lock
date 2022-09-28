@@ -411,7 +411,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "playwright"
-version = "1.26.0"
+version = "1.26.1"
 description = "A high-level API to automate web browsers"
 category = "main"
 optional = false
@@ -1184,13 +1184,13 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 playwright = [
-    {file = "playwright-1.26.0-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:4841796a44582b0d4cc0424ebce2da717d3aa04adb4051145dc480be198549bb"},
-    {file = "playwright-1.26.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:5d910b865a6c539d3589d1a9a67d221f060460b812b65f933e872f8762bd640a"},
-    {file = "playwright-1.26.0-py3-none-macosx_11_0_universal2.whl", hash = "sha256:fd7546d4b61ebe7fd1f1fa5eebdaf884263d97b111be6208a02a1bde5f36308f"},
-    {file = "playwright-1.26.0-py3-none-manylinux1_x86_64.whl", hash = "sha256:c6d9df284a74897eb667ee8e865137ed2fbdd93b8ba8f43e257871a3fbf1e9c4"},
-    {file = "playwright-1.26.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:759292562f50e7f04ef75eac7039ab7149461b2ac97c91f77d73cc974b3f49bb"},
-    {file = "playwright-1.26.0-py3-none-win32.whl", hash = "sha256:aa3e8ee10bce4d8992a8332f4358ab571724dfd0c34540e6b56e7ac062cc6e20"},
-    {file = "playwright-1.26.0-py3-none-win_amd64.whl", hash = "sha256:a04a549a32cea8000036274af6fe7e7b7ac3697021cd3cc2bb3e92341b89147d"},
+    {file = "playwright-1.26.1-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:eabf81e932076be5afe8f198c13cde913db319ccb07a9c16ea13bd0d372b40b2"},
+    {file = "playwright-1.26.1-py3-none-macosx_11_0_arm64.whl", hash = "sha256:ecd2d47a671d40f2c9f2fa70dec5c4e8f341194e7450e1483c787e02eecb6f61"},
+    {file = "playwright-1.26.1-py3-none-macosx_11_0_universal2.whl", hash = "sha256:a04bb9f2b25ad00077c7816e51b2cc3edc9b5ae7ed864ab1efbc3037a16db868"},
+    {file = "playwright-1.26.1-py3-none-manylinux1_x86_64.whl", hash = "sha256:c3cc87fc738d7c7668d8e3a8086fca2c6f981d31e560cee5f89415d17160f7e5"},
+    {file = "playwright-1.26.1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e8b3a58cd903d21bf71b0361b8f1379bb9de8046ecf5a866f5d13bd815100099"},
+    {file = "playwright-1.26.1-py3-none-win32.whl", hash = "sha256:1b06a0cd1d0c4ded1c5412129f9207d2589aa5ac86645cfa1a89690ef610228b"},
+    {file = "playwright-1.26.1-py3-none-win_amd64.whl", hash = "sha256:9dfbb664a0d3865ec3db4cd636dab755c7bf5eeadcaf1d6abe9ab8c9c26c431f"},
 ]
 protobuf = [
     {file = "protobuf-3.20.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:3cc797c9d15d7689ed507b165cd05913acb992d78b379f6014e013f9ecb20996"},
@@ -1256,18 +1256,7 @@ py-cpuinfo = [
     {file = "py-cpuinfo-8.0.0.tar.gz", hash = "sha256:5f269be0e08e33fd959de96b34cd4aeeeacac014dd8305f70eb28d06de2345c5"},
 ]
 pyasn1 = [
-    {file = "pyasn1-0.4.8-py2.4.egg", hash = "sha256:fec3e9d8e36808a28efb59b489e4528c10ad0f480e57dcc32b4de5c9d8c9fdf3"},
-    {file = "pyasn1-0.4.8-py2.5.egg", hash = "sha256:0458773cfe65b153891ac249bcf1b5f8f320b7c2ce462151f8fa74de8934becf"},
-    {file = "pyasn1-0.4.8-py2.6.egg", hash = "sha256:5c9414dcfede6e441f7e8f81b43b34e834731003427e5b09e4e00e3172a10f00"},
-    {file = "pyasn1-0.4.8-py2.7.egg", hash = "sha256:6e7545f1a61025a4e58bb336952c5061697da694db1cae97b116e9c46abcf7c8"},
     {file = "pyasn1-0.4.8-py2.py3-none-any.whl", hash = "sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d"},
-    {file = "pyasn1-0.4.8-py3.1.egg", hash = "sha256:78fa6da68ed2727915c4767bb386ab32cdba863caa7dbe473eaae45f9959da86"},
-    {file = "pyasn1-0.4.8-py3.2.egg", hash = "sha256:08c3c53b75eaa48d71cf8c710312316392ed40899cb34710d092e96745a358b7"},
-    {file = "pyasn1-0.4.8-py3.3.egg", hash = "sha256:03840c999ba71680a131cfaee6fab142e1ed9bbd9c693e285cc6aca0d555e576"},
-    {file = "pyasn1-0.4.8-py3.4.egg", hash = "sha256:7ab8a544af125fb704feadb008c99a88805126fb525280b2270bb25cc1d78a12"},
-    {file = "pyasn1-0.4.8-py3.5.egg", hash = "sha256:e89bf84b5437b532b0803ba5c9a5e054d21fec423a89952a74f87fa2c9b7bce2"},
-    {file = "pyasn1-0.4.8-py3.6.egg", hash = "sha256:014c0e9976956a08139dc0712ae195324a75e142284d5f87f1a87ee1b068a359"},
-    {file = "pyasn1-0.4.8-py3.7.egg", hash = "sha256:99fcc3c8d804d1bc6d9a099921e39d827026409a58f2a720dcdb89374ea0c776"},
     {file = "pyasn1-0.4.8.tar.gz", hash = "sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba"},
 ]
 pycodestyle = [
@@ -1320,6 +1309,7 @@ pyflakes = [
     {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
 ]
 pygtrie = [
+    {file = "pygtrie-2.5.0-py3-none-any.whl", hash = "sha256:8795cda8105493d5ae159a5bef313ff13156c5d4d72feddefacaad59f8c8ce16"},
     {file = "pygtrie-2.5.0.tar.gz", hash = "sha256:203514ad826eb403dab1d2e2ddd034e0d1534bbe4dbe0213bb0593f66beba4e2"},
 ]
 pyparsing = [
