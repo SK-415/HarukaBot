@@ -1,6 +1,6 @@
 [[package]]
 name = "aerich"
-version = "0.6.3"
+version = "0.7.1"
 description = "A database migrations tool for Tortoise ORM."
 category = "main"
 optional = false
@@ -777,12 +777,12 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "25bae2ff1b8dffb3c4c1872eee83a6f4efff7aa4b3915fe524892808569b4537"
+content-hash = "0ade8fa684b652f7ed11f52d08c754d3253d8b9bd6d9ce02f7ed6505f048619b"
 
 [metadata.files]
 aerich = [
-    {file = "aerich-0.6.3-py3-none-any.whl", hash = "sha256:d45f98214ed54b8ec9be949df264c5b0b9e8b79d8f8ba9e68714675bc81a5574"},
-    {file = "aerich-0.6.3.tar.gz", hash = "sha256:96ac087922048470687264125cb9dfeaade982219c78e6a9b91a0fb67eaa1cd1"},
+    {file = "aerich-0.7.1-py3-none-any.whl", hash = "sha256:ca1c46e777c448c8344961bb591ee8cc7bfcb2fc7527bea4da43647b5fbf8fbe"},
+    {file = "aerich-0.7.1.tar.gz", hash = "sha256:501f6598ae51e3ce19b1bfc21ff365f582e7447e6aa5215629451c40341d6eb8"},
 ]
 aiosqlite = [
     {file = "aiosqlite-0.17.0-py3-none-any.whl", hash = "sha256:6c49dc6d3405929b1d08eeccc72306d3677503cc5e5e43771efc1e00232e8231"},
