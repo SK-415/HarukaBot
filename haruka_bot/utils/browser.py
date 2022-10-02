@@ -54,7 +54,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         await page.add_script_tag(
             content=
             # 去除打开app按钮
-            "document.getElementsByClassName('launch-app-btn').forEach(v=>v.remove());"
+            "document.getElementsByClassName('m-dynamic-float-openapp').forEach(v=>v.remove());"
             # 去除关注按钮
             "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
             # 修复字体与换行问题
