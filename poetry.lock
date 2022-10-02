@@ -344,15 +344,15 @@ nonebot2 = ">=2.0.0-beta.3,<3.0.0"
 
 [[package]]
 name = "nonebot-plugin-apscheduler"
-version = "0.1.4"
+version = "0.2.0"
 description = "APScheduler Support for NoneBot2"
 category = "main"
 optional = false
-python-versions = ">=3.7.3,<4.0.0"
+python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 apscheduler = ">=3.7.0,<4.0.0"
-nonebot2 = ">=2.0.0-alpha.8,<3.0.0"
+nonebot2 = ">=2.0.0-rc.1,<3.0.0"
 
 [[package]]
 name = "nonebot-plugin-gocqhttp"
@@ -375,11 +375,11 @@ proxy = ["proxy.py (>=2.4.3,<3.0.0)"]
 
 [[package]]
 name = "nonebot2"
-version = "2.0.0b5"
+version = "2.0.0rc1"
 description = "An asynchronous python bot framework."
 category = "main"
 optional = false
-python-versions = ">=3.7.3,<4.0.0"
+python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 fastapi = ">=0.79.0,<0.80.0"
@@ -777,7 +777,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5b459c6ed743bc83de1b5fc362014437272bee7c2055e95baa4b0eaf5b8755a4"
+content-hash = "eceafd7949b4159f66e40105f38f5936b2cfd8d6cbfd5d333cf093c69b2da7df"
 
 [metadata.files]
 aerich = [
@@ -1168,16 +1168,16 @@ nonebot-adapter-onebot = [
     {file = "nonebot_adapter_onebot-2.1.3-py3-none-any.whl", hash = "sha256:d44eb7b119fdcc3f7936c77e2c0922728c959ad6d6b36ebd004e94856d9ccf49"},
 ]
 nonebot-plugin-apscheduler = [
-    {file = "nonebot-plugin-apscheduler-0.1.4.tar.gz", hash = "sha256:7541cfb2af48f244b74b66fd14f6486ef39a6d79f17b15c31cf1c6ad9a9632ca"},
-    {file = "nonebot_plugin_apscheduler-0.1.4-py3-none-any.whl", hash = "sha256:c904c344c22c8fb2bafec9875ee195b7be7d1f0b758a04e96da6758d62cf4e83"},
+    {file = "nonebot-plugin-apscheduler-0.2.0.tar.gz", hash = "sha256:7b63e99a611b657533b48fcf1f8c6627c18c2eb3fa820a906cd4ec4666c0ceb0"},
+    {file = "nonebot_plugin_apscheduler-0.2.0-py3-none-any.whl", hash = "sha256:9285ee84ca1cfa4db73c86cedb5911bbbd25a21ec0cd5f22447cd12f89e48fb4"},
 ]
 nonebot-plugin-gocqhttp = [
     {file = "nonebot-plugin-gocqhttp-0.6.1.tar.gz", hash = "sha256:dcbc7b3d2eec3179c7de4a7734fb3904650ce864f918de917f8482206a301470"},
     {file = "nonebot_plugin_gocqhttp-0.6.1-py3-none-any.whl", hash = "sha256:fa7d9db73826aabc7c811c2e0a577fb4cca3173db154b674c2578c2c9dd37191"},
 ]
 nonebot2 = [
-    {file = "nonebot2-2.0.0b5-py3-none-any.whl", hash = "sha256:5cfbfcd62ffcf55f884f9fb750a71cd92c97e347c99e891ef617da4d445a1f22"},
-    {file = "nonebot2-2.0.0b5.tar.gz", hash = "sha256:fccb5af749cceb289d756901b7abc7a679e5952dbe88c8b6ad8b2d906715c3ee"},
+    {file = "nonebot2-2.0.0rc1-py3-none-any.whl", hash = "sha256:99c70300b9d0755bba6ed50b7399f44f6213e119157bc026b960b3e157a38416"},
+    {file = "nonebot2-2.0.0rc1.tar.gz", hash = "sha256:6e5a0abf24086d05d5c2a56c971a551ece2a343ff29f83b76b398bf717b92e16"},
 ]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
@@ -1320,7 +1320,6 @@ pyflakes = [
     {file = "pyflakes-2.5.0.tar.gz", hash = "sha256:491feb020dca48ccc562a8c0cbe8df07ee13078df59813b83959cbdada312ea3"},
 ]
 pygtrie = [
-    {file = "pygtrie-2.5.0-py3-none-any.whl", hash = "sha256:8795cda8105493d5ae159a5bef313ff13156c5d4d72feddefacaad59f8c8ce16"},
     {file = "pygtrie-2.5.0.tar.gz", hash = "sha256:203514ad826eb403dab1d2e2ddd034e0d1534bbe4dbe0213bb0593f66beba4e2"},
 ]
 pyparsing = [
