@@ -22,6 +22,7 @@ from nonebot.matcher import Matcher
 from nonebot.params import ArgPlainText, CommandArg, RawCommand
 from nonebot.permission import SUPERUSER
 from nonebot.rule import Rule
+from nonebot_plugin_guild_patch import GuildMessageEvent
 
 from .. import config
 
@@ -37,8 +38,8 @@ def get_path(*other):
 
 
 async def handle_uid(
-    matcher: Matcher,
-    command_arg: Message = CommandArg(),
+        matcher: Matcher,
+        command_arg: Message = CommandArg(),
 ):
     uid = command_arg.extract_plain_text().strip()
     if uid:
@@ -46,8 +47,8 @@ async def handle_uid(
 
 
 async def uid_check(
-    matcher: Matcher,
-    uid: str = ArgPlainText("uid"),
+        matcher: Matcher,
+        uid: str = ArgPlainText("uid"),
 ):
     uid = uid.strip()
     if not uid.isdecimal():
@@ -56,7 +57,7 @@ async def uid_check(
 
 
 async def permission_check(
-    bot: Bot, event: Union[GroupMessageEvent, PrivateMessageEvent]
+        bot: Bot, event: Union[GroupMessageEvent, PrivateMessageEvent]
 ):
     from ..database import DB as db
 
@@ -65,17 +66,17 @@ async def permission_check(
             raise FinishedException
         return
     if await db.get_admin(event.group_id) and not await (
-        GROUP_ADMIN | GROUP_OWNER | SUPERUSER
+            GROUP_ADMIN | GROUP_OWNER | SUPERUSER
     )(bot, event):
         await bot.send(event, "权限不足，目前只有管理员才能使用")
         raise FinishedException
 
 
 async def group_only(
-    matcher: Matcher, event: MessageEvent, command: str = RawCommand()
+        matcher: Matcher, event: MessageEvent, command: str = RawCommand()
 ):
-    if not isinstance(event, GroupMessageEvent):
-        await matcher.finish(f"只有群里才能{command}")
+    if not isinstance(event, GroupMessageEvent | GuildMessageEvent):
+        await matcher.finish(f"只有群、频道里才能{command}")
 
 
 def to_me():
@@ -94,13 +95,24 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
     """发送出现错误时, 尝试重新发送, 并捕获异常且不会中断运行"""
 
     async def _safe_send(bot, send_type, type_id, message):
-        return await bot.call_api(
-            "send_" + send_type + "_msg",
-            **{
-                "message": message,
-                "user_id" if send_type == "private" else "group_id": type_id,
-            },
-        )
+        if send_type == "guild":
+            from ..database import DBGuild as db_guild
+            guild = await db_guild.get_guild_id(id=type_id)
+            result = await bot.call_api(
+                "send_guild_channel_msg",
+                guild_id=guild["guild_id"],
+                channel_id=guild["channel_id"],
+                message=message,
+            )
+        else:
+            result = await bot.call_api(
+                "send_" + send_type + "_msg",
+                **{
+                    "message": message,
+                    "user_id" if send_type == "private" else "group_id": type_id,
+                },
+            )
+        return result
 
     bots = nonebot.get_bots()
     bot = bots.get(str(bot_id))
@@ -108,8 +120,8 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
         logger.error(f"推送失败，Bot（{bot_id}）未连接，尝试使用其他 Bot 推送")
         for bot_id, bot in bots.items():
             if (
-                at
-                and (await bot.get_group_at_all_remain(group_id=type_id))["can_at_all"]
+                    at
+                    and (await bot.get_group_at_all_remain(group_id=type_id))["can_at_all"]
             ):
                 message = MessageSegment.at("all") + message
             try:

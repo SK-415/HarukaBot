@@ -64,9 +64,15 @@ class Group(BaseModel):
     admin = BooleanField()  # default=True
 
 
+class Guild(BaseModel):
+    id = IntField(pk=True)
+    guild_id = CharField(max_length=20)
+    channel_id = CharField(max_length=10)
+    admin = BooleanField()  # default=True
+
+
 class Version(BaseModel):
     version = CharField(max_length=30)
-
 
 # class Login(BaseModel):
 #     uid = IntField(pk=True)
