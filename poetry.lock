@@ -411,7 +411,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
 name = "playwright"
-version = "1.26.1"
+version = "1.27.0"
 description = "A high-level API to automate web browsers"
 category = "main"
 optional = false
@@ -421,7 +421,6 @@ python-versions = ">=3.7"
 greenlet = "1.1.3"
 pyee = "8.1.0"
 typing-extensions = {version = "*", markers = "python_version <= \"3.8\""}
-websockets = "10.1"
 
 [[package]]
 name = "protobuf"
@@ -1184,13 +1183,13 @@ packaging = [
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
 ]
 playwright = [
-    {file = "playwright-1.26.1-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:eabf81e932076be5afe8f198c13cde913db319ccb07a9c16ea13bd0d372b40b2"},
-    {file = "playwright-1.26.1-py3-none-macosx_11_0_arm64.whl", hash = "sha256:ecd2d47a671d40f2c9f2fa70dec5c4e8f341194e7450e1483c787e02eecb6f61"},
-    {file = "playwright-1.26.1-py3-none-macosx_11_0_universal2.whl", hash = "sha256:a04bb9f2b25ad00077c7816e51b2cc3edc9b5ae7ed864ab1efbc3037a16db868"},
-    {file = "playwright-1.26.1-py3-none-manylinux1_x86_64.whl", hash = "sha256:c3cc87fc738d7c7668d8e3a8086fca2c6f981d31e560cee5f89415d17160f7e5"},
-    {file = "playwright-1.26.1-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e8b3a58cd903d21bf71b0361b8f1379bb9de8046ecf5a866f5d13bd815100099"},
-    {file = "playwright-1.26.1-py3-none-win32.whl", hash = "sha256:1b06a0cd1d0c4ded1c5412129f9207d2589aa5ac86645cfa1a89690ef610228b"},
-    {file = "playwright-1.26.1-py3-none-win_amd64.whl", hash = "sha256:9dfbb664a0d3865ec3db4cd636dab755c7bf5eeadcaf1d6abe9ab8c9c26c431f"},
+    {file = "playwright-1.27.0-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:cd1ebac1e261eb58b393f9f504c223b0129dda3a19a41bba47c86abbd1301ca7"},
+    {file = "playwright-1.27.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:b5ae41c4313af04b9deb2b2cf6c1ebeb9deb1fa66149d8026ce48a45cbaaeb08"},
+    {file = "playwright-1.27.0-py3-none-macosx_11_0_universal2.whl", hash = "sha256:8c0989016156539f58286831c4ff200260f2173e4026330697e257aa7609f7eb"},
+    {file = "playwright-1.27.0-py3-none-manylinux1_x86_64.whl", hash = "sha256:7c0bd4af19ea145cd3aa4f9f1009e4e4b0ffd05a78235c5338a35e83366e68b5"},
+    {file = "playwright-1.27.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8bb56b53fa10aaedb32c28eef06a0579244c2ccf3ddf9238fb09044bfb6c493e"},
+    {file = "playwright-1.27.0-py3-none-win32.whl", hash = "sha256:fe90b890061f729d2ea2f547fc5b316a5e6361e3659fbc639ee35e08be38d13f"},
+    {file = "playwright-1.27.0-py3-none-win_amd64.whl", hash = "sha256:8cbeab451099cf0d52d9e80baf970363f900c8cc85ecf4d7dcde76a86c47880a"},
 ]
 protobuf = [
     {file = "protobuf-4.21.7-cp310-abi3-win32.whl", hash = "sha256:c7cb105d69a87416bd9023e64324e1c089593e6dae64d2536f06bcbe49cd97d8"},
