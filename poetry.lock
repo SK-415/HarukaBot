@@ -332,7 +332,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "nonebot-adapter-onebot"
-version = "2.1.4"
+version = "2.1.5"
 description = "OneBot(CQHTTP) adapter for nonebot2"
 category = "main"
 optional = false
@@ -1163,8 +1163,8 @@ multidict = [
     {file = "multidict-6.0.2.tar.gz", hash = "sha256:5ff3bd75f38e4c43f1f470f2df7a4d430b821c4ce22be384e1459cb57d6bb013"},
 ]
 nonebot-adapter-onebot = [
-    {file = "nonebot_adapter_onebot-2.1.4-py3-none-any.whl", hash = "sha256:c49cb5fc8f046a99467873dcd5883486eb36c80c62c3379f5446a1c41a348e23"},
-    {file = "nonebot_adapter_onebot-2.1.4.tar.gz", hash = "sha256:09f910db7e51c362ae06dc75c04776a06650a043dc87aaa72af839cb489d4994"},
+    {file = "nonebot_adapter_onebot-2.1.5-py3-none-any.whl", hash = "sha256:d2a46694c402d5f3c5f6951955a78bbf779e17039d282c612cc1fcff77bc6044"},
+    {file = "nonebot_adapter_onebot-2.1.5.tar.gz", hash = "sha256:e740422cceebc1f0379da788ccddaa7937f7d88c140e2a5ea9ba0e91ddee867e"},
 ]
 nonebot-plugin-apscheduler = [
     {file = "nonebot-plugin-apscheduler-0.2.0.tar.gz", hash = "sha256:7b63e99a611b657533b48fcf1f8c6627c18c2eb3fa820a906cd4ec4666c0ceb0"},
