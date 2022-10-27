@@ -44,6 +44,19 @@ async def handle_uid(
     if uid:
         matcher.set_arg("uid", command_arg)
 
+async def handle_uid_and_live_tips(
+    matcher: Matcher,
+    command_arg: Message = CommandArg(),
+):
+    arg = command_arg.extract_plain_text()
+    if arg.find(':') == -1:
+        arg += ':'
+    args = arg.split(':')
+    uid = args[0]
+    live_tips = ':'.join(args[1:])
+    if uid:
+        matcher.set_arg("uid", Message(uid.strip()))
+    matcher.set_arg("live_tips", Message(live_tips)) # live_tips允许为空白
 
 async def uid_check(
     matcher: Matcher,

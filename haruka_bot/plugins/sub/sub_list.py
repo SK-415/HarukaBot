@@ -22,6 +22,7 @@ async def _(event: MessageEvent):
             f"直播：{'开' if sub.live else '关'}，"
             f"动态：{'开' if sub.dynamic else '关'}，"
             # TODO 私聊不显示全体
-            f"全体：{'开' if sub.at else '关'}\n"
+            f"全体：{'开' if sub.at else '关'}"
+            f"{('，提示词：' + sub.live_tips) if sub.live_tips else ''}\n"
             )
     await sub_list.finish(message)

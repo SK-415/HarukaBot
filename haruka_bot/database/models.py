@@ -52,6 +52,7 @@ class Sub(BaseModel):
     dynamic = BooleanField()  # default=True
     at = BooleanField()  # default=False
     bot_id = IntField()
+    live_tips = CharField(max_length=100)
 
 
 class User(BaseModel):
