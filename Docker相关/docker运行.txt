@@ -1,0 +1,23 @@
+docker run -v /usr/src/docker-data:/docker-data --name playwright-1 -id mcr.microsoft.com/playwright:v1.24.0-focal
+docker exec -it playwright-1 /bin/bash
+
+cd /docker-data/go-cqhttp
+nohup go-cqhttp &
+cd /docker-data/haruka-bot
+nohup hb run &
+
+docker start playwright-1
+安装后的文件位置:/usr/local/lib/python3.8/dist-packages/haruka_bot/plugins
+
+docker 内覆盖代码：cp -r /docker-data/haruka-bot/code/haruka_bot /usr/local/lib/python3.8/dist-packages
+
+字体不对问题: apt install fonts-noto-cjk
+建议把上面的 两条指令写一个 sh 脚本放到自动启动里, 也可以用 screen命令运行(可以连进去，再次交互，但用 nohup的方式会自动生成日志)
+也可以sh的启动放Dockerfile或者docker-compress里
+
+[root@BanwagongVps ~]# docker ps
+CONTAINER ID   IMAGE                                        COMMAND   CREATED      STATUS      PORTS     NAMES
+2318c99435fc   mcr.microsoft.com/playwright:v1.24.0-focal   "bash"    8 days ago   Up 8 days             playwright-1
+
+get_rooms_info_by_uids()函数返回的内容：
+{'103': {'title': '用户103的直播间', 'room_id': 10588059, 'uid': 103, 'online': 0, 'live_time': 0, 'live_status': 0, 'short_id': 0, 'area': 0, 'area_name': '', 'area_v2_id': 0, 'area_v2_name': '', 'area_v2_parent_name': '', 'area_v2_parent_id': 0, 'uname': '捌玖君', 'face': 'https://i0.hdslb.com/bfs/face/member/noface.jpg', 'tag_name': '', 'tags': '', 'cover_from_user': '', 'keyframe': '', 'lock_till': '0000-00-00 00:00:00', 'hidden_till': '0000-00-00 00:00:00', 'broadcast_type': 0}}

@@ -9,7 +9,7 @@ help = on_command("帮助", rule=to_me(), priority=5)
 
 @help.handle()
 async def _():
-    message = "HarukaBot目前支持的功能：\n（请将UID替换为需要操作的B站UID）\n"
+    message = "LialaBot目前支持的功能：\n（请将UID替换为需要操作的B站UID）\n"
     for matchers_list in matchers.values():
         for matcher in matchers_list:
             if (
