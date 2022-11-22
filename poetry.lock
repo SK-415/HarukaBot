@@ -357,7 +357,7 @@ nonebot2 = ">=2.0.0-rc.1,<3.0.0"
 
 [[package]]
 name = "nonebot-plugin-gocqhttp"
-version = "0.6.2"
+version = "0.6.3"
 description = "A plugin to run go-cqhttp directly in NoneBot2, without additional download and installation."
 category = "dev"
 optional = false
@@ -369,7 +369,7 @@ httpx = ">=0.20.0"
 nonebot-adapter-onebot = ">=2.0.0-beta.1,<3.0.0"
 nonebot2 = ">=2.0.0-beta.1,<3.0.0"
 psutil = ">=5.9.0,<6.0.0"
-py-cpuinfo = ">=8.0.0,<9.0.0"
+py-cpuinfo = ">=8,<10"
 
 [package.extras]
 proxy = ["proxy.py (>=2.4.3,<3.0.0)"]
@@ -780,7 +780,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c156498c6bc943da5acfd67e37bbbec77c6ca5cbb7af24b0e00c77bdd3e85ed6"
+content-hash = "3ff47242d4ef68695ef3aec202f82597f647954d70b6b339a6e6593d17065e83"
 
 [metadata.files]
 aerich = [
@@ -1181,8 +1181,8 @@ nonebot-plugin-apscheduler = [
     {file = "nonebot_plugin_apscheduler-0.2.0-py3-none-any.whl", hash = "sha256:9285ee84ca1cfa4db73c86cedb5911bbbd25a21ec0cd5f22447cd12f89e48fb4"},
 ]
 nonebot-plugin-gocqhttp = [
-    {file = "nonebot-plugin-gocqhttp-0.6.2.tar.gz", hash = "sha256:16f9e44d6fbaaef681febc5fa061237b4fb928095908266ccc9a4be6a92dae12"},
-    {file = "nonebot_plugin_gocqhttp-0.6.2-py3-none-any.whl", hash = "sha256:329ffc4630de767b007e19873ffde9067aa1e4daf3dd7015a954b44186247a78"},
+    {file = "nonebot_plugin_gocqhttp-0.6.3-py3-none-any.whl", hash = "sha256:16ce1d95e47b9b98691c11797c377b969c631821f4e1b3d5425cdc1e3c1bd452"},
+    {file = "nonebot_plugin_gocqhttp-0.6.3.tar.gz", hash = "sha256:c1005cf37d950d1d6c629f4117f95a5a3e28f7ab5739ea5ddbe22163b818e538"},
 ]
 nonebot2 = [
     {file = "nonebot2-2.0.0rc1-py3-none-any.whl", hash = "sha256:99c70300b9d0755bba6ed50b7399f44f6213e119157bc026b960b3e157a38416"},
