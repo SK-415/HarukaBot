@@ -28,6 +28,7 @@ tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
 aerich = ">=0.6.3,<0.8.0"
 bilireq = "^0.2.3"
 packaging = "^21.3"
+nonebot-plugin-guild-patch = "^0.2.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
