@@ -5,9 +5,7 @@ from nonebot.exception import FinishedException
 from nonebot_plugin_guild_patch import GuildMessageEvent
 
 
-async def permission_check_guild_admin(
-        bot: Bot, event: Union[GuildMessageEvent]
-):
+async def permission_check_guild_admin(bot: Bot, event: Union[GuildMessageEvent]):
     if not await if_haruka_guild_admin(bot, event):
         await bot.send(event, "权限不足，目前只有管理员才能使用")
         raise FinishedException
@@ -40,14 +38,16 @@ async def if_haruka_guild_admin(bot, event):
 
 async def if_haruka_guild_admin_group(bot, event: GuildMessageEvent):
     guild_member_info = await get_guild_member_info(bot, event.guild_id, event.user_id)
-    for per_role in guild_member_info['roles']:
-        if per_role['role_name'] in await get_haruka_guild_admin_group_list(bot):
+    for per_role in guild_member_info["roles"]:
+        if per_role["role_name"] in await get_haruka_guild_admin_group_list(bot):
             return True
     return False
 
 
 async def get_guild_member_info(bot, guild_id, user_id):
-    return await bot.call_api("get_guild_member_profile", guild_id=guild_id, user_id=user_id)
+    return await bot.call_api(
+        "get_guild_member_profile", guild_id=guild_id, user_id=user_id
+    )
 
 
 # 配置文件中管理员身份组

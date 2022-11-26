@@ -1,5 +1,5 @@
+from tortoise.fields.data import BooleanField, CharField, IntField
 from tortoise.models import Model
-from tortoise.fields.data import CharField, IntField, BooleanField
 
 
 class BaseModel(Model):
@@ -73,6 +73,7 @@ class Guild(BaseModel):
 
 class Version(BaseModel):
     version = CharField(max_length=30)
+
 
 # class Login(BaseModel):
 #     uid = IntField(pk=True)

@@ -1,7 +1,7 @@
 from typing import List
 
-from ..database.models import Sub, Guild
 from ..database.db import DB as db
+from ..database.models import Guild, Sub
 
 
 class DBGuild:
@@ -13,18 +13,16 @@ class DBGuild:
             channel_id=channel_id,
         )
         if result:
-            await Guild.update({"guild_id": guild_id, "channel_id": channel_id}, admin=switch)
-        else:
-            await cls.add_guild(
-                guild_id=guild_id,
-                channel_id=channel_id,
-                admin=switch
+            await Guild.update(
+                {"guild_id": guild_id, "channel_id": channel_id}, admin=switch
             )
+        else:
+            await cls.add_guild(guild_id=guild_id, channel_id=channel_id, admin=switch)
 
     @classmethod
     async def get_guild_sub_list(cls, type, guild_id, channel_id) -> List[Sub]:
         """获取指定位置的推送列表"""
-        guild = await  cls.get_guild_db_id(guild_id=guild_id, channel_id=channel_id)
+        guild = await cls.get_guild_db_id(guild_id=guild_id, channel_id=channel_id)
         return await db.get_subs(type=type, type_id=guild.id)
 
     @classmethod
@@ -80,7 +78,6 @@ class DBGuild:
             guild = {
                 "guild_id": sub.guild_id,
                 "channel_id": sub.channel_id,
-
             }
         return guild
 

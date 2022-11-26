@@ -2,7 +2,8 @@ from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import ArgPlainText
 
-from ...database import DB as db, DBGuild as db_guild
+from ...database import DB as db
+from ...database import DBGuild as db_guild
 from ...utils import get_type_id, handle_uid, permission_check, to_me, uid_check
 from ...utils.guild_utils import permission_check_guild_admin
 
@@ -20,7 +21,9 @@ live_off.got("uid", prompt="请输入要关闭直播的UID")(uid_check)
 async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 关闭直播"""
     if event.message_type == "guild":
-        guild = await db_guild.get_guild_db_id(guild_id=event.guild_id, channel_id=event.channel_id)
+        guild = await db_guild.get_guild_db_id(
+            guild_id=event.guild_id, channel_id=event.channel_id
+        )
         type_id = guild.id
     else:
         type_id = get_type_id(event)
