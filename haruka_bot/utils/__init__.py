@@ -73,7 +73,7 @@ async def permission_check(
     elif isinstance(event, GuildMessageEvent):
         if not await db.get_guild_admin(event.guild_id, event.channel_id):
             return
-        if await (SUPERUSER)(bot, event):
+        if await SUPERUSER(bot, event):
             return
         guild_member_info = await bot.get_guild_member_profile(
             guild_id=event.guild_id, user_id=event.user_id

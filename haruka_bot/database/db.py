@@ -100,7 +100,15 @@ class DB:
         """创建频道设置"""
         return await Guild.add(**kwargs)
 
-    # TODO 添加 delete_guild
+    @classmethod
+    async def delete_guild(cls, id) -> bool:
+        """删除子频道设置"""
+        if await cls.get_sub(type="guild", type_id=id):
+            # 当前频道还有订阅，不能删除
+            return False
+        await Guild.delete(id=id)
+        return True
+
     @classmethod
     async def delete_group(cls, id) -> bool:
         """删除群设置"""
@@ -120,7 +128,7 @@ class DB:
     async def set_guild_permission(cls, guild_id, channel_id, switch):
         """设置指定频道权限"""
         if not await cls.add_guild(
-            guild_id=guild_id, channel_id=channel_id, admin=switch
+                guild_id=guild_id, channel_id=channel_id, admin=switch
         ):
             await Guild.update(
                 {"guild_id": guild_id, "channel_id": channel_id}, admin=switch
@@ -172,6 +180,10 @@ class DB:
         """删除指定订阅"""
         if await Sub.delete(uid=uid, type=type, type_id=type_id):
             await cls.delete_user(uid=uid)
+            if type == "guild":
+                await cls.delete_guild(id=type_id)
+            elif type == "group":
+                await cls.delete_group(id=type_id)
             await cls.update_uid_list()
             return True
         # 订阅不存在
@@ -179,7 +191,7 @@ class DB:
 
     @classmethod
     async def delete_sub_list(cls, type, type_id):
-        "删除指定位置的推送列表"
+        """删除指定位置的推送列表"""
         async for sub in Sub.get(type=type, type_id=type_id):
             await cls.delete_sub(uid=sub.uid, type=sub.type, type_id=sub.type_id)
         await cls.update_uid_list()

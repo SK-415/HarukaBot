@@ -3,10 +3,11 @@ from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.params import ArgPlainText
 from nonebot.permission import SUPERUSER
+from nonebot_plugin_guild_patch import GuildMessageEvent
 
 from ... import config
 from ...database import DB as db
-from ...utils import group_only, handle_uid, to_me, uid_check
+from ...utils import group_only, handle_uid, to_me, uid_check, get_type_id
 
 at_on = on_command(
     "开启全体",
@@ -22,9 +23,9 @@ at_on.got("uid", prompt="请输入要开启全体的UID")(uid_check)
 
 
 @at_on.handle()
-async def _(event: GroupMessageEvent, uid: str = ArgPlainText("uid")):
+async def _(event: GroupMessageEvent | GuildMessageEvent, uid: str = ArgPlainText("uid")):
     """根据 UID 开启全体"""
-    if await db.set_sub("at", True, uid=uid, type="group", type_id=event.group_id):
+    if await db.set_sub("at", True, uid=uid, type=event.message_type, type_id=await get_type_id(event)):
         user = await db.get_user(uid=uid)
         assert user is not None
         await at_on.finish(
