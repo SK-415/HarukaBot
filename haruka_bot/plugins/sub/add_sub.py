@@ -3,8 +3,9 @@ from bilireq.user import get_user_info
 from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import ArgPlainText
+from nonebot_plugin_guild_patch import GuildMessageEvent
 
-from ...database import DB as db, DBGuild as db_guild
+from ...database import DB as db
 from ...utils import (
     PROXIES,
     get_type_id,
@@ -14,12 +15,10 @@ from ...utils import (
     uid_check,
 )
 
-from ...utils.guild_utils import permission_check_guild_admin
-
 add_sub = on_command("关注", aliases={"添加主播"}, rule=to_me(), priority=5)
 add_sub.__doc__ = """关注 UID"""
 
-add_sub.handle()(permission_check_guild_admin or permission_check)
+add_sub.handle()(permission_check)
 
 add_sub.handle()(handle_uid)
 
@@ -45,36 +44,21 @@ async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
                                     {str(e)}"
                 )
 
-    if event.message_type == "guild":
-        guild = await db_guild.get_guild_db_id(
-            guild_id=event.guild_id,
-            channel_id=event.channel_id,
+    if isinstance(event, GuildMessageEvent):
+        await db.add_guild(
+            guild_id=event.guild_id, channel_id=event.channel_id, admin=True
         )
-        result = await db_guild.add_guild_sub(
-            uid=uid,
-            type=event.message_type,
-            type_id=guild.id,
-            guild_id=event.guild_id,
-            channel_id=event.channel_id,
-            bot_id=event.self_id,
-            name=name,
-            # TODO 自定义默认开关
-            live=True,
-            dynamic=True,
-            at=False,
-        )
-    else:
-        result = await db.add_sub(
-            uid=uid,
-            type=event.message_type,
-            type_id=get_type_id(event),
-            bot_id=event.self_id,
-            name=name,
-            # TODO 自定义默认开关
-            live=True,
-            dynamic=True,
-            at=False,
-        )
+    result = await db.add_sub(
+        uid=uid,
+        type=event.message_type,
+        type_id=await get_type_id(event),
+        bot_id=event.self_id,
+        name=name,
+        # TODO 自定义默认开关
+        live=True,
+        dynamic=True,
+        at=False,
+    )
     if result:
         await add_sub.finish(f"已关注 {name}（{uid}）")
     await add_sub.finish(f"{name}（{uid}）已经关注了")

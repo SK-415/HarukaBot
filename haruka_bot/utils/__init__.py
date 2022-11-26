@@ -57,7 +57,7 @@ async def uid_check(
 
 
 async def permission_check(
-    bot: Bot, event: Union[GroupMessageEvent, PrivateMessageEvent]
+    bot: Bot, event: Union[GroupMessageEvent, PrivateMessageEvent, GuildMessageEvent]
 ):
     from ..database import DB as db
 
@@ -65,18 +65,31 @@ async def permission_check(
         if event.sub_type == "group":  # 不处理群临时会话
             raise FinishedException
         return
-    if await db.get_admin(event.group_id) and not await (
-        GROUP_ADMIN | GROUP_OWNER | SUPERUSER
-    )(bot, event):
-        await bot.send(event, "权限不足，目前只有管理员才能使用")
-        raise FinishedException
+    if isinstance(event, GroupMessageEvent):
+        if not await db.get_group_admin(event.group_id):
+            return
+        if await (GROUP_ADMIN | GROUP_OWNER | SUPERUSER)(bot, event):
+            return
+    elif isinstance(event, GuildMessageEvent):
+        if not await db.get_guild_admin(event.guild_id, event.channel_id):
+            return
+        if await (SUPERUSER)(bot, event):
+            return
+        guild_member_info = await bot.get_guild_member_profile(
+            guild_id=event.guild_id, user_id=event.user_id
+        )
+        if set(role["role_name"] for role in guild_member_info["roles"]) & set(
+            config.haruka_guild_admin_roles
+        ):
+            return
+    await bot.send(event, "权限不足，目前只有管理员才能使用")
+    raise FinishedException
 
 
 async def group_only(
-    matcher: Matcher, event: MessageEvent, command: str = RawCommand()
+    matcher: Matcher, event: PrivateMessageEvent, command: str = RawCommand()
 ):
-    if not isinstance(event, GroupMessageEvent | GuildMessageEvent):
-        await matcher.finish(f"只有群、频道里才能{command}")
+    await matcher.finish(f"只有群里才能{command}")
 
 
 def to_me():
@@ -96,13 +109,13 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
 
     async def _safe_send(bot, send_type, type_id, message):
         if send_type == "guild":
-            from ..database import DBGuild as db_guild
+            from ..database import DB as db
 
-            guild = await db_guild.get_guild_id(id=type_id)
-            result = await bot.call_api(
-                "send_guild_channel_msg",
-                guild_id=guild["guild_id"],
-                channel_id=guild["channel_id"],
+            guild = await db.get_guild(id=type_id)
+            assert guild
+            result = await bot.send_guild_channel_msg(
+                guild_id=guild.guild_id,
+                channel_id=guild.channel_id,
                 message=message,
             )
         else:
@@ -131,7 +144,7 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
                 return result
             except Exception:
                 continue
-        logger.error(f"尝试失败，所有 Bot 均无法推送")
+        logger.error("尝试失败，所有 Bot 均无法推送")
         return
 
     if at and (await bot.get_group_at_all_remain(group_id=type_id))["can_at_all"]:
@@ -155,7 +168,11 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
         logger.error(f"推送失败，请检查网络连接，错误信息：{e.msg}")
 
 
-def get_type_id(event: MessageEvent):
+async def get_type_id(event: MessageEvent):
+    if isinstance(event, GuildMessageEvent):
+        from ..database import DB as db
+
+        return await db.get_guild_type_id(event.guild_id, event.channel_id)
     return event.group_id if isinstance(event, GroupMessageEvent) else event.user_id
 
 
@@ -193,6 +210,6 @@ def on_startup():
 PROXIES = {"all://": config.haruka_proxy}
 
 require("nonebot_plugin_apscheduler")
-from nonebot_plugin_apscheduler import scheduler
+from nonebot_plugin_apscheduler import scheduler  # noqa
 
 from .browser import get_dynamic_screenshot  # noqa

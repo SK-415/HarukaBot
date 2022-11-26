@@ -1,4 +1,4 @@
-from tortoise.fields.data import BooleanField, CharField, IntField
+from tortoise.fields.data import BooleanField, CharField, IntField, TextField
 from tortoise.models import Model
 
 
@@ -66,8 +66,8 @@ class Group(BaseModel):
 
 class Guild(BaseModel):
     id = IntField(pk=True)
-    guild_id = CharField(max_length=20)
-    channel_id = CharField(max_length=10)
+    guild_id = TextField()
+    channel_id = TextField()
     admin = BooleanField()  # default=True
 
 
