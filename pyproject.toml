@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "haruka-bot"
-version = "1.4.2"
+version = "1.4.2.post1"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 authors = ["SK-415 <2967923486@qq.com>"]
 license = "AGPL-3.0-or-later"
@@ -19,20 +19,20 @@ python = "^3.8"
 click = "^8.0.4"
 httpx = "^0.23.0"
 nonebot-adapter-onebot = "^2.1.1"
-nonebot-plugin-apscheduler = "^0.1.4"
-nonebot2 = "^2.0.0-beta.5"
+nonebot-plugin-apscheduler = "^0.2.0"
+nonebot2 = "^2.0.0rc1"
 playwright = "^1.22.0"
 pydantic = "^1.9.0"
 python-dotenv = ">=0.19.2,<0.22.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
 aerich = ">=0.6.3,<0.8.0"
-bilireq = "^0.2.3"
+bilireq = "^0.2.3.post0"
 packaging = "^21.3"
 nonebot-plugin-guild-patch = "^0.2.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^5.0.4"
-nonebot-plugin-gocqhttp = "^0.6.1"
+nonebot-plugin-gocqhttp = "^0.6.3"
 
 [tool.nonebot]
 plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
