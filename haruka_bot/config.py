@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseSettings, validator
 from pydantic.fields import ModelField
@@ -17,7 +17,7 @@ class Config(BaseSettings):
     haruka_dynamic_at: bool = False
     haruka_screenshot_style: str = "mobile"
     # 频道管理员身份组
-    haruka_guild_admin_roles: list[str] = ["频道主", "管理员"]
+    haruka_guild_admin_roles: List[str] = ["频道主", "管理员"]
 
     @validator("haruka_interval", "haruka_live_interval", "haruka_dynamic_interval")
     def non_negative(cls, v: int, field: ModelField):
