@@ -15,6 +15,7 @@ COMMAND_START=[""]
 COMMAND_SEP=["."]
 HARUKA_DIR="./data/"
 HARUKA_TO_ME=false
+HARUKA_GUILD_ADMIN_ROLES=["Haruka", "频道主"]
 ```
 
 :::
@@ -43,6 +44,16 @@ HARUKA_DIR="./data/"
 
 ```json
 Haruka_TO_ME=False
+```
+
+## HARUKA_GUILD_ADMIN_ROLES
+
+默认值：["管理员","频道主"]
+
+在频道里使用命令的身份组，可以写入多个身份组
+
+```json
+HARUKA_GUILD_ADMIN_ROLES=["Haruka", "频道主"]
 ```
 
 ## HARUKA_LIVE_OFF_NOTIFY
