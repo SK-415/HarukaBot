@@ -375,6 +375,18 @@ py-cpuinfo = ">=8,<10"
 proxy = ["proxy.py (>=2.4.3,<3.0.0)"]
 
 [[package]]
+name = "nonebot-plugin-guild-patch"
+version = "0.2.1"
+description = "Patch plugin for NoneBot2 QQ guild (go-cqhttp) support."
+category = "main"
+optional = false
+python-versions = ">=3.7.3,<4.0.0"
+
+[package.dependencies]
+nonebot-adapter-onebot = ">=2.1.0,<3.0.0"
+nonebot2 = ">=2.0.0-beta.1,<3.0.0"
+
+[[package]]
 name = "nonebot2"
 version = "2.0.0rc1"
 description = "An asynchronous python bot framework."
@@ -1183,6 +1195,10 @@ nonebot-plugin-apscheduler = [
 nonebot-plugin-gocqhttp = [
     {file = "nonebot_plugin_gocqhttp-0.6.3-py3-none-any.whl", hash = "sha256:16ce1d95e47b9b98691c11797c377b969c631821f4e1b3d5425cdc1e3c1bd452"},
     {file = "nonebot_plugin_gocqhttp-0.6.3.tar.gz", hash = "sha256:c1005cf37d950d1d6c629f4117f95a5a3e28f7ab5739ea5ddbe22163b818e538"},
+]
+nonebot-plugin-guild-patch = [
+    {file = "nonebot-plugin-guild-patch-0.2.1.tar.gz", hash = "sha256:1d4c7bfcb8d0ee39493b13cd937f77db2fb69ab5ff9c57196e8aee159cc682d4"},
+    {file = "nonebot_plugin_guild_patch-0.2.1-py3-none-any.whl", hash = "sha256:6f4c52329940138ddf6e86c373eab83ee26128d2927b566f895fa25009ba218e"},
 ]
 nonebot2 = [
     {file = "nonebot2-2.0.0rc1-py3-none-any.whl", hash = "sha256:99c70300b9d0755bba6ed50b7399f44f6213e119157bc026b960b3e157a38416"},

@@ -21,7 +21,7 @@ async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
     name = getattr(await db.get_user(uid=uid), "name", None)
     if name:
         result = await db.delete_sub(
-            uid=uid, type=event.message_type, type_id=get_type_id(event)
+            uid=uid, type=event.message_type, type_id=await get_type_id(event)
         )
     else:
         result = False
