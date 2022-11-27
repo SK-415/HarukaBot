@@ -4,15 +4,15 @@ from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.permission import SUPERUSER
-from nonebot_plugin_guild_patch import GUILD_SUPERUSER, GuildMessageEvent
+from nonebot_plugin_guild_patch import GuildMessageEvent
 
 from ...database import DB as db
-from ...utils import group_only, to_me
+from ...utils import GUILD_ADMIN, group_only, to_me
 
 permission_on = on_command(
     "开启权限",
     rule=to_me(),
-    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER | GUILD_SUPERUSER,
+    permission=GROUP_OWNER | GROUP_ADMIN | SUPERUSER | GUILD_ADMIN,
     priority=5,
 )
 permission_on.__doc__ = """开启权限"""

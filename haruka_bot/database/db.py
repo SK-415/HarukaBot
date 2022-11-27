@@ -128,7 +128,7 @@ class DB:
     async def set_guild_permission(cls, guild_id, channel_id, switch):
         """设置指定频道权限"""
         if not await cls.add_guild(
-                guild_id=guild_id, channel_id=channel_id, admin=switch
+            guild_id=guild_id, channel_id=channel_id, admin=switch
         ):
             await Guild.update(
                 {"guild_id": guild_id, "channel_id": channel_id}, admin=switch
@@ -180,10 +180,6 @@ class DB:
         """删除指定订阅"""
         if await Sub.delete(uid=uid, type=type, type_id=type_id):
             await cls.delete_user(uid=uid)
-            if type == "guild":
-                await cls.delete_guild(id=type_id)
-            elif type == "group":
-                await cls.delete_group(id=type_id)
             await cls.update_uid_list()
             return True
         # 订阅不存在
