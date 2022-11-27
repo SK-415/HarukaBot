@@ -1,5 +1,5 @@
+from tortoise.fields.data import BooleanField, CharField, IntField, TextField
 from tortoise.models import Model
-from tortoise.fields.data import CharField, IntField, BooleanField
 
 
 class BaseModel(Model):
@@ -61,6 +61,13 @@ class User(BaseModel):
 
 class Group(BaseModel):
     id = IntField(pk=True)
+    admin = BooleanField()  # default=True
+
+
+class Guild(BaseModel):
+    id = IntField(pk=True)
+    guild_id = TextField()
+    channel_id = TextField()
     admin = BooleanField()  # default=True
 
 

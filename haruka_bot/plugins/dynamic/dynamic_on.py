@@ -23,7 +23,7 @@ async def _(event: MessageEvent, uid: str = ArgPlainText("uid")):
         True,
         uid=uid,
         type=event.message_type,
-        type_id=get_type_id(event),
+        type_id=await get_type_id(event),
     ):
         user = await db.get_user(uid=uid)
         assert user is not None
