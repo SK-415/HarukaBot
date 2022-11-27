@@ -56,6 +56,21 @@ async def uid_check(
     matcher.set_arg("uid", Message(uid))
 
 
+async def _guild_admin(bot: Bot, event: GuildMessageEvent):
+    roles = set(
+        role["role_name"]
+        for role in (
+            await bot.get_guild_member_profile(
+                guild_id=event.guild_id, user_id=event.user_id
+            )
+        )["roles"]
+    )
+    return bool(roles & set(config.haruka_guild_admin_roles))
+
+
+GUILD_ADMIN: Permission = Permission(_guild_admin)
+
+
 async def permission_check(
     bot: Bot, event: Union[GroupMessageEvent, PrivateMessageEvent, GuildMessageEvent]
 ):
@@ -73,32 +88,10 @@ async def permission_check(
     elif isinstance(event, GuildMessageEvent):
         if not await db.get_guild_admin(event.guild_id, event.channel_id):
             return
-        if await SUPERUSER(bot, event):
-            return
-        guild_member_info = await bot.get_guild_member_profile(
-            guild_id=event.guild_id, user_id=event.user_id
-        )
-        if set(role["role_name"] for role in guild_member_info["roles"]) & set(
-            config.haruka_guild_admin_roles
-        ):
+        if await (GUILD_ADMIN | SUPERUSER)(bot, event):
             return
     await bot.send(event, "权限不足，目前只有管理员才能使用")
     raise FinishedException
-
-
-async def _guild_admin(bot: Bot, event: GuildMessageEvent):
-    roles = [
-        role["role_name"]
-        for role in (
-            await bot.get_guild_member_profile(
-                guild_id=event.guild_id, user_id=event.user_id
-            )
-        )["roles"]
-    ]
-    return ("频道主" in roles) or ("管理员" in roles)
-
-
-GUILD_ADMIN: Permission = Permission(_guild_admin)
 
 
 async def group_only(
