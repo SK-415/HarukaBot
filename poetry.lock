@@ -362,18 +362,15 @@ websockets = ["websockets (>=10.0,<11.0)"]
 type = "git"
 url = "https://github.com/nonebot/nonebot2.git"
 reference = "HEAD"
-resolved_reference = "a758e6f06ec69dd64dabf10c7376b4a01914667d"
+resolved_reference = "f2a618f663ee2bd450fab1949dc4ade23b9c3963"
 
 [[package]]
 name = "packaging"
-version = "21.3"
+version = "22.0"
 description = "Core utilities for Python packages"
 category = "main"
 optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
+python-versions = ">=3.7"
 
 [[package]]
 name = "playwright"
@@ -457,17 +454,6 @@ description = "A pure Python trie data structure implementation."
 category = "main"
 optional = false
 python-versions = "*"
-
-[[package]]
-name = "pyparsing"
-version = "3.0.9"
-description = "pyparsing module - Classes and methods to define and execute parsing grammars"
-category = "main"
-optional = false
-python-versions = ">=3.6.8"
-
-[package.extras]
-diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pypika-tortoise"
@@ -729,7 +715,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "edca0eaa1b30f62c7b5ec7c284deefb315d6bba840d54985f7805a96344ede30"
+content-hash = "0191ad053c4a1af9d0575ee268017becf599ee3066b87d35390fa066beff9fa7"
 
 [metadata.files]
 aiosqlite = [
@@ -1123,8 +1109,8 @@ nonebot-plugin-guild-patch = [
 ]
 nonebot2 = []
 packaging = [
-    {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
-    {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
+    {file = "packaging-22.0-py3-none-any.whl", hash = "sha256:957e2148ba0e1a3b282772e791ef1d8083648bc131c8ab0c1feba110ce1146c3"},
+    {file = "packaging-22.0.tar.gz", hash = "sha256:2198ec20bd4c017b8f9717e00f0c8714076fc2fd93816750ab48e2c41de2cfd3"},
 ]
 playwright = [
     {file = "playwright-1.28.0-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:2e101b17e4d5252ef96c9dc8b2ac17f2980dde0420728c1c96a77eeaf6f9b11f"},
@@ -1220,10 +1206,6 @@ pyee = [
 pygtrie = [
     {file = "pygtrie-2.5.0-py3-none-any.whl", hash = "sha256:8795cda8105493d5ae159a5bef313ff13156c5d4d72feddefacaad59f8c8ce16"},
     {file = "pygtrie-2.5.0.tar.gz", hash = "sha256:203514ad826eb403dab1d2e2ddd034e0d1534bbe4dbe0213bb0593f66beba4e2"},
-]
-pyparsing = [
-    {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
-    {file = "pyparsing-3.0.9.tar.gz", hash = "sha256:2b020ecf7d21b687f219b71ecad3631f644a47f01403fa1d1036b0c6416d70fb"},
 ]
 pypika-tortoise = [
     {file = "pypika-tortoise-0.1.6.tar.gz", hash = "sha256:d802868f479a708e3263724c7b5719a26ad79399b2a70cea065f4a4cadbebf36"},

@@ -26,7 +26,7 @@ pydantic = "^1.10.2"
 python-dotenv = ">=0.19.2,<0.22.0"
 tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
 bilireq = "^0.2.3.post0"
-packaging = "^21.3"
+packaging = ">=21.3,<23.0"
 nonebot-plugin-guild-patch = "^0.2.1"
 
 [tool.poetry.group.dev.dependencies]
