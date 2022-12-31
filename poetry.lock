@@ -322,7 +322,7 @@ proxy = ["proxy.py (>=2.4.3,<3.0.0)"]
 
 [[package]]
 name = "nonebot-plugin-guild-patch"
-version = "0.2.1"
+version = "0.2.2"
 description = "Patch plugin for NoneBot2 QQ guild (go-cqhttp) support."
 category = "main"
 optional = false
@@ -1118,8 +1118,8 @@ nonebot-plugin-gocqhttp = [
     {file = "nonebot_plugin_gocqhttp-0.6.3.tar.gz", hash = "sha256:c1005cf37d950d1d6c629f4117f95a5a3e28f7ab5739ea5ddbe22163b818e538"},
 ]
 nonebot-plugin-guild-patch = [
-    {file = "nonebot-plugin-guild-patch-0.2.1.tar.gz", hash = "sha256:1d4c7bfcb8d0ee39493b13cd937f77db2fb69ab5ff9c57196e8aee159cc682d4"},
-    {file = "nonebot_plugin_guild_patch-0.2.1-py3-none-any.whl", hash = "sha256:6f4c52329940138ddf6e86c373eab83ee26128d2927b566f895fa25009ba218e"},
+    {file = "nonebot_plugin_guild_patch-0.2.2-py3-none-any.whl", hash = "sha256:63e85e0528519d33752e59630d814af5959ec7d577b50271f4f682354918b6e3"},
+    {file = "nonebot_plugin_guild_patch-0.2.2.tar.gz", hash = "sha256:9bbbb6e519ce713ad462d014247c7d7a6ed9beeffff1752842ecebc9fb7ef52d"},
 ]
 nonebot2 = []
 packaging = [
