@@ -1,6 +1,7 @@
 import os
 import sys
 from typing import Optional
+from pathlib import Path
 
 from nonebot import get_driver
 from nonebot.log import logger
@@ -10,6 +11,7 @@ from playwright.async_api import Browser, async_playwright
 from .. import config
 
 _browser: Optional[Browser] = None
+mobile_js = Path(__file__).parent.joinpath("mobile.js").read_text(encoding="utf-8")
 
 
 async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
@@ -44,25 +46,30 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
             "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
             "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
         ),
-        viewport={"width": 360, "height": 780},
+        viewport={"width": 460, "height": 780},
     )
     try:
         await page.goto(url, wait_until="networkidle", timeout=10000)
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
             return None
-        await page.add_script_tag(
-            content=
-            # 去除打开app按钮
-            "document.getElementsByClassName('m-dynamic-float-openapp').forEach(v=>v.remove());"
-            # 去除关注按钮
-            "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
-            # 修复字体与换行问题
-            "const dyn=document.getElementsByClassName('dyn-card')[0];"
-            "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
-            "dyn.style.overflowWrap='break-word'"
-        )
-        card = await page.query_selector(".dyn-card")
+        # await page.add_script_tag(
+        #     content=
+        #     # 去除打开app按钮
+        #     "document.getElementsByClassName('m-dynamic-float-openapp').forEach(v=>v.remove());"
+        #     # 去除关注按钮
+        #     "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
+        #     # 修复字体与换行问题
+        #     "const dyn=document.getElementsByClassName('dyn-card')[0];"
+        #     "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
+        #     "dyn.style.overflowWrap='break-word'"
+        # )
+        await page.add_script_tag(content=mobile_js)
+        await page.wait_for_function("getMobileStyle()")
+        await page.wait_for_load_state("networkidle")
+        await page.wait_for_load_state("domcontentloaded")
+
+        card = await page.query_selector(".opus-modules" if "opus" in page.url else ".dyn-card")
         assert card
         clip = await card.bounding_box()
         assert clip
@@ -157,8 +164,7 @@ async def check_playwright_env():
             await p.chromium.launch()
     except Exception:
         raise ImportError(
-            "加载失败，Playwright 依赖不全，"
-            "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
+            "加载失败，Playwright 依赖不全，" "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
 
 
