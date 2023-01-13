@@ -16,6 +16,8 @@ class Config(BaseSettings):
     haruka_dynamic_interval: int = 0
     haruka_dynamic_at: bool = False
     haruka_screenshot_style: str = "mobile"
+    haruka_dunamic_custom_font: Optional[str] = ""
+    haruka_dunamic_custom_font_source: str = "remote"
     # 频道管理员身份组
     haruka_guild_admin_roles: List[str] = ["频道主", "管理员"]
 

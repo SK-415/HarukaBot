@@ -54,39 +54,6 @@ async function getMobileStyle() {
         mOpusDom.style.minHeight = "0";
     }
 
-    // TODO: 未来考虑添加本地离线字体
-    // 自行添加在线字体(字体的优先度将按照顺序执行)
-    const needLoadFontList = [
-        {
-            fontUrl: "https://static.graiax/fonts/HarmonyOS_Sans_SC_Medium.woff2",
-            fontFamily: "HarmonyOS_Medium_woff2",
-        },
-        {
-            fontUrl: "https://cdn.jsdelivr.net/gh/irozhi/HarmonyOS-Sans/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.woff2",
-            fontFamily: "HarmonyOS_Medium_woff2",
-        }
-    ];
-
-    // 字体按需加载方法
-    (() => {
-        const code = needLoadFontList.reduce((defaultString, fontObject) => {
-            return defaultString + `@font-face { font-family: ${fontObject.fontFamily};src: url('${fontObject.fontUrl}'); }`;
-        }, "");
-        const style = document.createElement("style");
-        style.rel = "stylesheet";
-        style.appendChild(document.createTextNode(code));
-        const head = document.getElementsByTagName("head")[0];
-        head.appendChild(style);
-    })();
-
-    // 将字体样式设置到 div#app 上
-    const appDom = document.querySelector("#app");
-    if (appDom) {
-        // 动态加字体, 并给与默认值 sans-serif
-        appDom.style.fontFamily = needLoadFontList.reduce((defaultString, fontObject) => defaultString + fontObject.fontFamily + ",", "") + "sans-serif";
-        appDom.style.overflowWrap = "break-word";
-    }
-
     // 删除老版动态 .dyn-card 上的字体设置
     const dynCardDom = document.querySelector(".dyn-card");
     if (dynCardDom) {
@@ -133,6 +100,62 @@ async function getMobileStyle() {
 }
 
 
+function setFont(font = "", fontSource = "local") {
+    // TODO: 未来考虑添加本地离线字体
+    // 自行添加在线字体(字体的优先度将按照顺序执行)
+    const needLoadFontList = [
+        {
+            fontUrl: "https://cdn.jsdelivr.net/gh/irozhi/HarmonyOS-Sans/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.woff2",
+            fontFamily: "HarmonyOS_Medium_woff2",
+        }
+    ];
+    const emojiFontList = ["Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"];
+
+    if (font) {
+        // 如果传入了字体名, 则将其添加到字体列表首位
+        if (fontSource === "local") {
+            needLoadFontList.unshift({
+                fontUrl: `https://fonts.bbot/${font}`,
+                fontFamily: "BBot_Custom_Font",
+            });
+        } else if (fontSource === "remote") {
+            needLoadFontList.unshift({
+                fontUrl: font,
+                fontFamily: "BBot_Custom_Font",
+            });
+        }
+    }
+
+    // 字体按需加载方法
+    (() => {
+        const code = needLoadFontList.reduce((defaultString, fontObject) => {
+            return defaultString + `@font-face { font-family: ${fontObject.fontFamily};src: url('${fontObject.fontUrl}'); }`;
+        }, "");
+        const style = document.createElement("style");
+        style.rel = "stylesheet";
+        style.appendChild(document.createTextNode(code));
+        const head = document.getElementsByTagName("head")[0];
+        head.appendChild(style);
+    })();
+
+    // 将字体样式设置到 div#app 上
+    const appDom = document.querySelector("#app");
+    const emojiFont = emojiFontList.join(",");
+    if (appDom) {
+        // 动态加字体, 并给与默认值 sans-serif
+        if (fontSource === "system") {
+            appDom.style.fontFamily = font + "," + emojiFont + ",sans-serif";
+        } else {
+            const needLoadFont = needLoadFontList.reduce((defaultString, fontObject) => defaultString + fontObject.fontFamily + ",", "");
+            appDom.style.fontFamily = needLoadFont + emojiFont + ",sans-serif";
+        };
+        appDom.style.overflowWrap = "break-word";
+    }
+
+    return font;
+}
+
+
 async function imageComplete() {
     // 异步渲染已经加载的图片地址, 如果已经缓存则会立即返回 true
     const loadImageAsync = (url) => {
@@ -164,7 +187,7 @@ async function imageComplete() {
     }, true)
 }
 
-async function fontsLoaded() {
+function fontsLoaded() {
     // 判断字体是否都加载完成
     return document.fonts.status === "loaded";
 }
