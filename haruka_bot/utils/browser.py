@@ -1,7 +1,8 @@
 import os
 import sys
-from typing import Optional
+import asyncio
 from pathlib import Path
+from typing import Optional
 
 from nonebot import get_driver
 from nonebot.log import logger
@@ -66,8 +67,12 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         # )
         await page.add_script_tag(content=mobile_js)
         await page.wait_for_function("getMobileStyle()")
+
         await page.wait_for_load_state("networkidle")
         await page.wait_for_load_state("domcontentloaded")
+        # 判断字体是否加载完成
+        need_wait = ["imageComplete", "fontsLoaded"]
+        await asyncio.gather(*[page.wait_for_function(f"{i}()") for i in need_wait])
 
         card = await page.query_selector(".opus-modules" if "opus" in page.url else ".dyn-card")
         assert card

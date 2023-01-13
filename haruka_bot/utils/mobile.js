@@ -2,25 +2,25 @@
  * @Author: KBD
  * @Date: 2022-12-26 13:45:30
  * @LastEditors: KBD
- * @LastEditTime: 2023-01-11 15:18:13
+ * @LastEditTime: 2023-01-13 01:35:34
  * @Description: 用于初始化手机动态页面的样式以及图片大小
  */
 async function getMobileStyle() {
-    // 删除dom的Object, 可以自行添加 (className需要增加'.'为前缀, id需要增加'#'为前缀)
+    // 删除 dom 的对象, 可以自行添加 ( className 需要增加 '.' 为前缀, id 需要增加 '#' 为前缀)
     const deleteDoms = {
-        // 关注dom
+        // 关注 dom
         followDoms: [".dyn-header__following", ".easy-follow-btn"],
-        // 分享dom
+        // 分享 dom
         shareDoms: [".dyn-share"],
-        // 打开程序dom
+        // 打开程序 dom
         openAppBtnDoms: [".dynamic-float-btn", ".float-openapp"],
-        // 导航dom
+        // 导航 dom
         navDoms: [".m-navbar", ".opus-nav"],
-        // 获取更多dom
+        // 获取更多 dom
         readMoreDoms: [".opus-read-more"],
-        // 全屏弹出Dom
+        // 全屏弹出 Dom
         openAppDialogDoms: [".openapp-dialog"],
-        // 评论区dom
+        // 评论区 dom
         commentsDoms: [".v-switcher"],
     }
 
@@ -54,23 +54,55 @@ async function getMobileStyle() {
         mOpusDom.style.minHeight = "0";
     }
 
-    // 设置字体格式
-    const cardDom = document.querySelector(".dyn-card");
-    if (cardDom) {
-        cardDom.style.fontFamily = "Noto Sans CJK SC, sans-serif";
-        cardDom.style.overflowWrap = "break-word";
+    // TODO: 未来考虑添加本地离线字体
+    // 自行添加在线字体(字体的优先度将按照顺序执行)
+    const needLoadFontList = [
+        {
+            fontUrl: "https://static.graiax/fonts/HarmonyOS_Sans_SC_Medium.woff2",
+            fontFamily: "HarmonyOS_Medium_woff2",
+        },
+        {
+            fontUrl: "https://cdn.jsdelivr.net/gh/irozhi/HarmonyOS-Sans/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.woff2",
+            fontFamily: "HarmonyOS_Medium_woff2",
+        }
+    ];
+
+    // 字体按需加载方法
+    (() => {
+        const code = needLoadFontList.reduce((defaultString, fontObject) => {
+            return defaultString + `@font-face { font-family: ${fontObject.fontFamily};src: url('${fontObject.fontUrl}'); }`;
+        }, "");
+        const style = document.createElement("style");
+        style.rel = "stylesheet";
+        style.appendChild(document.createTextNode(code));
+        const head = document.getElementsByTagName("head")[0];
+        head.appendChild(style);
+    })();
+
+    // 将字体样式设置到 div#app 上
+    const appDom = document.querySelector("#app");
+    if (appDom) {
+        // 动态加字体, 并给与默认值 sans-serif
+        appDom.style.fontFamily = needLoadFontList.reduce((defaultString, fontObject) => defaultString + fontObject.fontFamily + ",", "") + "sans-serif";
+        appDom.style.overflowWrap = "break-word";
+    }
+
+    // 删除老版动态 .dyn-card 上的字体设置
+    const dynCardDom = document.querySelector(".dyn-card");
+    if (dynCardDom) {
+        dynCardDom.style.fontFamily = "unset";
     }
 
     // 找到图标容器dom
     const containerDom = document.querySelector(".bm-pics-block__container");
     if (containerDom) {
-        // 先把默认padding-left置为0
+        // 先把默认 padding-left 置为0
         containerDom.style.paddingLeft = "0";
-        // 先把默认padding-right置为0
+        // 先把默认 padding-right 置为0
         containerDom.style.paddingRight = "0";
-        // 设置flex模式下以列形式排列
+        // 设置 flex 模式下以列形式排列
         containerDom.style.flexDirection = "column";
-        // 设置flex模式下每个容器间隔15px
+        // 设置 flex 模式下每个容器间隔15px
         containerDom.style.gap = "15px";
         // flex - 垂直居中
         containerDom.style.justifyContent = "center";
@@ -78,62 +110,63 @@ async function getMobileStyle() {
         containerDom.style.alignItems = "center";
     }
 
-    // 定义异步方法获取图片原尺寸(仅限于dom上的src路径的图片原尺寸)
-    const getImageSize = (url) => {
-        return new Promise((resolve, reject) => {
-            const image = new Image();
-            image.onload = () => {
-                // 图片加载成功返回对象(包含长宽)
-                resolve({
-                    width: image.width, height: image.height,
-                });
-            };
-            image.onerror = () => {
-                reject(new Error("error"));
-            };
-            image.src = url;
-        });
-    };
-
-    // 获取图片容器的所有dom
+    // 获取图片容器的所有 dom
     const imageItemDoms = document.querySelectorAll(".bm-pics-block__item");
 
-    // 异步遍历图片dom
-    await Promise.all(Array.from(imageItemDoms).map(async (item) => {
-        // 获取屏幕比例的90%宽度
+    // 异步遍历图片 dom
+    Array.from(imageItemDoms).map(async (item) => {
+        // 获取屏幕比例的 90% 宽度
         const clientWidth = window.innerWidth * 0.9;
-
-        // 先把默认margin置为0
+        // 先把默认 margin 置为 0
         item.style.margin = "0";
-        // 宽度默认撑满屏幕宽度90%;
+        // 宽度默认撑满屏幕宽度 90%;
         item.style.width = `${clientWidth}px`;
-        try {
-            // 初始化url
-            let imageTrueUrl;
+        // 获取原app中图片的src
+        const imgSrc = item.firstChild.src;
+        // 判断是否有 @ 符
+        const imgSrcAtIndex = imgSrc.indexOf("@");
+        // 将所有图片转换为 .webp 格式节省加载速度, 并返回给原来的 image 标签
+        item.firstChild.src = imgSrcAtIndex !== -1 ? imgSrc.slice(0, imgSrcAtIndex + 1) + ".webp" : imgSrc;
+        // 设置自动高度
+        item.style.height = "auto";
+    })
+}
 
-            // 获取原app中图片的src
-            const imgSrc = item.firstChild.src;
-            // 判断是否有@符
-            const imgSrcAtIndex = imgSrc.indexOf("@");
 
-            // 将所有图片转换为.webp格式节省加载速度
-            imageTrueUrl = imgSrcAtIndex !== -1 ? imgSrc.slice(0, imgSrcAtIndex + 1) + ".webp" : imgSrc;
+async function imageComplete() {
+    // 异步渲染已经加载的图片地址, 如果已经缓存则会立即返回 true
+    const loadImageAsync = (url) => {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.src = url;
 
-            // 需要将真实的路径返回给image标签上(否则会失真)
-            item.firstChild.src = imageTrueUrl;
-
-            // 获取图片原尺寸对象
-            const obj = await getImageSize(imageTrueUrl);
-            // 图片大小判断逻辑部分(以屏幕宽度90%的1:1为基准)
-            if (obj.width / obj.height !== 1) {
-                item.style.height = `${(clientWidth / obj.width) * obj.height}px`;
-            } else {
-                item.style.height = "auto";
+            image.onload = () => {
+                resolve(image.complete) // 理应为 true
             }
-        } catch (err) {
-            item.style.height = "auto";
-        }
+
+            image.onerror = () => {
+                reject(false);
+            }
+        })
+    }
+
+    // 获取图片容器的所有 dom
+    const imageItemDoms = document.querySelectorAll(".bm-pics-block__item");
+
+    // 异步遍历图片并等待
+    const imageItemStatusArray = await Promise.all(Array.from(imageItemDoms).map((item) => {
+        return loadImageAsync(item.firstChild.src);
     }))
+
+    // 通过遍历图片加载状态, 如果有一个图片加载失败, 均为 false
+    return imageItemStatusArray.reduce((p, c) => {
+        return p && c;
+    }, true)
+}
+
+async function fontsLoaded() {
+    // 判断字体是否都加载完成
+    return document.fonts.status === "loaded";
 }
 
 window.onload = () => {
