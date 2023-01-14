@@ -61,6 +61,7 @@ async def dy_sched():
     for dynamic in dynamics[::-1]:  # 动态从旧到新排列
         dynamic_id = int(dynamic.extend.dyn_id_str)
         if dynamic_id > offset[uid]:
+            offset[uid] = dynamic_id
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
             url = f"https://t.bilibili.com/{dynamic_id}"
             image = await get_dynamic_screenshot(dynamic_id)
@@ -92,8 +93,6 @@ async def dy_sched():
                     message=message,
                     at=bool(sets.at) and config.haruka_dynamic_at,
                 )
-
-            offset[uid] = dynamic_id
 
     if dynamic:
         await db.update_user(uid, name)
