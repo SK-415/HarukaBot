@@ -85,7 +85,6 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
             200 if config.haruka_dunamic_custom_font_source == "remote" else 50
         )
 
-        # 判断字体是否加载完成
         need_wait = ["imageComplete", "fontsLoaded"]
         await asyncio.gather(*[page.wait_for_function(f"{i}()") for i in need_wait])
 
@@ -184,7 +183,7 @@ async def check_playwright_env():
             await p.chromium.launch()
     except Exception:
         raise ImportError(
-            "加载失败，Playwright 依赖不全，" "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
+            "加载失败，Playwright 依赖不全，解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
 
 
