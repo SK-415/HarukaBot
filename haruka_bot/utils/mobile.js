@@ -9,7 +9,7 @@ async function getMobileStyle() {
     // 删除 dom 的对象, 可以自行添加 ( className 需要增加 '.' 为前缀, id 需要增加 '#' 为前缀)
     const deleteDoms = {
         // 关注 dom
-        followDoms: [".dyn-header__following", ".easy-follow-btn"],
+        followDoms: [".dyn-header__following", ".easy-follow-btn", ".dyn-orig-author__right"],
         // 分享 dom
         shareDoms: [".dyn-share"],
         // 打开程序 dom
@@ -105,22 +105,17 @@ function setFont(font = "", fontSource = "local") {
     // 自行添加在线字体(字体的优先度将按照顺序执行)
     const needLoadFontList = [
         {
-            fontUrl: "https://cdn.jsdelivr.net/gh/irozhi/HarmonyOS-Sans/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.woff2",
+            fontUrl: "https://fonts.bbot?name=https://cdn.jsdelivr.net/gh/irozhi/HarmonyOS-Sans/HarmonyOS_Sans_SC/HarmonyOS_Sans_SC_Medium.woff2",
             fontFamily: "HarmonyOS_Medium_woff2",
         }
     ];
     const emojiFontList = ["Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"];
 
     if (font) {
-        // 如果传入了字体名, 则将其添加到字体列表首位
-        if (fontSource === "local") {
+        // 如果字体不是 system, 则将其添加到字体列表首位
+        if (fontSource !== "system") {
             needLoadFontList.unshift({
-                fontUrl: `https://fonts.bbot/${font}`,
-                fontFamily: "BBot_Custom_Font",
-            });
-        } else if (fontSource === "remote") {
-            needLoadFontList.unshift({
-                fontUrl: font,
+                fontUrl: `https://fonts.bbot?name=${font}`,
                 fontFamily: "BBot_Custom_Font",
             });
         }
