@@ -1,7 +1,7 @@
+import asyncio
 import os
 import re
 import sys
-import asyncio
 from pathlib import Path
 from typing import Optional
 
@@ -10,8 +10,8 @@ from nonebot.log import logger
 from playwright.__main__ import main
 from playwright.async_api import Browser, async_playwright
 
-from .fonts_provider import fill_font
 from .. import config
+from .fonts_provider import fill_font
 
 _browser: Optional[Browser] = None
 mobile_js = Path(__file__).parent.joinpath("mobile.js")
@@ -27,6 +27,7 @@ async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
 
 
 async def get_browser() -> Browser:
+    # TODO 重启浏览器
     assert _browser
     return _browser
 
@@ -70,10 +71,10 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         # )
         await page.add_script_tag(path=mobile_js)
 
-        font = config.haruka_dunamic_custom_font
         await page.evaluate(
-            f"setFont({font}, {config.haruka_dunamic_custom_font_source})"
-            if font
+            f'setFont("{config.haruka_dynamic_font}", '
+            f'"{config.haruka_dynamic_font_source}")'
+            if config.haruka_dynamic_font
             else "setFont()"
         )
         await page.wait_for_function("getMobileStyle()")
@@ -82,14 +83,16 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         await page.wait_for_load_state("domcontentloaded")
 
         await page.wait_for_timeout(
-            200 if config.haruka_dunamic_custom_font_source == "remote" else 50
+            200 if config.haruka_dynamic_font_source == "remote" else 50
         )
 
         # 判断字体是否加载完成
         need_wait = ["imageComplete", "fontsLoaded"]
         await asyncio.gather(*[page.wait_for_function(f"{i}()") for i in need_wait])
 
-        card = await page.query_selector(".opus-modules" if "opus" in page.url else ".dyn-card")
+        card = await page.query_selector(
+            ".opus-modules" if "opus" in page.url else ".dyn-card"
+        )
         assert card
         clip = await card.bounding_box()
         assert clip
@@ -184,7 +187,8 @@ async def check_playwright_env():
             await p.chromium.launch()
     except Exception:
         raise ImportError(
-            "加载失败，Playwright 依赖不全，" "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
+            "加载失败，Playwright 依赖不全，"
+            "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
 
 

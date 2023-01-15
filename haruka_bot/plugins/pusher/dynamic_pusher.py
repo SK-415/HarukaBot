@@ -1,8 +1,12 @@
 import asyncio
 from datetime import datetime
 
-from apscheduler.events import (EVENT_JOB_ERROR, EVENT_JOB_EXECUTED,
-                                EVENT_JOB_MISSED, EVENT_SCHEDULER_STARTED)
+from apscheduler.events import (
+    EVENT_JOB_ERROR,
+    EVENT_JOB_EXECUTED,
+    EVENT_JOB_MISSED,
+    EVENT_SCHEDULER_STARTED,
+)
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from grpc import StatusCode
@@ -31,11 +35,13 @@ async def dy_sched():
     try:
         # 获取 UP 最新动态列表
         dynamics = (
-            await grpc_get_user_dynamics(uid, timeout=10, proxy=config.haruka_proxy)
+            await grpc_get_user_dynamics(
+                uid, timeout=config.haruka_dynamic_timeout, proxy=config.haruka_proxy
+            )
         ).list
     except AioRpcError as e:
         if e.code() == StatusCode.DEADLINE_EXCEEDED:
-            logger.error(f"爬取动态超时，将在下个轮询中重试")
+            logger.error("爬取动态超时，将在下个轮询中重试")
             return
         raise
 
@@ -105,7 +111,7 @@ def dynamic_lisener(event):
     job = scheduler.get_job("dynamic_sched")
     if not job:
         scheduler.add_job(
-            dy_sched, id="dynamic_sched", next_run_time=datetime.now(scheduler.timezone)  # type: ignore
+            dy_sched, id="dynamic_sched", next_run_time=datetime.now(scheduler.timezone)
         )
 
 
