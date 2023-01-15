@@ -27,6 +27,7 @@ async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
 
 
 async def get_browser() -> Browser:
+    # TODO 重启浏览器
     assert _browser
     return _browser
 
