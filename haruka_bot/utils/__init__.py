@@ -222,7 +222,7 @@ def on_startup():
 
         check_proxy()
         install()
-        asyncio.ensure_future(check_playwright_env())
+        asyncio.get_event_loop().run_until_complete(check_playwright_env())
         # 创建数据存储目录
         if not Path(get_path()).is_dir():
             Path(get_path()).mkdir(parents=True)
