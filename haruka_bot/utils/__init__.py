@@ -211,7 +211,7 @@ def check_proxy():
             raise RuntimeError("加载失败，代理无法连接，请检查 HARUKA_PROXY 后重试")
 
 
-def on_startup():
+async def on_startup():
     """安装依赖并检查当前环境是否满足运行条件"""
     if config.fastapi_reload and sys.platform == "win32":
         raise ImportError("加载失败，Windows 必须设置 FASTAPI_RELOAD=false 才能正常运行 HarukaBot")
