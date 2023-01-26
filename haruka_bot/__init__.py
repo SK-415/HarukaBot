@@ -8,7 +8,7 @@ if isinstance(globals()["__loader__"], PluginLoader):
     config = Config(**global_config.dict())
     from .utils import on_startup
 
-    on_startup()
+    asyncio.create_task(on_startup())
 
     from . import plugins  # noqa: F401
 
