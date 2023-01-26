@@ -1,3 +1,5 @@
+import asyncio
+
 from nonebot import get_driver
 from nonebot.plugin.manager import PluginLoader
 
