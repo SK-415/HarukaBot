@@ -5,7 +5,7 @@ from .config import Config
 
 if isinstance(globals()["__loader__"], PluginLoader):
     global_config = get_driver().config
-    config = Config(**global_config.dict())
+    config = Config.parse_obj(global_config)
     from .utils import on_startup
 
     on_startup()
