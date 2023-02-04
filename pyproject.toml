@@ -1,45 +1,55 @@
-[tool.poetry]
+[project]
+# PEP 621 project metadata
+# See https://www.python.org/dev/peps/pep-0621/
+authors = [
+    {name = "SK-415", email = "2967923486@qq.com"},
+]
+license = {text = "AGPL-3.0-or-later"}
+requires-python = ">=3.8,<4.0"
+dependencies = [
+    "click~=8.1",
+    "httpx~=0.23",
+    "nonebot-adapter-onebot~=2.2",
+    "nonebot-plugin-apscheduler~=0.2",
+    "nonebot2[fastapi]<3,>=2.0.0rc3",
+    "playwright~=1.30",
+    "pydantic~=1.10",
+    "python-dotenv~=0.21",
+    "tortoise-orm[asyncpg]~=0.19",
+    "bilireq~=0.2",
+    "packaging~=23.0",
+    "nonebot-plugin-guild-patch~=0.2",
+]
 name = "haruka-bot"
 version = "1.5.2"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
-authors = ["SK-415 <2967923486@qq.com>"]
-license = "AGPL-3.0-or-later"
 readme = "README.md"
+keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
+
+[project.urls]
 homepage = "https://github.com/SK-415/HarukaBot"
 repository = "https://github.com/SK-415/HarukaBot/tree/master/src/plugins/haruka_bot"
 documentation = "https://github.com/SK-415/HarukaBot#readme"
-keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
-include = ["haruka_bot/web/build/**/*"]
 
-[tool.poetry.scripts]
-hb = 'haruka_bot.__main__:main'
-
-[tool.poetry.dependencies]
-python = "^3.8"
-click = "^8.0.4"
-httpx = "^0.23.1"
-nonebot-adapter-onebot = "^2.1.5"
-nonebot-plugin-apscheduler = "^0.2.0"
-nonebot2 = "^2.0.0rc2"
-playwright = "^1.28.0"
-pydantic = "^1.10.2"
-python-dotenv = ">=0.19.2,<0.22.0"
-tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
-bilireq = "^0.2.3.post0"
-packaging = ">=21.3,<24.0"
-nonebot-plugin-guild-patch = "^0.2.1"
-
-[tool.poetry.group.dev.dependencies]
-nonebot-plugin-gocqhttp = "^0.6.3"
+[tool.pdm.dev-dependencies]
+dev = [
+    "nonebot-plugin-gocqhttp>=0.6.4",
+]
 
 [tool.nonebot]
-plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
+adapters = [
+    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
+]
+plugins = []
+plugin_dirs = ["src/plugins"]
+builtin_plugins = []
 
-# [[tool.poetry.source]]
-# name = "tsinghua"
-# url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
-# default = true
+[project.scripts]
+hb = "haruka_bot.__main__:main"
+
+[tool.pdm.build]
+includes = ["haruka_bot/web/build/**/*"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"

@@ -1,5 +1,6 @@
 # Project ignored
 *.sqlite3
+.pdm.toml
 
 data/
 accounts/
