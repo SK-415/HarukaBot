@@ -408,7 +408,7 @@ summary = "Style preserving TOML library"
 
 [[package]]
 name = "tortoise-orm"
-version = "0.19.2"
+version = "0.19.3"
 requires_python = ">=3.7,<4.0"
 summary = "Easy async ORM for python, built with relations in mind"
 dependencies = [
@@ -420,13 +420,13 @@ dependencies = [
 
 [[package]]
 name = "tortoise-orm"
-version = "0.19.2"
+version = "0.19.3"
 extras = ["asyncpg"]
 requires_python = ">=3.7,<4.0"
 summary = "Easy async ORM for python, built with relations in mind"
 dependencies = [
     "asyncpg",
-    "tortoise-orm==0.19.2",
+    "tortoise-orm==0.19.3",
 ]
 
 [[package]]
@@ -1124,9 +1124,9 @@ content_hash = "sha256:5778a1d07927ecc7c35768a18abd8136e6a6c5b173ab6fca9937830a6
     {url = "https://files.pythonhosted.org/packages/2b/df/971fa5db3250bb022105d17f340339370f73d502e65e687a94ca1a4c4b1f/tomlkit-0.11.6-py3-none-any.whl", hash = "sha256:07de26b0d8cfc18f871aec595fda24d95b08fef89d147caa861939f37230bf4b"},
     {url = "https://files.pythonhosted.org/packages/ff/04/58b4c11430ed4b7b8f1723a5e4f20929d59361e9b17f0872d69681fd8ffd/tomlkit-0.11.6.tar.gz", hash = "sha256:71b952e5721688937fb02cf9d354dbcf0785066149d2855e44531ebdd2b65d73"},
 ]
-"tortoise-orm 0.19.2" = [
-    {url = "https://files.pythonhosted.org/packages/8a/f5/a933b1ca84684d3b5a2b36ff765803879e956335737c72b96fea5a111dde/tortoise_orm-0.19.2-py3-none-any.whl", hash = "sha256:a99b8c9f42d5cd49493c70471b5c9a5df8ecf49cc624f2f41b9dc75bba993ac5"},
-    {url = "https://files.pythonhosted.org/packages/ef/fa/18ca86cafc210358b99ab227980647d6c7c12aaef70d9126b83958012a97/tortoise-orm-0.19.2.tar.gz", hash = "sha256:bff4d79abfca7fb805972bb2438e8e0cd2e6590bc2cfd7593a803518a027bbf0"},
+"tortoise-orm 0.19.3" = [
+    {url = "https://files.pythonhosted.org/packages/58/cf/286eb8997113dd04a61c430b5a0d3b2aef9ee51031440d18357bf21740a9/tortoise_orm-0.19.3-py3-none-any.whl", hash = "sha256:9e368820c70a0866ef9c521d43aa5503485bd7a20a561edc0933b7b0f7036fbc"},
+    {url = "https://files.pythonhosted.org/packages/8a/47/4369c766243067776b4899b1041281d0fc2452b67a0d5a4b7ac72f3e962f/tortoise_orm-0.19.3.tar.gz", hash = "sha256:ca574bca5191f55608f9013314b1f5d1c6ffd4165a1fcc2f60f6c902f529b3b6"},
 ]
 "typing-extensions 4.4.0" = [
     {url = "https://files.pythonhosted.org/packages/0b/8e/f1a0a5a76cfef77e1eb6004cb49e5f8d72634da638420b9ea492ce8305e8/typing_extensions-4.4.0-py3-none-any.whl", hash = "sha256:16fa4864408f655d35ec496218b85f79b3437c829e93320c7c9215ccfd92489e"},
