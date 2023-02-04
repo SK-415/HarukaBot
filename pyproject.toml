@@ -40,15 +40,15 @@ dev = [
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = []
-plugin_dirs = ["src/plugins"]
+plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
+plugin_dirs = []
 builtin_plugins = []
 
 [project.scripts]
 hb = "haruka_bot.__main__:main"
 
 [tool.pdm.build]
-includes = ["haruka_bot/web/build/**/*"]
+# includes = ["haruka_bot/web/build/**/*"]
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
