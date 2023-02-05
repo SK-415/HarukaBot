@@ -5,7 +5,6 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from nonebot import get_driver
 from nonebot.log import logger
 from playwright.__main__ import main
 from playwright.async_api import Browser, async_playwright
@@ -27,8 +26,9 @@ async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
 
 
 async def get_browser() -> Browser:
-    # TODO 重启浏览器
-    assert _browser
+    global _browser
+    if _browser is None or not _browser.is_connected():
+        _browser = await init_browser()
     return _browser
 
 
@@ -190,6 +190,3 @@ async def check_playwright_env():
             "加载失败，Playwright 依赖不全，"
             "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
-
-
-get_driver().on_startup(init_browser)
