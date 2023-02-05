@@ -216,13 +216,6 @@ def on_startup():
     """安装依赖并检查当前环境是否满足运行条件"""
     if config.fastapi_reload and sys.platform == "win32":
         raise ImportError("加载失败，Windows 必须设置 FASTAPI_RELOAD=false 才能正常运行 HarukaBot")
-    try:
-        from greenlet import _greenlet  # noqa: F401
-    except ImportError:
-        raise ImportError(
-            "加载失败，请先安装 Visual C++ Redistributable: "
-            "https://aka.ms/vs/17/release/vc_redist.x64.exe"
-        )
     try:  # 如果开启 realod 只在第一次运行
         asyncio.get_running_loop()
     except RuntimeError:
