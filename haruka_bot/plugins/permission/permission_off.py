@@ -1,13 +1,12 @@
 from typing import Union
 
-from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.permission import SUPERUSER
 from nonebot_plugin_guild_patch import GuildMessageEvent
 
 from ...database import DB as db
-from ...utils import GUILD_ADMIN, group_only, to_me
+from ...utils import GUILD_ADMIN, group_only, on_command, to_me
 
 permission_off = on_command(
     "关闭权限",

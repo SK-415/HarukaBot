@@ -5,6 +5,7 @@ from typing import Union
 
 import httpx
 import nonebot
+from nonebot import on_command as _on_command
 from nonebot import require
 from nonebot.adapters.onebot.v11 import (
     ActionFailed,
@@ -233,6 +234,10 @@ def on_startup():
         # 创建数据存储目录
         if not Path(get_path()).is_dir():
             Path(get_path()).mkdir(parents=True)
+
+
+def on_command(cmd, *args, **kwargs):
+    return _on_command(config.haruka_command_prefix + cmd, *args, **kwargs)
 
 
 PROXIES = {"all://": config.haruka_proxy}

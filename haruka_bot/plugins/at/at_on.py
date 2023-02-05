@@ -1,6 +1,5 @@
 from typing import Union
 
-from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import GroupMessageEvent
 from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
 from nonebot.params import ArgPlainText
@@ -9,7 +8,15 @@ from nonebot_plugin_guild_patch import GuildMessageEvent
 
 from ... import config
 from ...database import DB as db
-from ...utils import GUILD_ADMIN, get_type_id, group_only, handle_uid, to_me, uid_check
+from ...utils import (
+    GUILD_ADMIN,
+    get_type_id,
+    group_only,
+    handle_uid,
+    on_command,
+    to_me,
+    uid_check,
+)
 
 at_on = on_command(
     "开启全体",

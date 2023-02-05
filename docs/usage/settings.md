@@ -138,6 +138,17 @@ HARUKA_DYNAMIC_TIMEOUT=30
 HARUKA_DYNAMIC_FONT="Microsoft YaHei"
 ```
 
+## HARUKA_COMMAND_PREFIX
+
+默认值：""
+
+添加命令前缀，所有 HarukaBot 的命令需要带上前缀才能触发。
+
+```json
+# 使用方式：“hb帮助”、“hb关注列表”
+HARUKA_COMMAND_PREFIX="hb"
+```
+
 ## HARUKA_GUILD_ADMIN_ROLES
 
 默认值：["管理员", "频道主"]
