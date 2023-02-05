@@ -16,9 +16,9 @@ class Config(BaseSettings):
     haruka_dynamic_interval: int = 0
     haruka_dynamic_at: bool = False
     haruka_screenshot_style: str = "mobile"
-    haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"
-    haruka_dynamic_font_source: str = "system"
     haruka_dynamic_timeout: int = 10
+    haruka_dynamic_font_source: str = "system"
+    haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"
     # 频道管理员身份组
     haruka_guild_admin_roles: List[str] = ["频道主", "管理员"]
 

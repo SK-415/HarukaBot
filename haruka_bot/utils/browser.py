@@ -54,7 +54,11 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
     )
     try:
         await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
-        await page.goto(url, wait_until="networkidle", timeout=10000)
+        await page.goto(
+            url,
+            wait_until="networkidle",
+            timeout=config.haruka_dynamic_timeout * 1000,
+        )
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
             return None
@@ -124,7 +128,9 @@ async def get_dynamic_screenshot_pc(dynamic_id):
     )
     page = await context.new_page()
     try:
-        await page.goto(url, wait_until="networkidle", timeout=10000)
+        await page.goto(
+            url, wait_until="networkidle", timeout=config.haruka_dynamic_timeout * 1000
+        )
         # 动态被删除或者进审核了
         if page.url == "https://www.bilibili.com/404":
             return None

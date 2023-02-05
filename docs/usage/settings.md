@@ -46,16 +46,6 @@ HARUKA_DIR="./data/"
 Haruka_TO_ME=False
 ```
 
-## HARUKA_GUILD_ADMIN_ROLES
-
-默认值：["管理员", "频道主"]
-
-在频道里使用命令的身份组，可以写入多个身份组
-
-```json
-HARUKA_GUILD_ADMIN_ROLES=["Haruka", "频道主"]
-```
-
 ## HARUKA_LIVE_OFF_NOTIFY
 
 默认值：False
@@ -125,4 +115,35 @@ HARUKA_DYNAMIC_AT=True
 
 ```yml
 HARUKA_SCREENSHOT_STYLE=pc
+```
+
+## HARUKA_DYNAMIC_TIMEOUT
+
+默认值：10
+
+动态加载超时，单位秒。
+网络不好一直超时请调大此数值。
+
+```json
+HARUKA_DYNAMIC_TIMEOUT=30
+```
+
+## HARUKA_DYNAMIC_FONT
+
+默认值："Noto Sans CJK SC"
+
+自定义动态截图使用的字体。只能使用系统中已经安装的字体。
+
+```json
+HARUKA_DYNAMIC_FONT="Microsoft YaHei"
+```
+
+## HARUKA_GUILD_ADMIN_ROLES
+
+默认值：["管理员", "频道主"]
+
+在频道里使用命令的身份组，可以写入多个身份组
+
+```json
+HARUKA_GUILD_ADMIN_ROLES=["Haruka", "频道主"]
 ```
