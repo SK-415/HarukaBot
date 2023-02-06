@@ -7,10 +7,9 @@ from typing import Optional
 
 from nonebot.log import logger
 from playwright.__main__ import main
-from playwright.async_api import Browser
 
 try:
-    from playwright.async_api import async_playwright
+    from playwright.async_api import Browser, async_playwright
 except ImportError:
     raise ImportError(
         "加载失败，请先安装 Visual C++ Redistributable: "
