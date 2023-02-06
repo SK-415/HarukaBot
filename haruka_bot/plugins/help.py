@@ -1,7 +1,6 @@
-from nonebot import on_command
 from nonebot.matcher import matchers
 
-from ..utils import to_me
+from ..utils import on_command, to_me
 from ..version import __version__
 
 help = on_command("帮助", rule=to_me(), priority=5)

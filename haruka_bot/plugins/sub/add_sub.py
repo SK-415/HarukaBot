@@ -1,6 +1,5 @@
 from bilireq.exceptions import ResponseCodeError
 from bilireq.user import get_user_info
-from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import ArgPlainText
 from nonebot_plugin_guild_patch import GuildMessageEvent
@@ -10,6 +9,7 @@ from ...utils import (
     PROXIES,
     get_type_id,
     handle_uid,
+    on_command,
     permission_check,
     to_me,
     uid_check,

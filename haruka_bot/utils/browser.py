@@ -5,10 +5,16 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from nonebot import get_driver
 from nonebot.log import logger
 from playwright.__main__ import main
-from playwright.async_api import Browser, async_playwright
+
+try:
+    from playwright.async_api import Browser, async_playwright
+except ImportError:
+    raise ImportError(
+        "加载失败，请先安装 Visual C++ Redistributable: "
+        "https://aka.ms/vs/17/release/vc_redist.x64.exe"
+    )
 
 from .. import config
 from .fonts_provider import fill_font
@@ -27,8 +33,9 @@ async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
 
 
 async def get_browser() -> Browser:
-    # TODO 重启浏览器
-    assert _browser
+    global _browser
+    if _browser is None or not _browser.is_connected():
+        _browser = await init_browser()
     return _browser
 
 
@@ -54,7 +61,11 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
     )
     try:
         await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
-        await page.goto(url, wait_until="networkidle", timeout=10000)
+        await page.goto(
+            url,
+            wait_until="networkidle",
+            timeout=config.haruka_dynamic_timeout * 1000,
+        )
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
             return None
@@ -124,7 +135,9 @@ async def get_dynamic_screenshot_pc(dynamic_id):
     )
     page = await context.new_page()
     try:
-        await page.goto(url, wait_until="networkidle", timeout=10000)
+        await page.goto(
+            url, wait_until="networkidle", timeout=config.haruka_dynamic_timeout * 1000
+        )
         # 动态被删除或者进审核了
         if page.url == "https://www.bilibili.com/404":
             return None
@@ -190,6 +203,3 @@ async def check_playwright_env():
             "加载失败，Playwright 依赖不全，"
             "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
-
-
-get_driver().on_startup(init_browser)
