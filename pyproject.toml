@@ -21,7 +21,7 @@ dependencies = [
     "nonebot-plugin-guild-patch~=0.2",
 ]
 name = "haruka-bot"
-version = "1.5.3"
+version = "1.5.3.post1"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 readme = "README.md"
 keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
