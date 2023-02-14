@@ -5,7 +5,6 @@ from ...database import DB as db
 from ...utils import get_type_id, on_command, permission_check, to_me
 
 sub_list = on_command("关注列表", aliases={"主播列表"}, rule=to_me(), priority=5)
-print(sub_list)
 sub_list.__doc__ = """关注列表"""
 
 sub_list.handle()(permission_check)
