@@ -1,6 +1,4 @@
-from importlib.metadata import version
-
 from packaging.version import Version
 
-__version__ = version("haruka-bot")
+__version__ = "1.5.3.post1"
 VERSION = Version(__version__)

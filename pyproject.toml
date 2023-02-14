@@ -20,8 +20,8 @@ dependencies = [
     "packaging~=23.0",
     "nonebot-plugin-guild-patch~=0.2",
 ]
+dynamic = ["version"]
 name = "haruka-bot"
-version = "1.5.3.post1"
 description = "Push dynamics and live informations from bilibili to QQ. Based on nonebot2."
 readme = "README.md"
 keywords = ["nonebot", "nonebot2", "qqbot", "bilibili", "bot"]
@@ -46,6 +46,10 @@ builtin_plugins = []
 
 [project.scripts]
 hb = "haruka_bot.__main__:main"
+
+[tool.pdm.version]
+source = "file"
+path = "haruka_bot/version.py"
 
 [tool.pdm.build]
 # includes = ["haruka_bot/web/build/**/*"]
