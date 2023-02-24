@@ -45,6 +45,10 @@ class DB:
         await cls.update_uid_list()
 
     @classmethod
+    async def close(cls):
+        await connections.close_all()
+
+    @classmethod
     async def get_user(cls, **kwargs):
         """获取 UP 主信息"""
         return await User.get(**kwargs).first()
@@ -314,4 +318,4 @@ class DB:
 
 
 get_driver().on_startup(DB.init)
-get_driver().on_shutdown(connections.close_all)
+get_driver().on_shutdown(DB.close)
