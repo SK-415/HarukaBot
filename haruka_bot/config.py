@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from nonebot import get_driver
 from pydantic import BaseSettings, validator
 from pydantic.fields import ModelField
 
@@ -32,3 +33,7 @@ class Config(BaseSettings):
 
     class Config:
         extra = "ignore"
+
+
+global_config = get_driver().config
+plugin_config = Config.parse_obj(global_config)
