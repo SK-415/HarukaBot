@@ -168,6 +168,12 @@ version = "1.0.4"
 summary = "MessagePack serializer"
 
 [[package]]
+name = "msvc-runtime"
+version = "14.34.31931"
+requires_python = ">=3.5"
+summary = "Install the Microsoft™ Visual C++™ runtime DLLs to the sys.prefix and Scripts directories"
+
+[[package]]
 name = "multidict"
 version = "6.0.4"
 requires_python = ">=3.7"
@@ -518,7 +524,7 @@ dependencies = [
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:5778a1d07927ecc7c35768a18abd8136e6a6c5b173ab6fca9937830a63ee32eb"
+content_hash = "sha256:072b0bdfbd8bbf0c313ce8abf8cc88c08c9b1e30b8a2d6fff9dfce40a2ad3115"
 
 [metadata.files]
 "aiosqlite 0.17.0" = [
@@ -842,6 +848,18 @@ content_hash = "sha256:5778a1d07927ecc7c35768a18abd8136e6a6c5b173ab6fca9937830a6
     {url = "https://files.pythonhosted.org/packages/ec/ff/92af8194c12fc46da6dd56e4e22bdb7bdd297c451bd76183b0ec496196ab/msgpack-1.0.4-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:81fc7ba725464651190b196f3cd848e8553d4d510114a954681fd0b9c479d7e1"},
     {url = "https://files.pythonhosted.org/packages/ef/3f/f20ed47d3a356a556edbd8f9d0515a5a111ffde1e24213a64da948d823a2/msgpack-1.0.4-cp310-cp310-win_amd64.whl", hash = "sha256:4dea20515f660aa6b7e964433b1808d098dcfcabbebeaaad240d11f909298075"},
     {url = "https://files.pythonhosted.org/packages/f4/f8/225ca22971690c8b530a2f5344e8cf4d13d601c3817eded87ecbb3e644b8/msgpack-1.0.4-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:545e3cf0cf74f3e48b470f68ed19551ae6f9722814ea969305794645da091236"},
+]
+"msvc-runtime 14.34.31931" = [
+    {url = "https://files.pythonhosted.org/packages/0b/ea/f9153561935e0065bc40bfa3de67ad888d569ee9671a5fe79310c4970816/msvc_runtime-14.34.31931-cp311-cp311-win_arm64.whl", hash = "sha256:9c4b38d6dca0dd7384397a4842ba6f7522bb20e00621bfeb36ab0df53f042439"},
+    {url = "https://files.pythonhosted.org/packages/20/dc/ad48d46ee4e019430e56a4c3754490888c63f9340c74fe3a04f299847c3e/msvc_runtime-14.34.31931-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:6a26b6b95ae303c955b3071520e573eb55b4f29ef9a194bf05144b217437660c"},
+    {url = "https://files.pythonhosted.org/packages/4b/d8/5b7d9d028da69b47b822eb0ad04292d58fd21b243fe15545f1ff51cc07ba/msvc_runtime-14.34.31931-cp39-cp39-win_amd64.whl", hash = "sha256:a7a91f34f2f3e8ad24f21991afdf6c45705569ecdf03b8c85a7b4011d827fe50"},
+    {url = "https://files.pythonhosted.org/packages/61/59/43e1e31a99caf81c4bda78cce8c209244a01f0b7f631f7c4b5449087b7d9/msvc_runtime-14.34.31931-cp311-cp311-win32.whl", hash = "sha256:7b62b7c64ea3b65f4142a08779323c5f19f7f8b4ee00d5e9040e6cf6a75852c0"},
+    {url = "https://files.pythonhosted.org/packages/76/b8/c28febefb5fe63245f2e5ad569d4fcc19a883aad14e91dab8c022c2248c2/msvc_runtime-14.34.31931-cp39-cp39-win32.whl", hash = "sha256:8660b55a592faab37a4d88ef20dbc3c7102e6496011ca09a326d3ca7a13ee7f0"},
+    {url = "https://files.pythonhosted.org/packages/84/70/bf7f0649c60fb1f4b722131999d997a690fe90606f32a60f7cad1c51fd97/msvc_runtime-14.34.31931-cp310-cp310-win_amd64.whl", hash = "sha256:6ca55f411426027fc31ea4e61325a4f2fd44978aa669fb8378e19363935ea10e"},
+    {url = "https://files.pythonhosted.org/packages/de/1d/cdbe60cd53775ca27aa6af4b17abd0bb9af032869a6ee4e8274dfaea0610/msvc_runtime-14.34.31931-cp311-cp311-win_amd64.whl", hash = "sha256:21a7d75e98e8197e708b1ba95bce35cdc351f304e7f1326ae9f427d43fd9a728"},
+    {url = "https://files.pythonhosted.org/packages/df/42/b391309aa0b4c72235cd88713d44a1e44a50f499d19bf1b6f63d3dcea935/msvc_runtime-14.34.31931-cp38-cp38-win32.whl", hash = "sha256:734c6961564f0d28fcdcb807e5802604a52d72bfaabe9908013371d0c4e54101"},
+    {url = "https://files.pythonhosted.org/packages/ec/3c/94c34a56dc50d8f6a246d42c411385c6e63f49cf9045554849cd96b0ac73/msvc_runtime-14.34.31931-cp310-cp310-win32.whl", hash = "sha256:be06bd2b66aa4f64f79452b312a49044c07c51f72159a7ebda3bdfbc3e2a0481"},
+    {url = "https://files.pythonhosted.org/packages/f5/98/494d94d1bedc7466f03f1d3696c542d1663fb23c4b1e5b88ef40e56818fc/msvc_runtime-14.34.31931-cp38-cp38-win_amd64.whl", hash = "sha256:0ab774f87001a9707f6a538b0af0d17c6eb417db33ca2b43c286becf01e05c6d"},
 ]
 "multidict 6.0.4" = [
     {url = "https://files.pythonhosted.org/packages/00/bb/1cdffe9b1ab01830bc9255a64524c34b71c20a4affe5d1000b223a41698d/multidict-6.0.4-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:ddd3915998d93fbcd2566ddf9cf62cdb35c9e093075f862935573d265cf8f65d"},
