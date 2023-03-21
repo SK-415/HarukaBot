@@ -7,10 +7,10 @@
   "author": "SK-415 <2967923486@qq.com>",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@vuepress/plugin-docsearch": "^2.0.0-beta.26",
-    "@vuepress/plugin-pwa": "^2.0.0-beta.26",
-    "@vuepress/plugin-shiki": "^2.0.0-beta.26",
-    "vuepress-vite": "^2.0.0-beta.26"
+    "@vuepress/plugin-docsearch": "^2.0.0-beta.61",
+    "@vuepress/plugin-pwa": "^2.0.0-beta.61",
+    "@vuepress/plugin-shiki": "^2.0.0-beta.61",
+    "vuepress-vite": "^2.0.0-beta.61"
   },
   "scripts": {
     "dev": "vuepress dev",

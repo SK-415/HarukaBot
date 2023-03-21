@@ -1,13 +1,19 @@
-module.exports = {
+import { docsearchPlugin } from '@vuepress/plugin-docsearch'
+import { pwaPlugin } from '@vuepress/plugin-pwa'
+import { shikiPlugin } from '@vuepress/plugin-shiki'
+import { defaultTheme } from 'vuepress-vite'
+
+
+export default {
   lang: 'zh-CN',
   title: 'HarukaBot',
   description: '哔哩哔哩消息推送 QQ 机器人',
   head: [
     ['link', { rel: 'icon', href: '/logo.png' }],
-    ['link', {rel: 'manifest', href: '/manifest.json'}],
-    ['meta', { name: 'theme-color', content: '#f5827e'}]
+    ['link', { rel: 'manifest', href: '/manifest.json' }],
+    ['meta', { name: 'theme-color', content: '#f5827e' }]
   ],
-  themeConfig: {
+  theme: defaultTheme({
     logo: '/logo.png',
     repo: 'SK-415/HarukaBot',
     docsDir: 'docs',
@@ -24,7 +30,7 @@ module.exports = {
     navbar: [
       // { text: '主页', link: '/' },
       { text: '安装', link: '/install/' },
-      { text: '小小白白话文', link: '/level-0/'},
+      { text: '小小白白话文', link: '/level-0/' },
       { text: '功能列表', link: '/usage/' },
       { text: '常见问题', link: '/faq/' },
       { text: '关于', link: '/about/' },
@@ -50,7 +56,7 @@ module.exports = {
           ]
         }
       ],
-      '/level-0/':[
+      '/level-0/': [
         {
           title: '小小白白话文',
           children: [
@@ -63,34 +69,18 @@ module.exports = {
         }
       ],
     },
-  },
+  }),
   plugins: [
-    [
-      '@vuepress/plugin-pwa',
-      {
-        skipWaiting: true,
-      }
-    ],
-    // [
-    //   '@vuepress/plugin-pwa-popup',
-    //   {
-    //     message: '发现新内容可用',
-    //     buttonText: '刷新',
-    //   }
-    // ],
-    [
-      '@vuepress/plugin-shiki',
-      {
-        theme: 'dark-plus',
-      }
-    ],
-    [
-      '@vuepress/plugin-docsearch',
-      {
-        apiKey: 'b42f3ac623cf606bb9ea15b3e8c888d0',
-        indexName: 'haruka-bot',
-        placeholder: '搜索文档',
-      }
-    ]
+    pwaPlugin({
+      skipWaiting: true,
+    }),
+    shikiPlugin({
+      theme: 'dark-plus',
+    }),
+    docsearchPlugin({
+      apiKey: 'b42f3ac623cf606bb9ea15b3e8c888d0',
+      indexName: 'haruka-bot',
+      placeholder: '搜索文档',
+    })
   ]
 }
