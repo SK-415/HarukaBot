@@ -300,7 +300,7 @@ class DB:
         for uid in dynamic_offset_keys - dynamic_uids:
             del dynamic_offset[uid]
         for uid in dynamic_uids - dynamic_offset_keys:
-            dynamic_offset[uid] = -1
+            dynamic_offset[uid] = [-1, ]
 
     async def backup(self):
         """备份数据库"""

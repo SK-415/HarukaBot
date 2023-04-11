@@ -48,27 +48,27 @@ async def dy_sched():
         raise
 
     if not dynamics:  # 没发过动态
-        if uid in offset and offset[uid] == -1:  # 不记录会导致第一次发动态不推送
-            offset[uid] = 0
+        if uid in offset and offset[uid] == [-1, ]:  # 不记录会导致第一次发动态不推送
+            offset[uid].append(0)
         return
     # 更新昵称
     name = dynamics[0].modules[0].module_author.author.name
 
+    dynamics.sort(key=lambda x: int(x.extend.dyn_id_str))  # 动态从旧到新排列
+
     if uid not in offset:  # 已删除
         return
-    elif offset[uid] == -1:  # 第一次爬取
+    elif offset[uid] == [-1, ]:  # 第一次爬取
         if len(dynamics) == 1:  # 只有一条动态
-            offset[uid] = int(dynamics[0].extend.dyn_id_str)
-        else:  # 第一个可能是置顶动态，但置顶也可能是最新一条，所以取前两条的最大值
-            offset[uid] = max(
-                int(dynamics[0].extend.dyn_id_str), int(dynamics[1].extend.dyn_id_str)
-            )
+            offset[uid].append(int(dynamics[0].extend.dyn_id_str))
+        else:
+            offset[uid] = [int(x.extend.dyn_id_str) for x in dynamics]  # 记录前12条动态id
         return
 
     dynamic = None
-    for dynamic in dynamics[::-1]:  # 动态从旧到新排列
+    for dynamic in dynamics:
         dynamic_id = int(dynamic.extend.dyn_id_str)
-        if dynamic_id > offset[uid]:
+        if (dynamic_id not in offset[uid]) and (dynamic_id > offset[uid][1]):  # 和记录中第二旧的动态比较，排除置顶变动影响
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
             url = f"https://t.bilibili.com/{dynamic_id}"
             image = await get_dynamic_screenshot(dynamic_id)
@@ -101,10 +101,14 @@ async def dy_sched():
                     at=bool(sets.at) and plugin_config.haruka_dynamic_at,
                 )
 
-            offset[uid] = dynamic_id
+            offset[uid].append(dynamic_id)
+            offset[uid].sort()
 
     if dynamic:
         await db.update_user(uid, name)
+
+    if len(offset[uid]) > 12:  # 删除已不在前12条的动态id，防止记录过多拖慢运行速度
+        offset[uid] = offset[uid][1:]
 
 
 def dynamic_lisener(event):
