@@ -2,7 +2,7 @@ from bilireq.live import get_rooms_info_by_uids
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
-from ... import config
+from ...config import plugin_config
 from ...database import DB as db
 from ...utils import PROXIES, safe_send, scheduler
 
@@ -10,7 +10,7 @@ status = {}
 
 
 @scheduler.scheduled_job(
-    "interval", seconds=config.haruka_live_interval, id="live_sched"
+    "interval", seconds=plugin_config.haruka_live_interval, id="live_sched"
 )
 async def live_sched():
     """直播推送"""
@@ -47,7 +47,7 @@ async def live_sched():
             )
         else:  # 下播
             logger.info(f"检测到下播：{name}（{uid}）")
-            if not config.haruka_live_off_notify:  # 没开下播推送
+            if not plugin_config.haruka_live_off_notify:  # 没开下播推送
                 continue
             live_msg = f"{name} 下播了"
 

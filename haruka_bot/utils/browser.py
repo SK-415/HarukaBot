@@ -9,14 +9,14 @@ from nonebot.log import logger
 from playwright.__main__ import main
 from playwright.async_api import Browser, async_playwright
 
-from .. import config
+from ..config import plugin_config
 from .fonts_provider import fill_font
 
 _browser: Optional[Browser] = None
 mobile_js = Path(__file__).parent.joinpath("mobile.js")
 
 
-async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
+async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> Browser:
     if proxy:
         kwargs["proxy"] = {"server": proxy}
     global _browser
@@ -32,7 +32,9 @@ async def get_browser() -> Browser:
     return _browser
 
 
-async def get_dynamic_screenshot(dynamic_id, style=config.haruka_screenshot_style):
+async def get_dynamic_screenshot(
+    dynamic_id, style=plugin_config.haruka_screenshot_style
+):
     """获取动态截图"""
     if style.lower() == "mobile":
         return await get_dynamic_screenshot_mobile(dynamic_id)
@@ -57,7 +59,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         await page.goto(
             url,
             wait_until="networkidle",
-            timeout=config.haruka_dynamic_timeout * 1000,
+            timeout=plugin_config.haruka_dynamic_timeout * 1000,
         )
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
@@ -76,9 +78,9 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         await page.add_script_tag(path=mobile_js)
 
         await page.evaluate(
-            f'setFont("{config.haruka_dynamic_font}", '
-            f'"{config.haruka_dynamic_font_source}")'
-            if config.haruka_dynamic_font
+            f'setFont("{plugin_config.haruka_dynamic_font}", '
+            f'"{plugin_config.haruka_dynamic_font_source}")'
+            if plugin_config.haruka_dynamic_font
             else "setFont()"
         )
         await page.wait_for_function("getMobileStyle()")
@@ -87,7 +89,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         await page.wait_for_load_state("domcontentloaded")
 
         await page.wait_for_timeout(
-            200 if config.haruka_dynamic_font_source == "remote" else 50
+            200 if plugin_config.haruka_dynamic_font_source == "remote" else 50
         )
 
         # 判断字体是否加载完成
@@ -129,7 +131,9 @@ async def get_dynamic_screenshot_pc(dynamic_id):
     page = await context.new_page()
     try:
         await page.goto(
-            url, wait_until="networkidle", timeout=config.haruka_dynamic_timeout * 1000
+            url,
+            wait_until="networkidle",
+            timeout=plugin_config.haruka_dynamic_timeout * 1000,
         )
         # 动态被删除或者进审核了
         if page.url == "https://www.bilibili.com/404":
@@ -156,7 +160,7 @@ def install():
 
     def restore_env():
         del os.environ["PLAYWRIGHT_DOWNLOAD_HOST"]
-        if config.haruka_proxy:
+        if plugin_config.haruka_proxy:
             del os.environ["HTTPS_PROXY"]
         if original_proxy is not None:
             os.environ["HTTPS_PROXY"] = original_proxy
@@ -164,8 +168,8 @@ def install():
     logger.info("检查 Chromium 更新")
     sys.argv = ["", "install", "chromium"]
     original_proxy = os.environ.get("HTTPS_PROXY")
-    if config.haruka_proxy:
-        os.environ["HTTPS_PROXY"] = config.haruka_proxy
+    if plugin_config.haruka_proxy:
+        os.environ["HTTPS_PROXY"] = plugin_config.haruka_proxy
     os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://npmmirror.com/mirrors/playwright/"
     success = False
     try:

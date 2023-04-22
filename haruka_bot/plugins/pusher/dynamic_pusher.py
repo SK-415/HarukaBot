@@ -14,7 +14,7 @@ from grpc.aio import AioRpcError
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
-from ... import config
+from ...config import plugin_config
 from ...database import DB as db
 from ...database import dynamic_offset as offset
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
@@ -36,7 +36,9 @@ async def dy_sched():
         # 获取 UP 最新动态列表
         dynamics = (
             await grpc_get_user_dynamics(
-                uid, timeout=config.haruka_dynamic_timeout, proxy=config.haruka_proxy
+                uid,
+                timeout=plugin_config.haruka_dynamic_timeout,
+                proxy=plugin_config.haruka_proxy,
             )
         ).list
     except AioRpcError as e:
@@ -96,7 +98,7 @@ async def dy_sched():
                     send_type=sets.type,
                     type_id=sets.type_id,
                     message=message,
-                    at=bool(sets.at) and config.haruka_dynamic_at,
+                    at=bool(sets.at) and plugin_config.haruka_dynamic_at,
                 )
 
             offset[uid] = dynamic_id
@@ -115,7 +117,7 @@ def dynamic_lisener(event):
         )
 
 
-if config.haruka_dynamic_interval == 0:
+if plugin_config.haruka_dynamic_interval == 0:
     scheduler.add_listener(
         dynamic_lisener,
         EVENT_JOB_EXECUTED
@@ -125,5 +127,8 @@ if config.haruka_dynamic_interval == 0:
     )
 else:
     scheduler.add_job(
-        dy_sched, "interval", seconds=config.haruka_dynamic_interval, id="dynamic_sched"
+        dy_sched,
+        "interval",
+        seconds=plugin_config.haruka_dynamic_interval,
+        id="dynamic_sched",
     )
