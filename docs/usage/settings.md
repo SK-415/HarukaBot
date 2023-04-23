@@ -48,7 +48,7 @@ Haruka_TO_ME=False
 
 ## HARUKA_GUILD_ADMIN_ROLES
 
-默认值：["管理员", "频道主"]
+默认值：["超级管理员", "频道主"]
 
 在频道里使用命令的身份组，可以写入多个身份组
 
