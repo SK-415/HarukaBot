@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from nonebot import get_driver
 from pydantic import BaseSettings, validator
 from pydantic.fields import ModelField
 
@@ -16,6 +17,10 @@ class Config(BaseSettings):
     haruka_dynamic_interval: int = 0
     haruka_dynamic_at: bool = False
     haruka_screenshot_style: str = "mobile"
+    haruka_dynamic_timeout: int = 30
+    haruka_dynamic_font_source: str = "system"
+    haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"
+    haruka_command_prefix: str = ""
     # 频道管理员身份组
     haruka_guild_admin_roles: List[str] = ["频道主", "超级管理员"]
 
@@ -28,3 +33,7 @@ class Config(BaseSettings):
 
     class Config:
         extra = "ignore"
+
+
+global_config = get_driver().config
+plugin_config = Config.parse_obj(global_config)

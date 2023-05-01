@@ -22,15 +22,31 @@ class DB:
     @classmethod
     async def init(cls):
         """初始化数据库"""
-        from . import models  # noqa: F401
+        config = {
+            "connections": {
+                # "haruka_bot": {
+                #     "engine": "tortoise.backends.sqlite",
+                #     "credentials": {"file_path": get_path("data.sqlite3")},
+                # },
+                "haruka_bot": f"sqlite://{get_path('data.sqlite3')}"
+            },
+            "apps": {
+                "haruka_bot_app": {
+                    "models": ["haruka_bot.database.models"],
+                    "default_connection": "haruka_bot",
+                }
+            },
+        }
 
-        await Tortoise.init(
-            db_url=f"sqlite://{get_path('data.sqlite3')}",
-            modules={"models": [locals()["models"]]},
-        )
+        await Tortoise.init(config)
+
         await Tortoise.generate_schemas()
         await cls.migrate()
         await cls.update_uid_list()
+
+    @classmethod
+    async def close(cls):
+        await connections.close_all()
 
     @classmethod
     async def get_user(cls, **kwargs):
@@ -302,4 +318,4 @@ class DB:
 
 
 get_driver().on_startup(DB.init)
-get_driver().on_shutdown(connections.close_all)
+get_driver().on_shutdown(DB.close)

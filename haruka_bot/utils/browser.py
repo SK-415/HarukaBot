@@ -1,18 +1,22 @@
+import asyncio
 import os
+import re
 import sys
+from pathlib import Path
 from typing import Optional
 
-from nonebot import get_driver
 from nonebot.log import logger
 from playwright.__main__ import main
 from playwright.async_api import Browser, async_playwright
 
-from .. import config
+from ..config import plugin_config
+from .fonts_provider import fill_font
 
 _browser: Optional[Browser] = None
+mobile_js = Path(__file__).parent.joinpath("mobile.js")
 
 
-async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
+async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> Browser:
     if proxy:
         kwargs["proxy"] = {"server": proxy}
     global _browser
@@ -22,11 +26,15 @@ async def init_browser(proxy=config.haruka_proxy, **kwargs) -> Browser:
 
 
 async def get_browser() -> Browser:
-    assert _browser
+    global _browser
+    if _browser is None or not _browser.is_connected():
+        _browser = await init_browser()
     return _browser
 
 
-async def get_dynamic_screenshot(dynamic_id, style=config.haruka_screenshot_style):
+async def get_dynamic_screenshot(
+    dynamic_id, style=plugin_config.haruka_screenshot_style
+):
     """获取动态截图"""
     if style.lower() == "mobile":
         return await get_dynamic_screenshot_mobile(dynamic_id)
@@ -44,25 +52,53 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
             "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
             "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
         ),
-        viewport={"width": 360, "height": 780},
+        viewport={"width": 460, "height": 780},
     )
     try:
-        await page.goto(url, wait_until="networkidle", timeout=10000)
+        await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
+        await page.goto(
+            url,
+            wait_until="networkidle",
+            timeout=plugin_config.haruka_dynamic_timeout * 1000,
+        )
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
             return None
-        await page.add_script_tag(
-            content=
-            # 去除打开app按钮
-            "document.getElementsByClassName('m-dynamic-float-openapp').forEach(v=>v.remove());"
-            # 去除关注按钮
-            "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
-            # 修复字体与换行问题
-            "const dyn=document.getElementsByClassName('dyn-card')[0];"
-            "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
-            "dyn.style.overflowWrap='break-word'"
+        # await page.add_script_tag(
+        #     content=
+        #     # 去除打开app按钮
+        #     "document.getElementsByClassName('m-dynamic-float-openapp').forEach(v=>v.remove());"
+        #     # 去除关注按钮
+        #     "document.getElementsByClassName('dyn-header__following').forEach(v=>v.remove());"
+        #     # 修复字体与换行问题
+        #     "const dyn=document.getElementsByClassName('dyn-card')[0];"
+        #     "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
+        #     "dyn.style.overflowWrap='break-word'"
+        # )
+        await page.add_script_tag(path=mobile_js)
+
+        await page.evaluate(
+            f'setFont("{plugin_config.haruka_dynamic_font}", '
+            f'"{plugin_config.haruka_dynamic_font_source}")'
+            if plugin_config.haruka_dynamic_font
+            else "setFont()"
         )
-        card = await page.query_selector(".dyn-card")
+        await page.wait_for_function("getMobileStyle()")
+
+        await page.wait_for_load_state("networkidle")
+        await page.wait_for_load_state("domcontentloaded")
+
+        await page.wait_for_timeout(
+            200 if plugin_config.haruka_dynamic_font_source == "remote" else 50
+        )
+
+        # 判断字体是否加载完成
+        need_wait = ["imageComplete", "fontsLoaded"]
+        await asyncio.gather(*[page.wait_for_function(f"{i}()") for i in need_wait])
+
+        card = await page.query_selector(
+            ".opus-modules" if "opus" in page.url else ".dyn-card"
+        )
         assert card
         clip = await card.bounding_box()
         assert clip
@@ -94,7 +130,11 @@ async def get_dynamic_screenshot_pc(dynamic_id):
     )
     page = await context.new_page()
     try:
-        await page.goto(url, wait_until="networkidle", timeout=10000)
+        await page.goto(
+            url,
+            wait_until="networkidle",
+            timeout=plugin_config.haruka_dynamic_timeout * 1000,
+        )
         # 动态被删除或者进审核了
         if page.url == "https://www.bilibili.com/404":
             return None
@@ -120,7 +160,7 @@ def install():
 
     def restore_env():
         del os.environ["PLAYWRIGHT_DOWNLOAD_HOST"]
-        if config.haruka_proxy:
+        if plugin_config.haruka_proxy:
             del os.environ["HTTPS_PROXY"]
         if original_proxy is not None:
             os.environ["HTTPS_PROXY"] = original_proxy
@@ -128,8 +168,8 @@ def install():
     logger.info("检查 Chromium 更新")
     sys.argv = ["", "install", "chromium"]
     original_proxy = os.environ.get("HTTPS_PROXY")
-    if config.haruka_proxy:
-        os.environ["HTTPS_PROXY"] = config.haruka_proxy
+    if plugin_config.haruka_proxy:
+        os.environ["HTTPS_PROXY"] = plugin_config.haruka_proxy
     os.environ["PLAYWRIGHT_DOWNLOAD_HOST"] = "https://npmmirror.com/mirrors/playwright/"
     success = False
     try:
@@ -160,6 +200,3 @@ async def check_playwright_env():
             "加载失败，Playwright 依赖不全，"
             "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
-
-
-get_driver().on_startup(init_browser)

@@ -1,6 +1,8 @@
 # Project ignored
 *.sqlite3
+.pdm.toml
 
+docs/.yarn
 data/
 accounts/
 go-cqhttp/

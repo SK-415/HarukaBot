@@ -1,8 +1,12 @@
 import asyncio
 from datetime import datetime
 
-from apscheduler.events import (EVENT_JOB_ERROR, EVENT_JOB_EXECUTED,
-                                EVENT_JOB_MISSED, EVENT_SCHEDULER_STARTED)
+from apscheduler.events import (
+    EVENT_JOB_ERROR,
+    EVENT_JOB_EXECUTED,
+    EVENT_JOB_MISSED,
+    EVENT_SCHEDULER_STARTED,
+)
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from grpc import StatusCode
@@ -10,7 +14,7 @@ from grpc.aio import AioRpcError
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
-from ... import config
+from ...config import plugin_config
 from ...database import DB as db
 from ...database import dynamic_offset as offset
 from ...utils import get_dynamic_screenshot, safe_send, scheduler
@@ -31,11 +35,15 @@ async def dy_sched():
     try:
         # 获取 UP 最新动态列表
         dynamics = (
-            await grpc_get_user_dynamics(uid, timeout=10, proxy=config.haruka_proxy)
+            await grpc_get_user_dynamics(
+                uid,
+                timeout=plugin_config.haruka_dynamic_timeout,
+                proxy=plugin_config.haruka_proxy,
+            )
         ).list
     except AioRpcError as e:
         if e.code() == StatusCode.DEADLINE_EXCEEDED:
-            logger.error(f"爬取动态超时，将在下个轮询中重试")
+            logger.error("爬取动态超时，将在下个轮询中重试")
             return
         raise
 
@@ -90,7 +98,7 @@ async def dy_sched():
                     send_type=sets.type,
                     type_id=sets.type_id,
                     message=message,
-                    at=bool(sets.at) and config.haruka_dynamic_at,
+                    at=bool(sets.at) and plugin_config.haruka_dynamic_at,
                 )
 
             offset[uid] = dynamic_id
@@ -105,11 +113,11 @@ def dynamic_lisener(event):
     job = scheduler.get_job("dynamic_sched")
     if not job:
         scheduler.add_job(
-            dy_sched, id="dynamic_sched", next_run_time=datetime.now(scheduler.timezone)  # type: ignore
+            dy_sched, id="dynamic_sched", next_run_time=datetime.now(scheduler.timezone)
         )
 
 
-if config.haruka_dynamic_interval == 0:
+if plugin_config.haruka_dynamic_interval == 0:
     scheduler.add_listener(
         dynamic_lisener,
         EVENT_JOB_EXECUTED
@@ -119,5 +127,8 @@ if config.haruka_dynamic_interval == 0:
     )
 else:
     scheduler.add_job(
-        dy_sched, "interval", seconds=config.haruka_dynamic_interval, id="dynamic_sched"
+        dy_sched,
+        "interval",
+        seconds=plugin_config.haruka_dynamic_interval,
+        id="dynamic_sched",
     )

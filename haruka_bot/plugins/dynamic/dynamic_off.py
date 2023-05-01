@@ -1,9 +1,15 @@
-from nonebot import on_command
 from nonebot.adapters.onebot.v11.event import MessageEvent
 from nonebot.params import ArgPlainText
 
 from ...database import DB as db
-from ...utils import get_type_id, handle_uid, permission_check, to_me, uid_check
+from ...utils import (
+    get_type_id,
+    handle_uid,
+    on_command,
+    permission_check,
+    to_me,
+    uid_check,
+)
 
 dynamic_off = on_command("关闭动态", rule=to_me(), priority=5)
 dynamic_off.__doc__ = """关闭动态 UID"""

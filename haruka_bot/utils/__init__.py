@@ -5,6 +5,7 @@ from typing import Union
 
 import httpx
 import nonebot
+from nonebot import on_command as _on_command
 from nonebot import require
 from nonebot.adapters.onebot.v11 import (
     ActionFailed,
@@ -24,13 +25,13 @@ from nonebot.permission import SUPERUSER, Permission
 from nonebot.rule import Rule
 from nonebot_plugin_guild_patch import ChannelDestroyedNoticeEvent, GuildMessageEvent
 
-from .. import config
+from ..config import plugin_config
 
 
 def get_path(*other):
     """获取数据文件绝对路径"""
-    if config.haruka_dir:
-        dir_path = Path(config.haruka_dir).resolve()
+    if plugin_config.haruka_dir:
+        dir_path = Path(plugin_config.haruka_dir).resolve()
     else:
         dir_path = Path.cwd().joinpath("data")
         # dir_path = Path.cwd().joinpath('data', 'haruka_bot')
@@ -65,7 +66,7 @@ async def _guild_admin(bot: Bot, event: GuildMessageEvent):
             )
         )["roles"]
     )
-    return bool(roles & set(config.haruka_guild_admin_roles))
+    return bool(roles & set(plugin_config.haruka_guild_admin_roles))
 
 
 GUILD_ADMIN: Permission = Permission(_guild_admin)
@@ -101,7 +102,7 @@ async def group_only(
 
 
 def to_me():
-    if config.haruka_to_me:
+    if plugin_config.haruka_to_me:
         from nonebot.rule import to_me
 
         return to_me()
@@ -199,12 +200,12 @@ async def get_type_id(event: Union[MessageEvent, ChannelDestroyedNoticeEvent]):
 
 def check_proxy():
     """检查代理是否有效"""
-    if config.haruka_proxy:
+    if plugin_config.haruka_proxy:
         logger.info("检查代理是否有效")
         try:
             httpx.get(
                 "https://icanhazip.com/",
-                proxies={"all://": config.haruka_proxy},
+                proxies={"all://": plugin_config.haruka_proxy},
                 timeout=2,
             )
         except Exception:
@@ -213,7 +214,7 @@ def check_proxy():
 
 def on_startup():
     """安装依赖并检查当前环境是否满足运行条件"""
-    if config.fastapi_reload and sys.platform == "win32":
+    if plugin_config.fastapi_reload and sys.platform == "win32":
         raise ImportError("加载失败，Windows 必须设置 FASTAPI_RELOAD=false 才能正常运行 HarukaBot")
     try:  # 如果开启 realod 只在第一次运行
         asyncio.get_running_loop()
@@ -222,13 +223,17 @@ def on_startup():
 
         check_proxy()
         install()
-        asyncio.run(check_playwright_env())
+        asyncio.get_event_loop().run_until_complete(check_playwright_env())
         # 创建数据存储目录
         if not Path(get_path()).is_dir():
             Path(get_path()).mkdir(parents=True)
 
 
-PROXIES = {"all://": config.haruka_proxy}
+def on_command(cmd, *args, **kwargs):
+    return _on_command(plugin_config.haruka_command_prefix + cmd, *args, **kwargs)
+
+
+PROXIES = {"all://": plugin_config.haruka_proxy}
 
 require("nonebot_plugin_apscheduler")
 from nonebot_plugin_apscheduler import scheduler  # noqa
