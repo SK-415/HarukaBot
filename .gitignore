@@ -1,6 +1,6 @@
 # Project ignored
 *.sqlite3
-.pdm.toml
+.pdm-python
 
 docs/.yarn
 data/
