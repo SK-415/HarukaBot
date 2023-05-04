@@ -66,7 +66,7 @@ async def dy_sched():
         return
 
     dynamic = None
-    for dynamic in dynamics[::-1]:  # 动态从旧到新排列
+    for dynamic in sorted(dynamics, key=lambda x: int(x.extend.dyn_id_str)):  # 动态从旧到新排列
         dynamic_id = int(dynamic.extend.dyn_id_str)
         if dynamic_id > offset[uid]:
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
