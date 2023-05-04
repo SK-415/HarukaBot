@@ -75,6 +75,9 @@ async def dy_sched():
             if image is None:
                 logger.debug(f"动态不存在，已跳过：{url}")
                 return
+            elif dynamic.card_type == DynamicType.live_rcmd:
+                logger.debug(f"直播推荐动态，已跳过：{url}")
+                return
 
             type_msg = {
                 0: "发布了新动态",
