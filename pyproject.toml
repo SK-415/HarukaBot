@@ -20,6 +20,7 @@ dependencies = [
     "packaging>=23.1",
     "nonebot-plugin-guild-patch>=0.2.3",
     "msvc-runtime>=14.34.31931; sys_platform == \"win32\"",
+    "dynamicrender>=1.2.6",
 ]
 dynamic = ["version"]
 name = "haruka-bot"
@@ -51,9 +52,6 @@ hb = "haruka_bot.__main__:main"
 [tool.pdm.version]
 source = "file"
 path = "haruka_bot/version.py"
-
-[tool.pdm.build]
-# includes = ["haruka_bot/web/build/**/*"]
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]

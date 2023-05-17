@@ -5,9 +5,12 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+
 from nonebot.log import logger
 from playwright.__main__ import main
+from dynamicrender.Core import DyRender 
 from playwright.async_api import Browser, async_playwright
+from dynamicadaptor.DynamicConversion import formate_message
 
 from ..config import plugin_config
 from .fonts_provider import fill_font
@@ -33,16 +36,20 @@ async def get_browser() -> Browser:
 
 
 async def get_dynamic_screenshot(
-    dynamic_id, style=plugin_config.haruka_screenshot_style
+    dynamic_id, 
+    style=plugin_config.haruka_screenshot_style,
+    dynamic=None
 ):
     """获取动态截图"""
+    dynamic_formated = formate_message("grpc",dynamic)
     if style.lower() == "mobile":
-        return await get_dynamic_screenshot_mobile(dynamic_id)
+        return await get_dynamic_screenshot_mobile(dynamic_id,dynamic_formated)
     else:
-        return await get_dynamic_screenshot_pc(dynamic_id)
+        return await get_dynamic_screenshot_pc(dynamic_id,dynamic_formated)
 
 
-async def get_dynamic_screenshot_mobile(dynamic_id):
+
+async def get_dynamic_screenshot_mobile(dynamic_id,dynamic_formated):
     """移动端动态截图"""
     url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
     browser = await get_browser()
@@ -105,12 +112,13 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         return await page.screenshot(clip=clip, full_page=True)
     except Exception:
         logger.exception(f"截取动态时发生错误：{url}")
-        return await page.screenshot(full_page=True)
+        return await DyRender().dyn_render(dynamic_formated)
+        # return await page.screenshot(full_page=True)
     finally:
         await page.close()
 
 
-async def get_dynamic_screenshot_pc(dynamic_id):
+async def get_dynamic_screenshot_pc(dynamic_id,dynamic_formated):
     """电脑端动态截图"""
     url = f"https://t.bilibili.com/{dynamic_id}"
     browser = await get_browser()
@@ -150,7 +158,8 @@ async def get_dynamic_screenshot_pc(dynamic_id):
         return await page.screenshot(clip=clip, full_page=True)
     except Exception:
         logger.exception(f"截取动态时发生错误：{url}")
-        return await page.screenshot(full_page=True)
+        return await DyRender().dyn_render(dynamic_formated)
+        # return await page.screenshot(full_page=True)
     finally:
         await context.close()
 
