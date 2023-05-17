@@ -43,7 +43,7 @@ HARUKA_DIR="./data/"
 在群里使用命令前是否需要 @机器人。设置为 `False` 则可以直接触发指令。
 
 ```json
-Haruka_TO_ME=False
+HARUKA_TO_ME=False
 ```
 
 ## HARUKA_LIVE_OFF_NOTIFY

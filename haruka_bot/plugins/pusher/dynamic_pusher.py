@@ -71,7 +71,7 @@ async def dy_sched():
         if dynamic_id > offset[uid]:
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
             url = f"https://t.bilibili.com/{dynamic_id}"
-            image = await get_dynamic_screenshot(dynamic_id)
+            image = await get_dynamic_screenshot(dynamic_id,dynamic=dynamic)
             if image is None:
                 logger.debug(f"动态不存在，已跳过：{url}")
                 return
