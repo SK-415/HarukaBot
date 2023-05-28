@@ -145,7 +145,7 @@ async def get_dynamic_screenshot_pc(dynamic_id):
         assert card
         clip = await card.bounding_box()
         assert clip
-        bar = await page.query_selector(".bili-opus-view")
+        bar = await page.query_selector(".bili-tabs.opus-tabs")
         assert bar
         bar_bound = await bar.bounding_box()
         assert bar_bound
