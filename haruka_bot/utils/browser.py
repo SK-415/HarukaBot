@@ -117,6 +117,9 @@ async def get_dynamic_screenshot_pc(dynamic_id):
     context = await browser.new_context(
         viewport={"width": 2560, "height": 1080},
         device_scale_factor=2,
+        user_agent=(
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+        ),
     )
     await context.add_cookies(
         [
