@@ -112,7 +112,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
 
 async def get_dynamic_screenshot_pc(dynamic_id):
     """电脑端动态截图"""
-    url = f"https://t.bilibili.com/{dynamic_id}"
+    url = f"https://www.bilibili.com/opus/{dynamic_id}"
     browser = await get_browser()
     context = await browser.new_context(
         viewport={"width": 2560, "height": 1080},
@@ -141,11 +141,11 @@ async def get_dynamic_screenshot_pc(dynamic_id):
         # 动态被删除或者进审核了
         if page.url == "https://www.bilibili.com/404":
             return None
-        card = await page.query_selector(".card")
+        card = await page.query_selector(".opus-detail")
         assert card
         clip = await card.bounding_box()
         assert clip
-        bar = await page.query_selector(".bili-dyn-action__icon")
+        bar = await page.query_selector(".bili-opus-view")
         assert bar
         bar_bound = await bar.bounding_box()
         assert bar_bound
