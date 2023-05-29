@@ -7,12 +7,19 @@ from apscheduler.events import (
     EVENT_JOB_MISSED,
     EVENT_SCHEDULER_STARTED,
 )
+from io import BytesIO
+from dynamicrender.Core import DyRender
+from dynamicadaptor.DynamicConversion import formate_message
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from grpc import StatusCode
 from grpc.aio import AioRpcError
 from nonebot.adapters.onebot.v11.message import MessageSegment
+import json
 from nonebot.log import logger
+
+
+from google.protobuf.json_format import MessageToJson
 
 from ...config import plugin_config
 from ...database import DB as db
@@ -67,43 +74,52 @@ async def dy_sched():
 
     dynamic = None
     for dynamic in sorted(dynamics, key=lambda x: int(x.extend.dyn_id_str)):  # 动态从旧到新排列
-        dynamic_id = int(dynamic.extend.dyn_id_str)
-        if dynamic_id > offset[uid]:
-            logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
-            url = f"https://t.bilibili.com/{dynamic_id}"
-            image = await get_dynamic_screenshot(dynamic_id)
-            if image is None:
-                logger.debug(f"动态不存在，已跳过：{url}")
-                return
-            elif dynamic.card_type == DynamicType.live_rcmd:
-                logger.debug(f"直播推荐动态，已跳过：{url}")
-                return
+        try:
+            dynamic_id = int(dynamic.extend.dyn_id_str)
+            if dynamic_id > offset[uid]:
+                offset[uid] = dynamic_id
+                logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
+                url = f"https://t.bilibili.com/{dynamic_id}"
+                # image = await get_dynamic_screenshot(dynamic_id)
+                msg = await formate_message("grpc",json.loads(MessageToJson(dynamic)))
+                img = await DyRender().dyn_render(msg)
+                img_byte = BytesIO()
+                img.save(img_byte, format="PNG")
+                image = img_byte.getvalue()
+                if image is None:
+                    logger.debug(f"动态不存在，已跳过：{url}")
+                    return
+                elif dynamic.card_type == DynamicType.live_rcmd:
+                    logger.debug(f"直播推荐动态，已跳过：{url}")
+                    return
 
-            type_msg = {
-                0: "发布了新动态",
-                DynamicType.forward: "转发了一条动态",
-                DynamicType.word: "发布了新文字动态",
-                DynamicType.draw: "发布了新图文动态",
-                DynamicType.av: "发布了新投稿",
-                DynamicType.article: "发布了新专栏",
-                DynamicType.music: "发布了新音频",
-            }
-            message = (
-                f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
-                + MessageSegment.image(image)
-                + f"\n{url}"
-            )
-
-            push_list = await db.get_push_list(uid, "dynamic")
-            for sets in push_list:
-                await safe_send(
-                    bot_id=sets.bot_id,
-                    send_type=sets.type,
-                    type_id=sets.type_id,
-                    message=message,
-                    at=bool(sets.at) and plugin_config.haruka_dynamic_at,
+                type_msg = {
+                    0: "发布了新动态",
+                    DynamicType.forward: "转发了一条动态",
+                    DynamicType.word: "发布了新文字动态",
+                    DynamicType.draw: "发布了新图文动态",
+                    DynamicType.av: "发布了新投稿",
+                    DynamicType.article: "发布了新专栏",
+                    DynamicType.music: "发布了新音频",
+                }
+                message = (
+                    f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
+                    + MessageSegment.image(image)
+                    + f"\n{url}"
                 )
 
+                push_list = await db.get_push_list(uid, "dynamic")
+                for sets in push_list:
+                    await safe_send(
+                        bot_id=sets.bot_id,
+                        send_type=sets.type,
+                        type_id=sets.type_id,
+                        message=message,
+                        at=bool(sets.at) and plugin_config.haruka_dynamic_at,
+                    )
+
+                
+        except:
             offset[uid] = dynamic_id
 
     if dynamic:
