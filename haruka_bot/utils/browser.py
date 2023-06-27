@@ -11,6 +11,7 @@ from playwright.async_api import Browser, async_playwright
 
 from ..config import plugin_config
 from .fonts_provider import fill_font
+from .captcha import resolve_captcha
 
 _browser: Optional[Browser] = None
 mobile_js = Path(__file__).parent.joinpath("mobile.js")
@@ -56,11 +57,14 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
     )
     try:
         await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
-        await page.goto(
-            url,
-            wait_until="networkidle",
-            timeout=plugin_config.haruka_dynamic_timeout * 1000,
-        )
+        if plugin_config.haruka_captcha_address:
+            page = await resolve_captcha(url,page)
+        else:
+            await page.goto(
+                url,
+                wait_until="networkidle",
+                timeout=plugin_config.haruka_dynamic_timeout * 1000,
+            )
         # 动态被删除或者进审核了
         if page.url == "https://m.bilibili.com/404":
             return None
