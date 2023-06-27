@@ -7,35 +7,61 @@ from typing import Optional
 
 from nonebot.log import logger
 from playwright.__main__ import main
-from playwright.async_api import Browser, async_playwright
+from playwright.async_api import BrowserContext, async_playwright
 
 from ..config import plugin_config
 from .fonts_provider import fill_font
 from .captcha import resolve_captcha
+from ..utils import get_path
 
-_browser: Optional[Browser] = None
+_browser: Optional[BrowserContext] = None
 mobile_js = Path(__file__).parent.joinpath("mobile.js")
 
 
-async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> Browser:
+async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> BrowserContext:
     if proxy:
         kwargs["proxy"] = {"server": proxy}
     global _browser
     p = await async_playwright().start()
-    _browser = await p.chromium.launch(**kwargs)
+    browser_data = Path(get_path("browser"))
+    browser_data.mkdir(parents=True, exist_ok=True)
+    browser_context = await p.chromium.launch_persistent_context(
+        browser_data,
+        user_agent=plugin_config.haruka_browser_ua
+        or (
+            (
+                "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
+            )
+            if plugin_config.haruka_screenshot_style.lower() == "mobile"
+            else None
+        ),
+        device_scale_factor=2,
+        **kwargs,
+    )
+    if plugin_config.haruka_screenshot_style.lower() != "mobile":
+        await browser_context.add_cookies(
+            [
+                {
+                    "name": "hit-dyn-v2",
+                    "value": "1",
+                    "domain": ".bilibili.com",
+                    "path": "/",
+                }
+            ]
+        )
+    _browser = browser_context
     return _browser
 
 
-async def get_browser() -> Browser:
+async def get_browser() -> BrowserContext:
     global _browser
-    if _browser is None or not _browser.is_connected():
+    if not _browser or _browser.browser is None or not _browser.browser.is_connected():
         _browser = await init_browser()
     return _browser
 
 
-async def get_dynamic_screenshot(
-    dynamic_id, style=plugin_config.haruka_screenshot_style
-):
+async def get_dynamic_screenshot(dynamic_id, style=plugin_config.haruka_screenshot_style):
     """获取动态截图"""
     if style.lower() == "mobile":
         return await get_dynamic_screenshot_mobile(dynamic_id)
@@ -47,14 +73,8 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
     """移动端动态截图"""
     url = f"https://m.bilibili.com/dynamic/{dynamic_id}"
     browser = await get_browser()
-    page = await browser.new_page(
-        device_scale_factor=2,
-        user_agent=(
-            "Mozilla/5.0 (Linux; Android 10; RMX1911) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
-        ),
-        viewport={"width": 460, "height": 780},
-    )
+    page = await browser.new_page()
+    await page.set_viewport_size({"width": 460, "height": 780})
     try:
         await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
         if plugin_config.haruka_captcha_address:
@@ -79,6 +99,13 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         #     "dyn.style.fontFamily='Noto Sans CJK SC, sans-serif';"
         #     "dyn.style.overflowWrap='break-word'"
         # )
+
+        await page.wait_for_load_state(state="domcontentloaded", timeout=20000)
+        if "opus" in page.url:
+            await page.wait_for_selector(".opus-module-author", state="visible")
+        else:
+            await page.wait_for_selector(".dyn-header__author__face", state="visible")
+
         await page.add_script_tag(path=mobile_js)
 
         await page.evaluate(
@@ -100,9 +127,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
         need_wait = ["imageComplete", "fontsLoaded"]
         await asyncio.gather(*[page.wait_for_function(f"{i}()") for i in need_wait])
 
-        card = await page.query_selector(
-            ".opus-modules" if "opus" in page.url else ".dyn-card"
-        )
+        card = await page.query_selector(".opus-modules" if "opus" in page.url else ".dyn-card")
         assert card
         clip = await card.bounding_box()
         assert clip
@@ -118,21 +143,9 @@ async def get_dynamic_screenshot_pc(dynamic_id):
     """电脑端动态截图"""
     url = f"https://t.bilibili.com/{dynamic_id}"
     browser = await get_browser()
-    context = await browser.new_context(
-        viewport={"width": 2560, "height": 1080},
-        device_scale_factor=2,
-    )
-    await context.add_cookies(
-        [
-            {
-                "name": "hit-dyn-v2",
-                "value": "1",
-                "domain": ".bilibili.com",
-                "path": "/",
-            }
-        ]
-    )
-    page = await context.new_page()
+
+    page = await browser.new_page()
+    await page.set_viewport_size({"width": 2560, "height": 1080})
     try:
         await page.goto(
             url,
@@ -156,7 +169,7 @@ async def get_dynamic_screenshot_pc(dynamic_id):
         logger.exception(f"截取动态时发生错误：{url}")
         return await page.screenshot(full_page=True)
     finally:
-        await context.close()
+        await page.close()
 
 
 def install():
@@ -201,6 +214,5 @@ async def check_playwright_env():
             await p.chromium.launch()
     except Exception:
         raise ImportError(
-            "加载失败，Playwright 依赖不全，"
-            "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
+            "加载失败，Playwright 依赖不全，" "解决方法：https://haruka-bot.sk415.icu/faq.html#playwright-依赖不全"
         )
