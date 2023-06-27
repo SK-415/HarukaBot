@@ -1,9 +1,11 @@
 from typing import Optional
 from nonebot.adapters.onebot.v11.message import MessageSegment, Message
 from pydantic import BaseModel, root_validator
+
 # from pydantic import Json
 
 from .desc import Desc
+
 # from .card import Card
 # from .display import Display
 

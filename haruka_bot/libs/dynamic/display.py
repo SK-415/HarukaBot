@@ -21,6 +21,7 @@ class EmojiDetail(BaseModel):
 
 class EmojiInfo(BaseModel):
     """emoji 信息"""
+
     emoji_details: List[EmojiDetail]
 
 

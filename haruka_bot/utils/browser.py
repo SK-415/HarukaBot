@@ -58,7 +58,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id):
     try:
         await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
         if plugin_config.haruka_captcha_address:
-            page = await resolve_captcha(url,page)
+            page = await resolve_captcha(url, page)
         else:
             await page.goto(
                 url,

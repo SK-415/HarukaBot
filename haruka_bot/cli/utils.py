@@ -22,6 +22,7 @@ def create_env():
     if any(Path.cwd().iterdir()):
         print("文件夹不为空，请更换空文件夹后重试")
         import sys
+
         sys.exit()
 
     while True:

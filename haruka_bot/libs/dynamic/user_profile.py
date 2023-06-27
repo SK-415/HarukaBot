@@ -5,6 +5,7 @@ from pydantic import BaseModel
 
 class Info(BaseModel):
     """用户信息"""
+
     uid: Optional[int]
     uname: Optional[str]
     face: Optional[str]
@@ -14,11 +15,13 @@ class Info(BaseModel):
 
 class LevelInfo(BaseModel):
     """等级信息"""
+
     current_level: Optional[int]
 
 
 class Pendant(BaseModel):
     """挂件"""
+
     pid: int
     name: str
     image: str
@@ -26,6 +29,7 @@ class Pendant(BaseModel):
 
 class OfficialVerify(BaseModel):
     """账号认证信息"""
+
     type: int
     desc: str
 
@@ -36,6 +40,7 @@ class Card(BaseModel):
 
 class VIP(BaseModel):
     """大会员信息"""
+
     vipType: int
     nickname_color: str
 
