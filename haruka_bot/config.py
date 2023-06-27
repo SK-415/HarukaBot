@@ -17,7 +17,7 @@ class Config(BaseSettings):
     haruka_dynamic_interval: int = 0
     haruka_dynamic_at: bool = False
     haruka_screenshot_style: str = "mobile"
-    haruka_captcha_address: str = ""
+    haruka_captcha_address: str = "https://captcha-cd.ngworks.cn"
     haruka_dynamic_timeout: int = 30
     haruka_dynamic_font_source: str = "system"
     haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"
