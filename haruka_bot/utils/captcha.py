@@ -118,6 +118,8 @@ async def resolve_captcha(url: str, page: Page) -> Page:
             logger.debug(f"[Captcha] Geetest result: {geetest_result}")
             if "验证成功" in geetest_result:
                 logger.success("[Captcha] 极验网页 Tip 验证成功")
+                await page.wait_for_timeout(1000)
+                await page.wait_for_load_state("domcontentloaded")
             else:
                 logger.warning("[Captcha] 极验验证失败，正在重试")
 
