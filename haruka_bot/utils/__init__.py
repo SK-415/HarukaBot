@@ -1,7 +1,10 @@
 import asyncio
 import sys
+import re
+import contextlib
 from pathlib import Path
 from typing import Union
+from bilireq.utils import get
 
 import httpx
 import nonebot
@@ -52,18 +55,79 @@ async def uid_check(
     uid: str = ArgPlainText("uid"),
 ):
     uid = uid.strip()
-    if not uid.isdecimal():
-        await matcher.finish("UID 必须为纯数字")
+    if extract := await uid_extract(uid):
+        uid = extract
+    else:
+        await matcher.finish("未找到该 UP，请输入正确的 UP 群内昵称、UP 名、UP UID或 UP 首页链接")
     matcher.set_arg("uid", Message(uid))
+
+
+async def b23_extract(text: str):
+    if "b23.tv" not in text and "b23.wtf" not in text:
+        return None
+    if not (b23 := re.compile(r"b23.(tv|wtf)[\\/]+(\w+)").search(text)):
+        return None
+    try:
+        url = f"https://b23.tv/{b23[2]}"
+        for _ in range(3):
+            with contextlib.suppress(Exception):
+                resp = await httpx.AsyncClient().get(url, follow_redirects=True)
+                break
+        else:
+            return None
+        url = resp.url
+        logger.debug(f"b23.tv url: {url}")
+        return str(url)
+    except TypeError:
+        return None
+
+
+async def search_user(keyword: str):
+    """
+    搜索用户
+    """
+    url = "https://api.bilibili.com/x/web-interface/search/type"
+    data = {"keyword": keyword, "search_type": "bili_user"}
+    resp = await get(url, params=data)
+    logger.debug(resp)
+    return resp
+
+
+async def uid_extract(text: str):
+    logger.debug(f"[UID Extract] Original Text: {text}")
+    b23_msg = await b23_extract(text) if "b23.tv" in text else None
+    message = b23_msg or text
+    logger.debug(f"[UID Extract] b23 extract: {message}")
+    pattern = re.compile("^[0-9]*$|bilibili.com/([0-9]*)")
+    if match := pattern.search(message):
+        logger.debug(f"[UID Extract] Digit or Url: {match}")
+        match = match[1] or match[0]
+        return str(match)
+    elif message.startswith("UID:"):
+        pattern = re.compile("^\\d+")
+        if match := pattern.search(message[4:]):
+            logger.debug(f"[UID Extract] UID: {match}")
+            return str(match[0])
+    else:
+        text_u = text.strip(""""'“”‘’""")
+        if text_u != text:
+            logger.debug(f"[UID Extract] Text is a Quoted Digit: {text_u}")
+        logger.debug(f"[UID Extract] Searching UID in BiliBili: {text_u}")
+        resp = await search_user(text_u)
+        logger.debug(f"[UID Extract] Search result: {resp}")
+        if resp and resp["numResults"]:
+            for result in resp["result"]:
+                if result["uname"] == text_u:
+                    logger.debug(f"[UID Extract] Found User: {result}")
+                    return str(result["mid"])
+        logger.debug("[UID Extract] No User found")
 
 
 async def _guild_admin(bot: Bot, event: GuildMessageEvent):
     roles = set(
         role["role_name"]
         for role in (
-            await bot.get_guild_member_profile(
-                guild_id=event.guild_id, user_id=event.user_id
-            )
+            await bot.get_guild_member_profile(guild_id=event.guild_id, user_id=event.user_id)
         )["roles"]
     )
     return bool(roles & set(plugin_config.haruka_guild_admin_roles))
@@ -95,9 +159,7 @@ async def permission_check(
     raise FinishedException
 
 
-async def group_only(
-    matcher: Matcher, event: PrivateMessageEvent, command: str = RawCommand()
-):
+async def group_only(matcher: Matcher, event: PrivateMessageEvent, command: str = RawCommand()):
     await matcher.finish(f"只有群里才能{command}")
 
 
@@ -189,9 +251,7 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
 
 
 async def get_type_id(event: Union[MessageEvent, ChannelDestroyedNoticeEvent]):
-    if isinstance(event, GuildMessageEvent) or isinstance(
-        event, ChannelDestroyedNoticeEvent
-    ):
+    if isinstance(event, GuildMessageEvent) or isinstance(event, ChannelDestroyedNoticeEvent):
         from ..database import DB as db
 
         return await db.get_guild_type_id(event.guild_id, event.channel_id)
