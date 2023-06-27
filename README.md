@@ -38,6 +38,7 @@ HarukaBot 针对不同的推送场景（粉丝群、娱乐群、直播通知群�
 - [bilibili-API-collect](https://github.com/SocialSisterYi/bilibili-API-collect)：非常详细的 B 站 API 文档。
 - [bilibili_api](https://github.com/Passkou/bilibili_api)：Python 实现的 B 站 API 库。
 - [HarukaBot_Guild_Patch](https://github.com/17TheWord/HarukaBot_Guild_Patch)：可以让HarukaBot适用于频道的补丁。（已合入 HarukaBot）
+- [Pallas-Bot](https://github.com/MistEO/Pallas-Bot)：参考(超)了牛牛的 ci
 
 ## 支持与贡献
 

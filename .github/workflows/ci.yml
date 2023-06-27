@@ -1,0 +1,14 @@
+name: Docker Image CI
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image for test
+        run: docker build . --file Dockerfile --tag ${GITHUB_ACTOR,,}:haruka-bot
