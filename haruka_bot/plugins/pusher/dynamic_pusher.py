@@ -70,11 +70,10 @@ async def dy_sched():
         dynamic_id = int(dynamic.extend.dyn_id_str)
         if dynamic_id > offset[uid]:
             logger.info(f"检测到新动态（{dynamic_id}）：{name}（{uid}）")
-            image = await get_dynamic_screenshot(dynamic_id)
+            image, err = await get_dynamic_screenshot(dynamic_id)
             url = f"https://t.bilibili.com/{dynamic_id}"
             if image is None:
                 logger.debug(f"动态不存在，已跳过：{url}")
-                offset[uid] = dynamic_id
                 return
             elif dynamic.card_type in [
                 DynamicType.live_rcmd,
@@ -97,6 +96,7 @@ async def dy_sched():
             }
             message = (
                 f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
+                f"{f'动态图片可能截图异常：{err}' if err else ''}\n"
                 f"{MessageSegment.image(image)}\n{url}"
             )
 
