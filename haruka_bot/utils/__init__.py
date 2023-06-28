@@ -26,9 +26,11 @@ from nonebot.matcher import Matcher
 from nonebot.params import ArgPlainText, CommandArg, RawCommand
 from nonebot.permission import SUPERUSER, Permission
 from nonebot.rule import Rule
-from nonebot_plugin_guild_patch import ChannelDestroyedNoticeEvent, GuildMessageEvent
 
 from ..config import plugin_config
+
+require("nonebot_plugin_guild_patch")
+from nonebot_plugin_guild_patch import ChannelDestroyedNoticeEvent, GuildMessageEvent  # noqa
 
 
 def get_path(*other):
@@ -45,8 +47,7 @@ async def handle_uid(
     matcher: Matcher,
     command_arg: Message = CommandArg(),
 ):
-    uid = command_arg.extract_plain_text().strip()
-    if uid:
+    if command_arg.extract_plain_text().strip():
         matcher.set_arg("uid", command_arg)
 
 
@@ -124,12 +125,12 @@ async def uid_extract(text: str):
 
 
 async def _guild_admin(bot: Bot, event: GuildMessageEvent):
-    roles = set(
+    roles = {
         role["role_name"]
         for role in (
             await bot.get_guild_member_profile(guild_id=event.guild_id, user_id=event.user_id)
         )["roles"]
-    )
+    }
     return bool(roles & set(plugin_config.haruka_guild_admin_roles))
 
 
@@ -191,7 +192,7 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
             )
         else:
             result = await bot.call_api(
-                "send_" + send_type + "_msg",
+                f"send_{send_type}_msg",
                 **{
                     "message": message,
                     "user_id" if send_type == "private" else "group_id": type_id,
@@ -251,7 +252,7 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
 
 
 async def get_type_id(event: Union[MessageEvent, ChannelDestroyedNoticeEvent]):
-    if isinstance(event, GuildMessageEvent) or isinstance(event, ChannelDestroyedNoticeEvent):
+    if isinstance(event, (GuildMessageEvent, ChannelDestroyedNoticeEvent)):
         from ..database import DB as db
 
         return await db.get_guild_type_id(event.guild_id, event.channel_id)

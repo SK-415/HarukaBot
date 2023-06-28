@@ -29,9 +29,7 @@ class Config(BaseSettings):
     @validator("haruka_interval", "haruka_live_interval", "haruka_dynamic_interval")
     def non_negative(cls, v: int, field: ModelField):
         """定时器为负返回默认值"""
-        if v < 1:
-            return field.default
-        return v
+        return field.default if v < 1 else v
 
     class Config:
         extra = "ignore"

@@ -20,6 +20,7 @@ async def live_sched():
         return
     logger.debug(f"爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人")
     res = await get_rooms_info_by_uids(uids, reqtype="web", proxies=PROXIES)
+    print(res)
     if not res:
         return
     for uid, info in res.items():
@@ -34,17 +35,12 @@ async def live_sched():
 
         name = info["uname"]
         if new_status:  # 开播
-            room_id = info["short_id"] if info["short_id"] else info["room_id"]
-            url = "https://live.bilibili.com/" + str(room_id)
+            room_id = info["short_id"] or info["room_id"]
+            url = f"https://live.bilibili.com/{room_id}"
             title = info["title"]
-            cover = (
-                info["cover_from_user"] if info["cover_from_user"] else info["keyframe"]
-            )
+            cover = info["cover_from_user"] or info["keyframe"]
             logger.info(f"检测到开播：{name}（{uid}）")
-
-            live_msg = (
-                f"{name} 正在直播：\n{title}\n" + MessageSegment.image(cover) + f"\n{url}"
-            )
+            live_msg = f"{name} 正在直播：\n{title}\n{MessageSegment.image(cover)}" + f"\n{url}"
         else:  # 下播
             logger.info(f"检测到下播：{name}（{uid}）")
             if not plugin_config.haruka_live_off_notify:  # 没开下播推送

@@ -107,7 +107,6 @@ async def resolve_captcha(url: str, page: Page) -> Page:
                 }
                 await captcha_image.click(position=Position(**real_click_points))
                 await page.wait_for_timeout(800)
-            captcha_image_body = ""
             await page.click("text=确认")
             geetest_up = await page.wait_for_selector(".geetest_up", state="visible")
             if not geetest_up:
@@ -118,6 +117,7 @@ async def resolve_captcha(url: str, page: Page) -> Page:
             logger.debug(f"[Captcha] Geetest result: {geetest_result}")
             if "验证成功" in geetest_result:
                 logger.success("[Captcha] 极验网页 Tip 验证成功")
+                captcha_image_body = ""
                 await page.wait_for_timeout(2000)
             else:
                 logger.warning("[Captcha] 极验验证失败，正在重试")
