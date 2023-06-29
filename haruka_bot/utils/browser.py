@@ -70,10 +70,11 @@ async def get_dynamic_screenshot(dynamic_id, style=plugin_config.haruka_screensh
         browser = await get_browser()
         page = await browser.new_page()
         try:
-            if style.lower() == "mobile":
-                page, clip = await get_dynamic_screenshot_mobile(dynamic_id, page)
-            else:
-                page, clip = await get_dynamic_screenshot_pc(dynamic_id, page)
+            # if style.lower() == "mobile":
+            #     page, clip = await get_dynamic_screenshot_mobile(dynamic_id, page)
+            # else:
+            #     page, clip = await get_dynamic_screenshot_pc(dynamic_id, page)
+            page, clip = await get_dynamic_screenshot_mobile(dynamic_id, page)
             clip["height"] = min(clip["height"], 32766)
             return (
                 await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=98),
