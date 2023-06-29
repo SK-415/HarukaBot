@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from loguru import logger
 from nonebot import get_driver
 from pydantic import BaseSettings, validator
 from pydantic.fields import ModelField
@@ -18,9 +19,11 @@ class Config(BaseSettings):
     haruka_dynamic_at: bool = False
     haruka_screenshot_style: str = "mobile"
     haruka_captcha_address: str = "https://captcha-cd.ngworks.cn"
+    haruka_browser_ua: Optional[str] = None
     haruka_dynamic_timeout: int = 30
     haruka_dynamic_font_source: str = "system"
     haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"
+    haruka_dynamic_big_image: bool = False
     haruka_command_prefix: str = ""
     # 频道管理员身份组
     haruka_guild_admin_roles: List[str] = ["频道主", "超级管理员"]
@@ -28,9 +31,13 @@ class Config(BaseSettings):
     @validator("haruka_interval", "haruka_live_interval", "haruka_dynamic_interval")
     def non_negative(cls, v: int, field: ModelField):
         """定时器为负返回默认值"""
-        if v < 1:
-            return field.default
-        return v
+        return field.default if v < 1 else v
+
+    @validator("haruka_screenshot_style")
+    def screenshot_style(cls, v: str):
+        if v != "mobile":
+            logger.warning("截图样式目前只支持 mobile，pc 样式现已被弃用")
+        return "mobile"
 
     class Config:
         extra = "ignore"
