@@ -1,5 +1,5 @@
 import contextlib
-from typing import Optional
+from typing import Optional, List
 
 import httpx
 from nonebot.log import logger
@@ -13,9 +13,9 @@ from ..config import plugin_config
 
 class CaptchaData(BaseModel):
     captcha_id: str
-    points: list[list[int]]
-    rectangles: list[list[int]]
-    yolo_data: list[list[int]]
+    points: List[List[int]]
+    rectangles: List[List[int]]
+    yolo_data: List[List[int]]
     time: int
 
 
@@ -97,7 +97,7 @@ async def resolve_captcha(url: str, page: Page) -> Page:
             assert captcha_req.data
             last_captcha_id = captcha_req.data.captcha_id
         if captcha_req.data:
-            click_points: list[list[int]] = captcha_req.data.points
+            click_points: List[List[int]] = captcha_req.data.points
             logger.warning(f"[Captcha] 识别到 {len(click_points)} 个坐标，正在点击")
             # 根据原图大小和截图大小计算缩放比例，然后计算出正确的需要点击的位置
             for point in click_points:
