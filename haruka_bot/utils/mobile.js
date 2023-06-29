@@ -5,7 +5,7 @@
  * @LastEditTime: 2023-01-13 01:35:34
  * @Description: 用于初始化手机动态页面的样式以及图片大小
  */
-async function getMobileStyle(expandImage = false) {
+async function getMobileStyle(useImageBig = false) {
     // 删除 dom 的对象, 可以自行添加 ( className 需要增加 '.' 为前缀, id 需要增加 '#' 为前缀)
     const deleteDoms = {
         // 关注 dom
