@@ -107,7 +107,7 @@ HARUKA_LIVE_INTERVAL=20
 HARUKA_DYNAMIC_AT=True
 ```
 
-## HARUKA_SCREENSHOT_STYLE
+<!-- ## HARUKA_SCREENSHOT_STYLE
 
 默认值：mobile
 
@@ -115,6 +115,28 @@ HARUKA_DYNAMIC_AT=True
 
 ```yml
 HARUKA_SCREENSHOT_STYLE=pc
+``` -->
+
+## HARUKA_CAPTCHA_ADDRESS
+
+默认值：<https://captcha-cd.ngworks.cn>
+
+验证码地址，用于解决动态截图验证码问题。
+（如果你不知道这是什么，请忽略）
+
+```yml
+HARUKA_CAPTCHA_ADDRESS=https://captcha-cd.ngworks.cn
+```
+
+## HARUKA_BROWSER_UA
+
+默认值：""
+
+自定义浏览器 UA
+（如果你不知道这是什么，请忽略）
+
+```yml
+HARUKA_BROWSER_UA="Mozilla/5.0 (Linux; Android 10; Redmi K30 Pro) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.210 Mobile Safari/537.36"
 ```
 
 ## HARUKA_DYNAMIC_TIMEOUT
@@ -136,6 +158,16 @@ HARUKA_DYNAMIC_TIMEOUT=30
 
 ```json
 HARUKA_DYNAMIC_FONT="Microsoft YaHei"
+```
+
+## HARUKA_DYNAMIC_BIG_IMAGE
+
+默认值：False
+
+是否使用大图模式，大图模式下会将动态图片扩展至页宽。
+
+```json
+HARUKA_DYNAMIC_BIG_IMAGE=True
 ```
 
 ## HARUKA_COMMAND_PREFIX

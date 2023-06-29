@@ -1,12 +1,15 @@
+import time
+
 from bilireq.live import get_rooms_info_by_uids
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
 
 from ...config import plugin_config
 from ...database import DB as db
-from ...utils import PROXIES, safe_send, scheduler
+from ...utils import PROXIES, safe_send, scheduler, calc_time_total
 
 status = {}
+live_time = {}
 
 
 @scheduler.scheduled_job(
@@ -34,22 +37,28 @@ async def live_sched():
 
         name = info["uname"]
         if new_status:  # 开播
-            room_id = info["short_id"] if info["short_id"] else info["room_id"]
-            url = "https://live.bilibili.com/" + str(room_id)
+            live_time[uid] = info["live_time"]
+            room_id = info["short_id"] or info["room_id"]
+            url = f"https://live.bilibili.com/{room_id}"
             title = info["title"]
-            cover = (
-                info["cover_from_user"] if info["cover_from_user"] else info["keyframe"]
-            )
+            cover = info["cover_from_user"] or info["keyframe"]
+            area_parent = info["area_v2_parent_name"]
+            area = info["area_v2_name"]
+            room_area = f"{area_parent} / {area}"
             logger.info(f"检测到开播：{name}（{uid}）")
-
             live_msg = (
-                f"{name} 正在直播：\n{title}\n" + MessageSegment.image(cover) + f"\n{url}"
+                f"{name} 开播啦！\n分区：{room_area}\n标题：{title}\n{MessageSegment.image(cover)}\n{url}"
             )
         else:  # 下播
             logger.info(f"检测到下播：{name}（{uid}）")
             if not plugin_config.haruka_live_off_notify:  # 没开下播推送
                 continue
-            live_msg = f"{name} 下播了"
+            live_time_msg = (
+                f"，本次直播时长 {calc_time_total(time.time() - live_time[uid])}。"
+                if live_time[uid]
+                else "。"
+            )
+            live_msg = f"{name} 下播了{live_time_msg}"
 
         # 推送
         push_list = await db.get_push_list(uid, "live")

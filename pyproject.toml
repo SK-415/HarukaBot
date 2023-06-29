@@ -41,7 +41,7 @@ dev = [
 adapters = [
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" }
 ]
-plugins = ["haruka_bot", "nonebot_plugin_gocqhttp"]
+plugins = ["haruka_bot", "nonebot_plugin_gocqhttp", "nonebot_plugin_guild_patch"]
 plugin_dirs = []
 builtin_plugins = []
 

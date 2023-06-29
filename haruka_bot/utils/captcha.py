@@ -1,5 +1,5 @@
 import contextlib
-from typing import Optional
+from typing import Optional, List
 
 import httpx
 from nonebot.log import logger
@@ -13,9 +13,9 @@ from ..config import plugin_config
 
 class CaptchaData(BaseModel):
     captcha_id: str
-    points: list[list[int]]
-    rectangles: list[list[int]]
-    yolo_data: list[list[int]]
+    points: List[List[int]]
+    rectangles: List[List[int]]
+    yolo_data: List[List[int]]
     time: int
 
 
@@ -97,7 +97,7 @@ async def resolve_captcha(url: str, page: Page) -> Page:
             assert captcha_req.data
             last_captcha_id = captcha_req.data.captcha_id
         if captcha_req.data:
-            click_points: list[list[int]] = captcha_req.data.points
+            click_points: List[List[int]] = captcha_req.data.points
             logger.warning(f"[Captcha] 识别到 {len(click_points)} 个坐标，正在点击")
             # 根据原图大小和截图大小计算缩放比例，然后计算出正确的需要点击的位置
             for point in click_points:
@@ -107,7 +107,6 @@ async def resolve_captcha(url: str, page: Page) -> Page:
                 }
                 await captcha_image.click(position=Position(**real_click_points))
                 await page.wait_for_timeout(800)
-            captcha_image_body = ""
             await page.click("text=确认")
             geetest_up = await page.wait_for_selector(".geetest_up", state="visible")
             if not geetest_up:
@@ -118,8 +117,8 @@ async def resolve_captcha(url: str, page: Page) -> Page:
             logger.debug(f"[Captcha] Geetest result: {geetest_result}")
             if "验证成功" in geetest_result:
                 logger.success("[Captcha] 极验网页 Tip 验证成功")
-                await page.wait_for_timeout(1000)
-                await page.wait_for_load_state("domcontentloaded")
+                captcha_image_body = ""
+                await page.wait_for_timeout(2000)
             else:
                 logger.warning("[Captcha] 极验验证失败，正在重试")
 
