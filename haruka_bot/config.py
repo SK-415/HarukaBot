@@ -22,6 +22,7 @@ class Config(BaseSettings):
     haruka_dynamic_timeout: int = 30
     haruka_dynamic_font_source: str = "system"
     haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"
+    haruka_dynamic_big_image: bool = False
     haruka_command_prefix: str = ""
     # 频道管理员身份组
     haruka_guild_admin_roles: List[str] = ["频道主", "超级管理员"]

@@ -150,7 +150,9 @@ async def get_dynamic_screenshot_mobile(dynamic_id, page: Page):
         if plugin_config.haruka_dynamic_font
         else "setFont()"
     )
-    await page.wait_for_function("getMobileStyle()")
+    await page.wait_for_function(
+        f"getMobileStyle({'true' if plugin_config.haruka_dynamic_big_image else 'false'})"
+    )
 
     await page.wait_for_load_state("networkidle")
     await page.wait_for_load_state("domcontentloaded")

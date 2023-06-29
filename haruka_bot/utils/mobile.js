@@ -9,7 +9,7 @@ async function getMobileStyle(expandImage = false) {
     // 删除 dom 的对象, 可以自行添加 ( className 需要增加 '.' 为前缀, id 需要增加 '#' 为前缀)
     const deleteDoms = {
         // 关注 dom
-        followDoms: [".dyn-header__following", ".easy-follow-btn"],
+        followDoms: [".dyn-header__following", ".easy-follow-btn", ".dyn-orig-author__right"],
         // 分享 dom
         shareDoms: [".dyn-share"],
         // 打开程序 dom
@@ -85,7 +85,7 @@ async function getMobileStyle(expandImage = false) {
         const isAllOneLength = ratioList.filter(item => item >= 0.9 && item <= 1.1).length;
         const isAllOne = ratioList.length === 9 ? isAllOneLength > ratioList.length / 2 : isAllOneLength > 0 && isAllOneLength % 3 === 0 && ratioList.length > 3;
         // 说明可能为组装的拼图, 如果不是则放大为大图
-        if (!isAllOne) {
+        if (!isAllOne && useImageBig) {
             // 找到图标容器dom
             const containerDom = document.querySelector(".bm-pics-block__container");
             if (containerDom) {

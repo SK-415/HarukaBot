@@ -43,7 +43,7 @@ async def dy_sched():
         ).list
     except AioRpcError as e:
         if e.code() == StatusCode.DEADLINE_EXCEEDED:
-            logger.error("爬取动态超时，将在下个轮询中重试")
+            logger.error(f"爬取动态超时，将在下个轮询中重试：{e.code()} {e.details()}")
             return
         raise
 
