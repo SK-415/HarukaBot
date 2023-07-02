@@ -20,6 +20,7 @@ mobile_js = Path(__file__).parent.joinpath("mobile.js")
 
 
 async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> BrowserContext:
+    logger.info("初始化浏览器")
     if proxy:
         kwargs["proxy"] = {"server": proxy}
     global _browser
@@ -57,7 +58,7 @@ async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> BrowserCon
 
 async def get_browser() -> BrowserContext:
     global _browser
-    if not _browser or _browser.browser is None or not _browser.browser.is_connected():
+    if not _browser:
         _browser = await init_browser()
     return _browser
 
@@ -78,7 +79,7 @@ async def get_dynamic_screenshot(dynamic_id, style=plugin_config.haruka_screensh
             clip["height"] = min(clip["height"], 32766)
             return (
                 await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=98),
-                err,
+                None,
             )
         except TimeoutError:
             logger.warning(f"截图超时，重试 {i + 1}/3")
