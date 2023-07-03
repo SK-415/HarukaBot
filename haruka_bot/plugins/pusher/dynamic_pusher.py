@@ -97,7 +97,8 @@ async def dy_sched():
             message = (
                 f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
                 f"{f'动态图片可能截图异常：{err}' if err else ''}\n"
-                f"{MessageSegment.image(image)}\n{url}"
+                + MessageSegment.image(image)
+                + f"\n{url}"
             )
 
             push_list = await db.get_push_list(uid, "dynamic")
