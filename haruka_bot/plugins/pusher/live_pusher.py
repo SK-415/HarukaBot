@@ -57,7 +57,7 @@ async def live_sched():
             if not plugin_config.haruka_live_off_notify:  # 没开下播推送
                 continue
             live_time_msg = (
-                f"，本次直播时长 {calc_time_total(time.time() - live_time[uid])}。"
+                f"\n本次直播时长 {calc_time_total(time.time() - live_time[uid])}。"
                 if live_time.get(uid)
                 else "。"
             )
