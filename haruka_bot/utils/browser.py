@@ -7,12 +7,12 @@ from pathlib import Path
 from typing import Optional
 
 from nonebot.log import logger
+from aunly_captcha_solver import CaptchaInfer
 from playwright.__main__ import main
 from playwright.async_api import BrowserContext, async_playwright, Page
 
 from ..config import plugin_config
 from .fonts_provider import fill_font
-from .captcha import resolve_captcha
 from ..utils import get_path
 
 _browser: Optional[BrowserContext] = None
@@ -39,6 +39,7 @@ async def init_browser(proxy=plugin_config.haruka_proxy, **kwargs) -> BrowserCon
             else None
         ),
         device_scale_factor=2,
+        timeout=plugin_config.haruka_dynamic_timeout * 1000,
         **kwargs,
     )
     if plugin_config.haruka_screenshot_style.lower() != "mobile":
@@ -116,13 +117,12 @@ async def get_dynamic_screenshot_mobile(dynamic_id, page: Page):
     await page.set_viewport_size({"width": 460, "height": 780})
     await page.route(re.compile("^https://static.graiax/fonts/(.+)$"), fill_font)
     if plugin_config.haruka_captcha_address:
-        page = await resolve_captcha(url, page)
-    else:
-        await page.goto(
-            url,
-            wait_until="networkidle",
-            timeout=plugin_config.haruka_dynamic_timeout * 1000,
+        captcha = CaptchaInfer(
+            plugin_config.haruka_captcha_address, plugin_config.haruka_captcha_token
         )
+        page = await captcha.solve_captcha(page, url)
+    else:
+        await page.goto(url, wait_until="networkidle")
     # 动态被删除或者进审核了
     if page.url == "https://m.bilibili.com/404":
         raise Notfound
@@ -138,11 +138,8 @@ async def get_dynamic_screenshot_mobile(dynamic_id, page: Page):
     #     "dyn.style.overflowWrap='break-word'"
     # )
 
-    await page.wait_for_load_state(state="domcontentloaded", timeout=20000)
-    if "opus" in page.url:
-        await page.wait_for_selector(".opus-module-author", state="visible")
-    else:
-        await page.wait_for_selector(".dyn-header__author__face", state="visible")
+    await page.wait_for_load_state(state="domcontentloaded")
+    await page.wait_for_selector(".b-img__inner", state="visible")
 
     await page.add_script_tag(path=mobile_js)
 
@@ -160,7 +157,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id, page: Page):
     await page.wait_for_load_state("domcontentloaded")
 
     await page.wait_for_timeout(
-        200 if plugin_config.haruka_dynamic_font_source == "remote" else 50
+        1000 if plugin_config.haruka_dynamic_font_source == "remote" else 200
     )
 
     # 判断字体是否加载完成
@@ -178,11 +175,7 @@ async def get_dynamic_screenshot_pc(dynamic_id, page: Page):
     """电脑端动态截图"""
     url = f"https://t.bilibili.com/{dynamic_id}"
     await page.set_viewport_size({"width": 2560, "height": 1080})
-    await page.goto(
-        url,
-        wait_until="networkidle",
-        timeout=plugin_config.haruka_dynamic_timeout * 1000,
-    )
+    await page.goto(url, wait_until="networkidle")
     # 动态被删除或者进审核了
     if page.url == "https://www.bilibili.com/404":
         raise Notfound

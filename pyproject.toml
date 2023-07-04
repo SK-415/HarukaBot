@@ -13,13 +13,14 @@ dependencies = [
     "nonebot-plugin-apscheduler>=0.3.0",
     "nonebot2[fastapi]>=2.0.0",
     "playwright>=1.35.0",
-    "pydantic>=1.10.9",
+    "pydantic>=1.10.9, <=2.0",
     "python-dotenv>=1.0.0",
     "tortoise-orm[asyncpg]>=0.19.3",
     "bilireq>=0.2.6",
     "packaging>=23.1",
     "nonebot-plugin-guild-patch>=0.2.3",
     "msvc-runtime>=14.34.31931; sys_platform == \"win32\"",
+    "aunly-captcha-solver>=0.1",
 ]
 dynamic = ["version"]
 name = "haruka-bot"

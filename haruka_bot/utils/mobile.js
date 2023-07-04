@@ -157,7 +157,7 @@ function setFont(font = "", fontSource = "local") {
         // 如果传入了字体名, 则将其添加到字体列表首位
         if (fontSource === "local") {
             needLoadFontList.unshift({
-                fontUrl: `https://fonts.bbot/${font}`,
+                fontUrl: `https://static.graiax/fonts/${font}`,
                 fontFamily: "BBot_Custom_Font",
             });
         } else if (fontSource === "remote") {
