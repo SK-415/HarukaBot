@@ -58,7 +58,7 @@ async def live_sched():
                 continue
             live_time_msg = (
                 f"，本次直播时长 {calc_time_total(time.time() - live_time[uid])}。"
-                if live_time[uid]
+                if live_time.get(uid)
                 else "。"
             )
             live_msg = f"{name} 下播了{live_time_msg}"
