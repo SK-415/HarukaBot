@@ -101,7 +101,7 @@ async def dy_sched():
             }
             message = (
                 f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
-                f"{f'动态图片可能截图异常：{err}' if err else ''}\n"
+                + str(f"动态图片可能截图异常：{err}\n" if err else "")
                 + MessageSegment.image(image)
                 + f"\n{url}"
             )
