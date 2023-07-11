@@ -139,7 +139,7 @@ async def get_dynamic_screenshot_mobile(dynamic_id, page: Page):
     # )
 
     await page.wait_for_load_state(state="domcontentloaded")
-    await page.wait_for_selector(".b-img__inner", state="visible")
+    await page.wait_for_selector(".b-img__inner, .dyn-header__author__face", state="visible")
 
     await page.add_script_tag(path=mobile_js)
 
