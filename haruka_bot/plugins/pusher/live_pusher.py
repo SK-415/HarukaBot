@@ -16,6 +16,7 @@ live_time = {}
     "interval", seconds=plugin_config.haruka_live_interval, id="live_sched"
 )
 async def live_sched():
+    # sourcery skip: use-fstring-for-concatenation
     """直播推送"""
     uids = await db.get_uid_list("live")
 
@@ -42,20 +43,22 @@ async def live_sched():
             url = f"https://live.bilibili.com/{room_id}"
             title = info["title"]
             cover = info["cover_from_user"] or info["keyframe"]
-            area_parent = info["area_v2_parent_name"]
             area = info["area_v2_name"]
+            area_parent = info["area_v2_parent_name"]
             room_area = f"{area_parent} / {area}"
             logger.info(f"检测到开播：{name}（{uid}）")
             live_msg = (
-                f"{name} 开播啦！\n分区：{room_area}\n标题：{title}\n{MessageSegment.image(cover)}\n{url}"
+                f"{name} 开播啦！\n分区：{room_area}\n标题：{title}\n"
+                + MessageSegment.image(cover)
+                + f"\n{url}"
             )
         else:  # 下播
             logger.info(f"检测到下播：{name}（{uid}）")
             if not plugin_config.haruka_live_off_notify:  # 没开下播推送
                 continue
             live_time_msg = (
-                f"，本次直播时长 {calc_time_total(time.time() - live_time[uid])}。"
-                if live_time[uid]
+                f"\n本次直播时长 {calc_time_total(time.time() - live_time[uid])}。"
+                if live_time.get(uid)
                 else "。"
             )
             live_msg = f"{name} 下播了{live_time_msg}"

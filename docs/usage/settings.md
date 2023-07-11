@@ -128,6 +128,16 @@ HARUKA_SCREENSHOT_STYLE=pc
 HARUKA_CAPTCHA_ADDRESS=https://captcha-cd.ngworks.cn
 ```
 
+## HARUKA_CAPTCHA_TOKEN
+
+默认值：harukabot
+
+验证码 Token，用于验证码服务器鉴权，若不填写一天内只能使用 5 次。
+
+```yml
+HARUKA_CAPTCHA_TOKEN=harukabot
+```
+
 ## HARUKA_BROWSER_UA
 
 默认值：""

@@ -7,6 +7,7 @@ from apscheduler.events import (
     EVENT_JOB_MISSED,
     EVENT_SCHEDULER_STARTED,
 )
+from bilireq.exceptions import GrpcError
 from bilireq.grpc.dynamic import grpc_get_user_dynamics
 from bilireq.grpc.protos.bilibili.app.dynamic.v2.dynamic_pb2 import DynamicType
 from grpc import StatusCode
@@ -44,8 +45,12 @@ async def dy_sched():
     except AioRpcError as e:
         if e.code() == StatusCode.DEADLINE_EXCEEDED:
             logger.error(f"爬取动态超时，将在下个轮询中重试：{e.code()} {e.details()}")
-            return
-        raise
+        else:
+            logger.error(f"爬取动态失败：{e.code()} {e.details()}")
+        return
+    except GrpcError as e:
+        logger.error(f"爬取动态失败：{e.code} {e.msg}")
+        return
 
     if not dynamics:  # 没发过动态
         if uid in offset and offset[uid] == -1:  # 不记录会导致第一次发动态不推送
@@ -96,8 +101,9 @@ async def dy_sched():
             }
             message = (
                 f"{name} {type_msg.get(dynamic.card_type, type_msg[0])}：\n"
-                f"{f'动态图片可能截图异常：{err}' if err else ''}\n"
-                f"{MessageSegment.image(image)}\n{url}"
+                + str(f"动态图片可能截图异常：{err}\n" if err else "")
+                + MessageSegment.image(image)
+                + f"\n{url}"
             )
 
             push_list = await db.get_push_list(uid, "dynamic")
