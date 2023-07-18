@@ -4,6 +4,8 @@ LABEL maintainer="https://github.com/SK-415/HarukaBot"
 
 EXPOSE 8080
 
+RUN apt install fonts-noto-cjk
+
 RUN pip install haruka-bot -i https://mirrors.aliyun.com/pypi/simple/
 
 WORKDIR /haruka_bot
