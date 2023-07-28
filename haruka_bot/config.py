@@ -21,6 +21,7 @@ class Config(BaseSettings):
     haruka_captcha_address: str = "https://captcha-cd.ngworks.cn"
     haruka_captcha_token: str = "harukabot"
     haruka_browser_ua: Optional[str] = None
+    haruka_browser_cookie: Optional[str] = None
     haruka_dynamic_timeout: int = 30
     haruka_dynamic_font_source: str = "system"
     haruka_dynamic_font: Optional[str] = "Noto Sans CJK SC"

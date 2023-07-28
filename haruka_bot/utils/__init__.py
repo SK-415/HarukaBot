@@ -322,3 +322,4 @@ require("nonebot_plugin_apscheduler")
 from nonebot_plugin_apscheduler import scheduler  # noqa
 
 from .browser import get_dynamic_screenshot  # noqa
+from .get_dynamic_list import get_user_dynamics
