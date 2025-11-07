@@ -1,4 +1,4 @@
-# 恭喜
+.menu .tagal .menugame .iqc .brat恭喜
 
 至此，你已经成功安装了 HarukaBot。
 
