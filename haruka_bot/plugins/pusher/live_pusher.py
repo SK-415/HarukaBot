@@ -1,5 +1,7 @@
 import time
 
+import httpx
+from bilireq.exceptions import ResponseCodeError
 from bilireq.live import get_rooms_info_by_uids
 from nonebot.adapters.onebot.v11.message import MessageSegment
 from nonebot.log import logger
@@ -23,7 +25,11 @@ async def live_sched():
     if not uids:  # 订阅为空
         return
     logger.debug(f"爬取直播列表，目前开播{sum(status.values())}人，总共{len(uids)}人")
-    res = await get_rooms_info_by_uids(uids, reqtype="web", proxies=PROXIES)
+    try:
+        res = await get_rooms_info_by_uids(uids, reqtype="web", proxies=PROXIES)
+    except (httpx.HTTPError, ResponseCodeError) as e:
+        logger.warning(f"爬取直播列表失败（{type(e).__name__}: {e}），将在下次轮询重试")
+        return
     if not res:
         return
     for uid, info in res.items():
