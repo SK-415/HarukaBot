@@ -1657,7 +1657,7 @@
     markdown-it "^13.0.1"
     markdown-it-container "^3.0.0"
 
-"@vuepress/plugin-docsearch@^2.0.0-beta.61":
+"@vuepress/plugin-docsearch@2.0.0-beta.61":
   version "2.0.0-beta.61"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-docsearch/-/plugin-docsearch-2.0.0-beta.61.tgz#3e2f232a31ad3c3b7746e6349b8a01e8f30b7274"
   integrity sha512-/C4A9DIxeLxll1UXgTeOoQqQnA5sBfb5Inek3Lzr4p6yxjeRhFigMctjJzHFAj0JHDEmO1BYVbqh4FxmtZjeVg==
@@ -1734,7 +1734,7 @@
     "@vuepress/core" "2.0.0-beta.61"
     prismjs "^1.29.0"
 
-"@vuepress/plugin-pwa@^2.0.0-beta.61":
+"@vuepress/plugin-pwa@2.0.0-beta.61":
   version "2.0.0-beta.61"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-pwa/-/plugin-pwa-2.0.0-beta.61.tgz#acd18d982b1fe2d5cfb41fa2e2199a285faafeb1"
   integrity sha512-5joCU3FsybJEzz7gOBzA0t9yFA9DIGl0UZH4Ycd8EHsK3o8+NeNtwvRzMPLyA7i7GfO57RUyRP3jGXIwWJeYQQ==
@@ -1747,7 +1747,7 @@
     vue "^3.2.47"
     workbox-build "^6.5.4"
 
-"@vuepress/plugin-shiki@^2.0.0-beta.61":
+"@vuepress/plugin-shiki@2.0.0-beta.61":
   version "2.0.0-beta.61"
   resolved "https://registry.yarnpkg.com/@vuepress/plugin-shiki/-/plugin-shiki-2.0.0-beta.61.tgz#985692350c51dda5e20c131167edda3d40843dd8"
   integrity sha512-YIduNpAg1EVqjfibasAYlZZ7nfRN/FYrMcj3TvlP3bJBXzHpKdDqaVSltXagVEFix6BqumQ85rso3ZtWCM+guw==
@@ -3797,7 +3797,7 @@ vue@^3.2.47:
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
 
-vuepress-vite@^2.0.0-beta.61:
+vuepress-vite@2.0.0-beta.61:
   version "2.0.0-beta.61"
   resolved "https://registry.yarnpkg.com/vuepress-vite/-/vuepress-vite-2.0.0-beta.61.tgz#04058551e6be014e9f2dee14c5d8043b158e032d"
   integrity sha512-4mcR8XSY5b36CYkPqF80WvoeGAEjTw6Cr9bMPHrPVSjG4qqyfVpdSdyRtXD+/5aLJB7r/L60J7PI1pKTci1+3w==
